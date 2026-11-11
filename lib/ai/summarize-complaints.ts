@@ -156,9 +156,9 @@ ${JSON.stringify(payload, null, 2)}
     return {
       mode: "ai",
       summary: result.data.summary,
-      topIssues: result.data.topIssues,
+      topIssues: [...byCategory].sort((a, b) => b.count - a.count).slice(0, 3),
       recommendedActions: result.data.recommendedActions,
-      safetyConcerns: result.data.safetyConcerns,
+      safetyConcerns: byPriority.find((entry) => entry.priority === "URGENT")?.count ?? 0,
       provider: result.provider,
       model: result.model,
       generatedAt: new Date().toISOString(),

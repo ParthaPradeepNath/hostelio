@@ -1,10 +1,16 @@
 import { z } from "zod";
 import { COMPLAINT_CATEGORIES, PRIORITIES } from "@/lib/validators/complaint";
 
+const uppercase = (value: unknown) =>
+  typeof value === "string" ? value.trim().toUpperCase() : value;
+
+const categoryValue = z.preprocess(uppercase, z.enum(COMPLAINT_CATEGORIES));
+const priorityValue = z.preprocess(uppercase, z.enum(PRIORITIES));
+
 export const categorizationSchema = z.object({
-  category: z.enum(COMPLAINT_CATEGORIES),
-  priority: z.enum(PRIORITIES),
-  confidence: z.number().min(0).max(1),
+  category: categoryValue,
+  priority: priorityValue,
+  confidence: z.coerce.number().min(0).max(1),
   reason: z.string().max(300).optional(),
 });
 
@@ -15,14 +21,14 @@ export const summarySchema = z.object({
   topIssues: z
     .array(
       z.object({
-        category: z.enum(COMPLAINT_CATEGORIES),
-        count: z.number().int().min(0),
+        category: categoryValue,
+        count: z.coerce.number().int().min(0),
         note: z.string().max(300).optional(),
       }),
     )
     .max(6),
   recommendedActions: z.array(z.string().min(3).max(300)).max(5),
-  safetyConcerns: z.number().int().min(0),
+  safetyConcerns: z.coerce.number().int().min(0),
 });
 
 export type SummaryResult = z.infer<typeof summarySchema>;
@@ -33,7 +39,6 @@ export const categorizationJsonSchema: Record<string, unknown> = {
     category: { type: "string", enum: [...COMPLAINT_CATEGORIES] },
     priority: { type: "string", enum: [...PRIORITIES] },
     confidence: { type: "number", minimum: 0, maximum: 1 },
-    reason: { type: "string", maxLength: 300 },
   },
   required: ["category", "priority", "confidence"],
   additionalProperties: false,
@@ -51,7 +56,6 @@ export const summaryJsonSchema: Record<string, unknown> = {
         properties: {
           category: { type: "string", enum: [...COMPLAINT_CATEGORIES] },
           count: { type: "integer", minimum: 0 },
-          note: { type: "string", maxLength: 300 },
         },
         required: ["category", "count"],
         additionalProperties: false,

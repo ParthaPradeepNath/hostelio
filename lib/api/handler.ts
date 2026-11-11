@@ -23,14 +23,14 @@ type AuthOptions<S extends z.ZodTypeAny> = {
 };
 
 type RouteContext<TParams extends Record<string, string>> = {
-  params?: Promise<TParams>;
+  params: Promise<TParams>;
 };
 
 export function withAuth<S extends z.ZodTypeAny = z.ZodType<unknown>, TParams extends Record<string, string> = Record<string, string>>(
   options: AuthOptions<S>,
   handler: (args: HandlerArgs<z.infer<S>>) => Promise<NextResponse>,
 ) {
-  return async (req: NextRequest, context?: RouteContext<TParams>): Promise<NextResponse> => {
+  return async (req: NextRequest, context: RouteContext<TParams>): Promise<NextResponse> => {
     const startedAt = Date.now();
     const requestId = crypto.randomUUID();
     const route = new URL(req.url).pathname;
@@ -48,7 +48,7 @@ export function withAuth<S extends z.ZodTypeAny = z.ZodType<unknown>, TParams ex
         }
       }
 
-      const params = context?.params ? await context.params : {};
+      const params = await context.params;
 
       let body = undefined as z.infer<S>;
       const shouldParse = options.parseBody ?? !["GET", "DELETE"].includes(req.method);

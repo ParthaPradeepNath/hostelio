@@ -16,7 +16,7 @@ export function groqConfigured() {
 
 export async function generateWithGroq(request: AiJsonRequest, signal: AbortSignal): Promise<string> {
   const groq = getClient();
-  const model = process.env.GROQ_MODEL?.trim() || "llama-3.3-70b-versatile";
+  const model = process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-120b";
 
   const completion = await groq.chat.completions.create(
     {
@@ -25,7 +25,16 @@ export async function generateWithGroq(request: AiJsonRequest, signal: AbortSign
         { role: "system", content: request.system },
         { role: "user", content: request.user },
       ],
-      response_format: { type: "json_object" },
+      response_format: request.jsonSchema
+        ? {
+            type: "json_schema",
+            json_schema: {
+              name: request.operation === "summarize" ? "hostel_summary" : "complaint_categorization",
+              schema: request.jsonSchema,
+              strict: true,
+            },
+          }
+        : { type: "json_object" },
       temperature: request.temperature ?? 0.2,
       max_tokens: request.maxOutputTokens ?? 900,
     },
