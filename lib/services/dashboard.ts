@@ -28,6 +28,7 @@ export async function getAdminDashboardStats() {
           status: true,
           priority: true,
           category: true,
+          aiCategory: true,
           aiStatus: true,
           createdAt: true,
           student: { select: { name: true } },
