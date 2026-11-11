@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum RoomType {
+  SINGLE
+  DOUBLE
+  TRIPLE
+  QUAD
+}
+
+enum RoomStatus {
+  AVAILABLE
+  FULL
+  MAINTENANCE
+}
+
+enum AllocationStatus {
+  ACTIVE
+  VACATED
+}
+
+enum ComplaintCategory {
+  ELECTRICAL
+  PLUMBING
+  CLEANING
+  INTERNET
+  FURNITURE
+  FOOD
+  SECURITY
+  OTHER
+}
+
+enum ComplaintStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum AiStatus {
+  PENDING
+  DONE
+  FAILED
+  SKIPPED
+}
+
+model User {
+  id          String   @id @default(cuid())
+  clerkUserId String   @unique
+  email       String   @unique
+  name        String
+  role        Role     @default(STUDENT)
+  phone       String?
+  studentId   String?  @unique
+  department  String?
+  year        Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  allocations Allocation[]
+  complaints  Complaint[]
+  notices     Notice[]
+
+  @@map("users")
+}
+
+model Room {
+  id          String     @id @default(cuid())
+  roomNumber  String     @unique
+  block       String
+  floor       Int
+  type        RoomType
+  capacity    Int
+  monthlyRent Decimal?   @db.Decimal(10, 2)
+  status      RoomStatus @default(AVAILABLE)
+  amenities   String[]   @default([])
+  notes       String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  allocations Allocation[]
+  complaints  Complaint[]
+
+  @@index([block, floor])
+  @@index([status])
+  @@map("rooms")
+}
+
+model Allocation {
+  id        String           @id @default(cuid())
+  studentId String
+  roomId    String
+  status    AllocationStatus @default(ACTIVE)
+  startDate DateTime         @default(now())
+  endDate   DateTime?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  student User @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  room    Room @relation(fields: [roomId], references: [id], onDelete: Restrict)
+
+  @@index([studentId, status])
+  @@index([roomId, status])
+  @@map("allocations")
+}
+
+model Complaint {
+  id            String            @id @default(cuid())
+  studentId     String
+  roomId        String?
+  title         String
+  description   String
+  category      ComplaintCategory @default(OTHER)
+  priority      Priority          @default(MEDIUM)
+  status        ComplaintStatus   @default(OPEN)
+  adminResponse String?
+  resolvedAt    DateTime?
+
+  aiCategory    ComplaintCategory?
+  aiPriority    Priority?
+  aiConfidence  Float?
+  aiStatus      AiStatus          @default(PENDING)
+  aiProvider    String?
+  aiModel       String?
+  aiProcessedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student User  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  room    Room? @relation(fields: [roomId], references: [id], onDelete: SetNull)
+
+  @@index([studentId, createdAt])
+  @@index([status, createdAt])
+  @@index([category, status])
+  @@map("complaints")
+}
+
+model Notice {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  isPinned    Boolean  @default(false)
+  authorId    String
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([isPinned, publishedAt])
+  @@map("notices")
+}
