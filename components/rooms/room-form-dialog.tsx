@@ -272,7 +272,7 @@ export function RoomFormDialog({
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? <Loader2 className="animate-spin" aria-hidden /> : null}
+              {isSubmitting ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
               {mode === "create" ? "Add room" : "Save changes"}
             </Button>
           </DialogFooter>

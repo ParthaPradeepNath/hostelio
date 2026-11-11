@@ -6,7 +6,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
     <input
       type={type}
       className={cn(
-        "h-10 w-full rounded-sm border border-line-strong bg-surface px-3 text-[15px] text-ink transition-colors placeholder:text-ink-tertiary focus-visible:border-accent disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-danger",
+        "h-11 w-full rounded-sm border border-line-strong bg-surface px-3 text-[16px] text-ink transition-colors placeholder:text-ink-tertiary focus-visible:border-accent disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-danger md:h-10 md:text-[15px]",
         className,
       )}
       ref={ref}
@@ -20,7 +20,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<"tex
   ({ className, ...props }, ref) => (
     <textarea
       className={cn(
-        "min-h-24 w-full rounded-sm border border-line-strong bg-surface px-3 py-2.5 text-[15px] leading-relaxed text-ink transition-colors placeholder:text-ink-tertiary focus-visible:border-accent disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-danger",
+        "min-h-24 w-full rounded-sm border border-line-strong bg-surface px-3 py-2.5 text-[16px] leading-relaxed text-ink transition-colors placeholder:text-ink-tertiary focus-visible:border-accent disabled:cursor-not-allowed disabled:opacity-50 aria-[invalid=true]:border-danger md:text-[15px]",
         className,
       )}
       ref={ref}

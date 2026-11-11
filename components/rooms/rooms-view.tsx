@@ -242,6 +242,7 @@ export function RoomsView({
                     <TableHead>Room</TableHead>
                     <TableHead>Block</TableHead>
                     <TableHead>Type</TableHead>
+                    <TableHead className="text-right">Capacity</TableHead>
                     <TableHead className="text-right">Occupancy</TableHead>
                     <TableHead className="text-right">Available</TableHead>
                     <TableHead className="text-right">Rent</TableHead>
@@ -263,8 +264,11 @@ export function RoomsView({
                       </TableCell>
                       <TableCell className="text-ink-secondary">{room.block}</TableCell>
                       <TableCell className="text-ink-secondary">{TYPE_LABELS[room.type]}</TableCell>
+                      <TableCell className="tabular text-right text-ink-secondary">
+                        {room.capacity}
+                      </TableCell>
                       <TableCell className="tabular text-right text-ink">
-                        {room.occupancy}/{room.capacity}
+                        {room.occupancy}
                       </TableCell>
                       <TableCell className="tabular text-right text-ink-secondary">
                         {room.availableBeds}
@@ -313,8 +317,7 @@ export function RoomsView({
                     </Link>
                     <p className="mt-0.5 text-[12px] text-ink-secondary">
                       Block {room.block} · Floor {room.floor} · {TYPE_LABELS[room.type]}
-                    </p>
-                  </div>
+                    </p>                  </div>
                   <StatusBadge value={room.status} />
                 </div>
 

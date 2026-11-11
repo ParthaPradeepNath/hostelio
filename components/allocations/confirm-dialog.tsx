@@ -59,7 +59,7 @@ export function ConfirmDialog({
             onClick={handleConfirm}
             disabled={pending}
           >
-            {pending ? <Loader2 className="animate-spin" aria-hidden /> : null}
+            {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
             {confirmLabel}
           </Button>
         </DialogFooter>

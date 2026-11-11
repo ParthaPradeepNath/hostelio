@@ -114,7 +114,7 @@ export function MoveRoomDialog({
             Cancel
           </Button>
           <Button onClick={submit} disabled={pending || options.length === 0}>
-            {pending ? <Loader2 className="animate-spin" aria-hidden /> : <MoveRight aria-hidden />}
+            {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : <MoveRight aria-hidden />}
             Move student
           </Button>
         </DialogFooter>

@@ -227,8 +227,13 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
                     <li key={occupant.allocationId} className="flex flex-col gap-2 py-3 first:pt-0 last:pb-0">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="truncate text-[14px] font-medium text-ink">{occupant.name}</p>
-                          <p className="truncate text-[12px] text-ink-secondary">
+                          <p className="truncate text-[14px] font-medium text-ink" title={occupant.name}>
+                            {occupant.name}
+                          </p>
+                          <p
+                            className="truncate text-[12px] text-ink-secondary"
+                            title={occupant.studentId ?? "No student ID"}
+                          >
                             {occupant.studentId ?? "No student ID"} · Since{" "}
                             {formatDate(occupant.startDate)}
                           </p>
@@ -280,6 +285,7 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
                         <Link
                           href={`/complaints/${complaint.id}`}
                           className="block truncate text-[14px] font-medium text-ink hover:text-accent"
+                          title={complaint.title}
                         >
                           {complaint.title}
                         </Link>

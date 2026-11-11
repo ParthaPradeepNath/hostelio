@@ -105,7 +105,7 @@ export function AllocateDialog({
           Allocate student
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl" aria-describedby="allocate-description">
+      <DialogContent className="max-w-[35rem]" aria-describedby="allocate-description">
         <DialogHeader>
           <DialogTitle>Allocate a student</DialogTitle>
           <DialogDescription id="allocate-description">
@@ -130,7 +130,6 @@ export function AllocateDialog({
               />
             </div>
             <ul
-              role="listbox"
               aria-label="Unallocated students"
               className="mt-2 max-h-64 overflow-y-auto rounded-md border border-line"
             >
@@ -147,8 +146,7 @@ export function AllocateDialog({
                     <li key={student.id}>
                       <button
                         type="button"
-                        role="option"
-                        aria-selected={selected}
+                        aria-pressed={selected}
                         onClick={() => setStudentId(student.id)}
                         className={cn(
                           "flex w-full items-center justify-between gap-2 border-b border-line px-3 py-2.5 text-left transition-colors last:border-b-0",
@@ -156,10 +154,16 @@ export function AllocateDialog({
                         )}
                       >
                         <span className="min-w-0">
-                          <span className="block truncate text-[13px] font-medium text-ink">
+                          <span
+                            className="block truncate text-[13px] font-medium text-ink"
+                            title={student.name}
+                          >
                             {student.name}
                           </span>
-                          <span className="block truncate text-[11px] text-ink-secondary">
+                          <span
+                            className="block truncate text-[11px] text-ink-secondary"
+                            title={student.studentId ?? student.email}
+                          >
                             {student.studentId ?? student.email}
                           </span>
                         </span>
@@ -188,7 +192,6 @@ export function AllocateDialog({
               />
             </div>
             <ul
-              role="listbox"
               aria-label="Available rooms"
               className="mt-2 max-h-64 overflow-y-auto rounded-md border border-line"
             >
@@ -205,8 +208,7 @@ export function AllocateDialog({
                     <li key={room.id}>
                       <button
                         type="button"
-                        role="option"
-                        aria-selected={selected}
+                        aria-pressed={selected}
                         onClick={() => setRoomId(room.id)}
                         className={cn(
                           "flex w-full items-center justify-between gap-2 border-b border-line px-3 py-2.5 text-left transition-colors last:border-b-0",
@@ -236,7 +238,7 @@ export function AllocateDialog({
             Cancel
           </Button>
           <Button onClick={submit} disabled={pending || !studentId || !roomId}>
-            {pending ? <Loader2 className="animate-spin" aria-hidden /> : null}
+            {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
             Allocate room
           </Button>
         </DialogFooter>

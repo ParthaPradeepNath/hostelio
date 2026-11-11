@@ -44,7 +44,7 @@ export function MaintenanceButton({
 
   const button = (
     <Button variant="secondary" size="sm" onClick={toggle} disabled={pending || blocked}>
-      {pending ? <Loader2 className="animate-spin" aria-hidden /> : <Wrench aria-hidden />}
+      {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : <Wrench aria-hidden />}
       {underMaintenance ? "Return to service" : "Put under maintenance"}
     </Button>
   );

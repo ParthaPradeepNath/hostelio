@@ -74,8 +74,7 @@ export default async function AllocationsPage({
       </PageHeader>
 
       {isAdmin ? (
-        <div
-          role="tablist"
+        <nav
           aria-label="Allocation status"
           className="mb-5 inline-flex items-center gap-1 rounded-md border border-line bg-surface-2 p-1"
         >
@@ -84,20 +83,19 @@ export default async function AllocationsPage({
             return (
               <Link
                 key={tab.key}
-                role="tab"
-                aria-selected={active}
                 href={`/allocations?status=${tab.key}`}
+                aria-current={active ? "page" : undefined}
                 className={
                   active
-                    ? "inline-flex h-8 items-center rounded-sm bg-surface px-3 text-[13px] font-medium text-ink shadow-card"
-                    : "inline-flex h-8 items-center rounded-sm px-3 text-[13px] font-medium text-ink-secondary transition-colors hover:text-ink"
+                    ? "inline-flex h-11 items-center rounded-sm bg-surface px-3 text-[13px] font-medium text-ink shadow-card sm:h-8"
+                    : "inline-flex h-11 items-center rounded-sm px-3 text-[13px] font-medium text-ink-secondary transition-colors hover:text-ink sm:h-8"
                 }
               >
                 {tab.label}
               </Link>
             );
           })}
-        </div>
+        </nav>
       ) : null}
 
       {result.data.length === 0 ? (
@@ -129,8 +127,9 @@ export default async function AllocationsPage({
           }
         />
       ) : (
-        <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-card">
-          <Table>
+        <>
+          <div className="hidden overflow-hidden rounded-lg border border-line bg-surface shadow-card md:block">
+            <Table>
             <TableHeader>
               <TableRow>
                 {isAdmin ? (
@@ -241,7 +240,69 @@ export default async function AllocationsPage({
               })}
             </TableBody>
           </Table>
-        </div>
+          </div>
+
+          <div className="flex flex-col gap-3 md:hidden">
+            {result.data.map((allocation) => {
+              const active = allocation.status === "ACTIVE";
+              return (
+                <article
+                  key={allocation.id}
+                  className="rounded-lg border border-line bg-surface p-4 shadow-card"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <Link
+                        href={`/rooms/${allocation.room.id}`}
+                        className="text-[15px] font-medium text-ink hover:text-accent"
+                      >
+                        Room {allocation.room.roomNumber}
+                      </Link>
+                      <p className="mt-0.5 text-[12px] text-ink-secondary">
+                        Block {allocation.room.block} · Floor {allocation.room.floor} ·{" "}
+                        {TYPE_LABELS[allocation.room.type]}
+                      </p>
+                    </div>
+                    <StatusBadge value={allocation.status} />
+                  </div>
+
+                  {isAdmin ? (
+                    <div className="mt-3 min-w-0">
+                      <p className="truncate text-[13px] font-medium text-ink" title={allocation.student.name}>
+                        {allocation.student.name}
+                      </p>
+                      <p className="truncate text-[12px] text-ink-secondary">
+                        {allocation.student.studentId ?? allocation.student.email}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-[12px] text-ink-secondary">
+                      {pluralize(allocation.room.capacity, "bed")} ·{" "}
+                      {formatRent(allocation.room.monthlyRent)}
+                    </p>
+                  )}
+
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[12px] text-ink-secondary">
+                    <span>Start {formatDate(allocation.startDate)}</span>
+                    {allocation.endDate ? <span>End {formatDate(allocation.endDate)}</span> : null}
+                  </div>
+
+                  {isAdmin && active ? (
+                    <div className="mt-3 border-t border-line pt-3">
+                      <AllocationRowActions
+                        allocationId={allocation.id}
+                        studentName={allocation.student.name}
+                        roomId={allocation.room.id}
+                        rooms={rooms}
+                        compact
+                      />
+                    </div>
+                  ) : null}
+                </article>
+              );
+            })}
+          </div>
+        </>
       )}
 
       {!isAdmin ? (

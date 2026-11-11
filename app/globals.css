@@ -364,17 +364,24 @@
   }
 
   .dialog-content,
-  .sheet-content {
+  .sheet-content,
+  .popover-content,
+  .tooltip-content {
     animation-duration: 120ms !important;
   }
 
   .dialog-content[data-state="open"],
-  .sheet-content[data-state="open"] {
+  .sheet-content[data-state="open"],
+  .popover-content[data-state="open"],
+  .tooltip-content[data-state="delayed-open"],
+  .tooltip-content[data-state="instant-open"] {
     animation-name: overlay-in;
   }
 
   .dialog-content[data-state="closed"],
-  .sheet-content[data-state="closed"] {
+  .sheet-content[data-state="closed"],
+  .popover-content[data-state="closed"],
+  .tooltip-content[data-state="closed"] {
     animation-name: overlay-out;
   }
 }
