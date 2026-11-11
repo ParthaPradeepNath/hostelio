@@ -252,10 +252,17 @@ export function ComplaintsView({
                     {isAdmin ? (
                       <>
                         <TableCell>
-                          <p className="font-medium text-ink">{complaint.student.name}</p>
-                          <p className="text-[12px] text-ink-tertiary">
-                            {complaint.student.studentId ?? "No student ID"}
-                          </p>
+                          <div className="max-w-56">
+                            <p className="truncate font-medium text-ink" title={complaint.student.name}>
+                              {complaint.student.name}
+                            </p>
+                            <p
+                              className="truncate text-[12px] text-ink-tertiary"
+                              title={complaint.student.studentId ?? undefined}
+                            >
+                              {complaint.student.studentId ?? "No student ID"}
+                            </p>
+                          </div>
                         </TableCell>
                         <TableCell className="max-w-72">
                           <Link

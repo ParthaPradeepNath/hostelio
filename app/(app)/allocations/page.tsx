@@ -164,10 +164,20 @@ export default async function AllocationsPage({
                     {isAdmin ? (
                       <>
                         <TableCell>
-                          <p className="font-medium text-ink">{allocation.student.name}</p>
-                          <p className="text-[12px] text-ink-tertiary">
-                            {allocation.student.studentId ?? allocation.student.email}
-                          </p>
+                          <div className="max-w-56">
+                            <p
+                              className="truncate font-medium text-ink"
+                              title={allocation.student.name}
+                            >
+                              {allocation.student.name}
+                            </p>
+                            <p
+                              className="truncate text-[12px] text-ink-tertiary"
+                              title={allocation.student.studentId ?? allocation.student.email}
+                            >
+                              {allocation.student.studentId ?? allocation.student.email}
+                            </p>
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Link
@@ -271,7 +281,10 @@ export default async function AllocationsPage({
                       <p className="truncate text-[13px] font-medium text-ink" title={allocation.student.name}>
                         {allocation.student.name}
                       </p>
-                      <p className="truncate text-[12px] text-ink-secondary">
+                      <p
+                        className="truncate text-[12px] text-ink-secondary"
+                        title={allocation.student.studentId ?? allocation.student.email}
+                      >
                         {allocation.student.studentId ?? allocation.student.email}
                       </p>
                     </div>
