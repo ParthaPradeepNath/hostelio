@@ -7,7 +7,17 @@ import { recomputeRoomStatus } from "@/lib/services/rooms";
 
 export const allocationInclude = {
   student: { select: { id: true, name: true, studentId: true, email: true } },
-  room: { select: { id: true, roomNumber: true, block: true, floor: true, capacity: true } },
+  room: {
+    select: {
+      id: true,
+      roomNumber: true,
+      block: true,
+      floor: true,
+      type: true,
+      capacity: true,
+      monthlyRent: true,
+    },
+  },
 } satisfies Prisma.AllocationInclude;
 
 export async function listAllocations(user: Pick<User, "id" | "role">, query: AllocationQuery) {

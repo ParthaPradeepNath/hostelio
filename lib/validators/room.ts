@@ -26,11 +26,11 @@ const block = z
   .toUpperCase()
   .regex(/^[A-Z0-9]{1,8}$/, "Use 1–8 uppercase letters or numbers");
 
-const floor = z.coerce.number().int().min(0).max(20);
+const floor = z.number().int().min(0).max(20);
 
-const capacity = z.coerce.number().int().min(1).max(6);
+const capacity = z.number().int().min(1).max(6);
 
-const monthlyRent = z.coerce
+const monthlyRent = z
   .number()
   .min(0)
   .max(99_999_999)

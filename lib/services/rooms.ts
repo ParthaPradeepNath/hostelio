@@ -243,3 +243,16 @@ export async function listBlockOptions() {
   });
   return rooms.map((room) => room.block);
 }
+
+export async function listRoomFacets() {
+  const rooms = await prisma.room.findMany({
+    select: { block: true, floor: true },
+    distinct: ["block", "floor"],
+    orderBy: [{ block: "asc" }, { floor: "asc" }],
+  });
+
+  return {
+    blocks: [...new Set(rooms.map((room) => room.block))].sort((a, b) => a.localeCompare(b)),
+    floors: [...new Set(rooms.map((room) => room.floor))].sort((a, b) => a - b),
+  };
+}
