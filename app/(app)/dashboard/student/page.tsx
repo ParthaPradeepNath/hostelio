@@ -60,13 +60,14 @@ export default async function StudentDashboardPage() {
       <PageHeader
         title={`Welcome, ${firstName}`}
         description="Your room, complaints, and the latest from the hostel office."
+        className="lg:mb-5"
       >
         <NewComplaintDialog activeRoom={activeRoom} />
       </PageHeader>
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <div className="flex flex-col gap-5 lg:col-span-2">
-          <Card>
+      <div className="grid gap-5 lg:grid-cols-3 lg:gap-4">
+        <div className="flex flex-col gap-5 lg:col-span-2 lg:gap-4">
+          <Card className="lg:p-5">
             <CardHeader>
               <div className="flex items-center justify-between gap-3">
                 <CardTitle>My room</CardTitle>
@@ -97,7 +98,7 @@ export default async function StudentDashboardPage() {
                     <StatusBadge value="ACTIVE" />
                   </div>
 
-                  <div className="mt-5 grid grid-cols-2 gap-4 text-[13px] sm:grid-cols-4">
+                  <div className="mt-5 grid grid-cols-2 gap-4 text-[13px] sm:grid-cols-4 lg:mt-4">
                     <div>
                       <p className="text-ink-tertiary">Monthly rent</p>
                       <p className="tabular mt-0.5 font-medium text-ink">
@@ -125,7 +126,7 @@ export default async function StudentDashboardPage() {
                   </div>
 
                   {allocation.room.amenities.length > 0 ? (
-                    <ul className="mt-4 flex flex-wrap gap-1.5">
+                    <ul className="mt-4 flex flex-wrap gap-1.5 lg:mt-3">
                       {allocation.room.amenities.map((amenity) => (
                         <li
                           key={amenity}
@@ -153,7 +154,7 @@ export default async function StudentDashboardPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="lg:p-5">
             <CardHeader>
               <div className="flex items-center justify-between gap-3">
                 <CardTitle>My complaints</CardTitle>
@@ -177,7 +178,7 @@ export default async function StudentDashboardPage() {
                 ))}
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 lg:mt-3">
                 {complaints.recent.length === 0 ? (
                   <EmptyState
                     icon={MessageSquareWarning}
@@ -191,7 +192,7 @@ export default async function StudentDashboardPage() {
                     {complaints.recent.map((complaint) => (
                       <li
                         key={complaint.id}
-                        className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0"
+                        className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0 lg:py-2.5"
                       >
                         <div className="min-w-0">
                           <Link
@@ -219,9 +220,9 @@ export default async function StudentDashboardPage() {
           </Card>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 lg:gap-4">
           {profileIncomplete ? (
-            <Card>
+            <Card className="lg:p-5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <UserRound className="size-4 text-accent" aria-hidden />
@@ -242,7 +243,7 @@ export default async function StudentDashboardPage() {
             </Card>
           ) : null}
 
-          <Card>
+          <Card className="lg:p-5">
             <CardHeader>
               <div className="flex items-center justify-between gap-3">
                 <CardTitle>Notices</CardTitle>
@@ -262,7 +263,7 @@ export default async function StudentDashboardPage() {
               ) : (
                 <ul className="flex flex-col divide-y divide-line">
                   {notices.map((notice) => (
-                    <li key={notice.id} className="py-3 first:pt-0 last:pb-0">
+                    <li key={notice.id} className="py-3 first:pt-0 last:pb-0 lg:py-2.5">
                       <p className="flex items-start gap-1.5 text-[13px] font-medium leading-snug text-ink">
                         {notice.isPinned ? (
                           <Pin className="mt-0.5 size-3.5 shrink-0 text-accent" aria-hidden />
@@ -279,7 +280,7 @@ export default async function StudentDashboardPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="lg:hidden">
             <CardHeader>
               <CardTitle>Quick actions</CardTitle>
             </CardHeader>

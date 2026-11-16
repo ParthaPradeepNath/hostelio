@@ -25,9 +25,10 @@ export interface BadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {
   dot?: boolean;
+  pulse?: boolean;
 }
 
-function Badge({ className, tone, dot, children, ...props }: BadgeProps) {
+function Badge({ className, tone, dot, pulse, children, ...props }: BadgeProps) {
   const dotColor =
     tone === "success"
       ? "bg-success"
@@ -41,7 +42,16 @@ function Badge({ className, tone, dot, children, ...props }: BadgeProps) {
 
   return (
     <span className={cn(badgeVariants({ tone }), className)} {...props}>
-      {dot ? <span className={cn("size-1.5 rounded-pill", dotColor)} aria-hidden /> : null}
+      {dot ? (
+        <span
+          className={cn(
+            "size-1.5 rounded-pill",
+            dotColor,
+            pulse && "animate-pulse motion-reduce:animate-none",
+          )}
+          aria-hidden
+        />
+      ) : null}
       {children}
     </span>
   );

@@ -89,7 +89,7 @@ export function AdminTriage({
                       selected
                         ? status === "REJECTED"
                           ? "destructive"
-                          : "primary"
+                          : "default"
                         : "secondary"
                     }
                     aria-pressed={selected}

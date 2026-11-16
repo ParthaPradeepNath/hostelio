@@ -16,7 +16,11 @@ export function Field({ label, htmlFor, error, hint, className, children }: Fiel
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
       {error ? (
-        <p id={`${htmlFor}-error`} role="alert" className="text-[12px] leading-snug text-danger">
+        <p
+          id={`${htmlFor}-error`}
+          role="alert"
+          className="field-error-in text-[12px] leading-snug text-danger"
+        >
           {error}
         </p>
       ) : hint ? (

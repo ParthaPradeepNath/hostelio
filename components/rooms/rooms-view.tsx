@@ -233,7 +233,7 @@ export function RoomsView({
           }
         />
       ) : (
-        <>
+        <div key={view} className="view-in">
           {view === "table" ? (
             <div className="hidden overflow-hidden rounded-lg border border-line bg-surface shadow-card md:block">
               <Table>
@@ -362,7 +362,7 @@ export function RoomsView({
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
 
       {meta.totalPages > 1 ? (

@@ -7,6 +7,7 @@ import { AllocationRowActions } from "@/components/allocations/allocation-action
 import { EmptyState } from "@/components/layout/empty-state";
 import { PageHeader } from "@/components/layout/page-header";
 import { PaginationNav } from "@/components/layout/pagination-nav";
+import { TabTransition } from "@/components/layout/tab-transition";
 import { StatusBadge } from "@/components/status-badge";
 import {
   Table,
@@ -98,7 +99,7 @@ export default async function AllocationsPage({
         </nav>
       ) : null}
 
-      {result.data.length === 0 ? (
+      <TabTransition value={status}>{result.data.length === 0 ? (
         <EmptyState
           icon={KeyRound}
           title={
@@ -317,6 +318,7 @@ export default async function AllocationsPage({
           </div>
         </>
       )}
+      </TabTransition>
 
       {!isAdmin ? (
         <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-ink-tertiary">

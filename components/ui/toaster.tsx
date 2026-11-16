@@ -3,8 +3,17 @@
 import { useEffect, useState } from "react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
+type ResolvedTheme = "light" | "dark";
+
+function resolveTheme(): ResolvedTheme {
+  const preference = document.documentElement.dataset.theme;
+  if (preference === "light" || preference === "dark") return preference;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 export function Toaster() {
   const [position, setPosition] = useState<ToasterProps["position"]>("top-right");
+  const [theme, setTheme] = useState<ResolvedTheme>("light");
 
   useEffect(() => {
     const query = window.matchMedia("(max-width: 767px)");
@@ -14,9 +23,25 @@ export function Toaster() {
     return () => query.removeEventListener("change", update);
   }, []);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const update = () => setTheme(resolveTheme());
+    update();
+
+    const observer = new MutationObserver(update);
+    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    colorScheme.addEventListener("change", update);
+
+    return () => {
+      observer.disconnect();
+      colorScheme.removeEventListener("change", update);
+    };
+  }, []);
+
   return (
     <Sonner
-      theme="system"
+      theme={theme}
       position={position}
       duration={4000}
       gap={8}

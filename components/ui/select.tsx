@@ -15,14 +15,17 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-11 w-full items-center justify-between gap-2 rounded-sm border border-line-strong bg-surface px-3 text-left text-[16px] text-ink transition-colors data-[placeholder]:text-ink-tertiary disabled:cursor-not-allowed disabled:opacity-50 md:h-10 md:text-[14px] [&_svg]:size-4 [&_svg]:shrink-0",
+      "group flex h-11 w-full items-center justify-between gap-2 rounded-sm border border-line-strong bg-surface px-3 text-left text-[16px] text-ink transition-colors data-[placeholder]:text-ink-tertiary disabled:cursor-not-allowed disabled:opacity-50 md:h-10 md:text-[14px] [&_svg]:size-4 [&_svg]:shrink-0",
       className,
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="text-ink-tertiary" aria-hidden />
+      <ChevronDown
+        className="text-ink-tertiary transition-transform duration-200 ease-[var(--ease-out)] motion-reduce:transition-none group-data-[state=open]:rotate-180"
+        aria-hidden
+      />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -64,7 +67,7 @@ const SelectItem = React.forwardRef<
   >
     <span className="absolute left-2 inline-flex size-4 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="size-4 text-accent" aria-hidden />
+        <Check className="item-indicator-in size-4 text-accent" aria-hidden />
       </SelectPrimitive.ItemIndicator>
     </span>
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

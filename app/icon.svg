@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<!--
+  Pikaicons: home-alt (Duo Solid), free for personal and commercial use (https://pikaicons.com/free-icons)
+  Credit is optional but appreciated: "Icons by Pikaicons" linking to https://pikaicons.com
+  License: https://pikaicons.com/license
+-->
+<rect width="24" height="24" rx="5.5" fill="#0071e3"/>
+<g transform="translate(2.9 2.9) scale(0.7583)">
+  <path fill="#ffffff" d="M10.51 2.23c.97-.31 2.01-.31 2.98 0 .61.19 1.14.52 1.68.96.53.43 1.13 1 1.88 1.7l2.72 2.57c.65.62 1.11 1.05 1.44 1.57.29.45.51.96.64 1.48.15.6.15 1.23.15 2.13v2c0 1.08 0 1.96-.06 2.67-.06.73-.18 1.37-.48 1.96-.48.94-1.25 1.7-2.19 2.18-.56.29-1.15.41-1.83.48q-.63.06-1.44.06V16c0-2.21-1.79-4-4-4s-4 1.79-4 4v5.99q-.81 0-1.44-.06c-.68-.07-1.27-.19-1.83-.48-.94-.48-1.71-1.24-2.18-2.18-.31-.59-.43-1.23-.49-1.96C2 16.6 2 15.72 2 14.64v-2c0-.9 0-1.53.15-2.13.13-.52.35-1.03.64-1.48.33-.52.79-.95 1.44-1.57l2.72-2.57c.75-.7 1.35-1.27 1.88-1.7.54-.44 1.07-.77 1.68-.96" opacity=".45"/>
+  <path fill="#ffffff" d="M14 22h-4v-6c0-1.1.9-2 2-2s2 .9 2 2z"/>
+  <path stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.88 10.76c-.1-.43-.28-.83-.51-1.2-.27-.41-.63-.76-1.37-1.46l-2.6-2.45c-1.55-1.46-2.32-2.19-3.21-2.47-.77-.24-1.6-.24-2.38 0-.88.28-1.66 1.01-3.2 2.47L5.01 8.1c-.74.7-1.11 1.05-1.38 1.46q-.345.555-.51 1.2"/>
+</g>
+</svg>

@@ -1,39 +1,57 @@
 @import "tailwindcss";
 
 :root {
+  /* `light dark` follows the OS; data-theme pins one side explicitly. */
+  color-scheme: light dark;
+
   /* Surfaces */
-  --bg: #f5f5f7;
-  --surface: #ffffff;
-  --surface-2: #fbfbfd;
-  --surface-hover: rgba(0, 0, 0, 0.03);
+  --bg: light-dark(#f5f5f7, #000000);
+  --surface: light-dark(#ffffff, #1c1c1e);
+  --surface-2: light-dark(#fbfbfd, #2c2c2e);
+  --surface-hover: light-dark(rgba(0, 0, 0, 0.03), rgba(255, 255, 255, 0.06));
 
   /* Text */
-  --text: #1d1d1f;
-  --text-secondary: #6e6e73;
-  --text-tertiary: #86868b;
+  --text: light-dark(#1d1d1f, #f5f5f7);
+  --text-secondary: light-dark(#6e6e73, #a1a1a6);
+  --text-tertiary: light-dark(#86868b, #8e8e93);
   --text-inverse: #ffffff;
 
   /* Lines and focus */
-  --border: rgba(0, 0, 0, 0.08);
-  --border-strong: rgba(0, 0, 0, 0.14);
-  --focus-ring: rgba(0, 113, 227, 0.35);
-  --scrim: rgba(0, 0, 0, 0.35);
+  --border: light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.1));
+  --border-strong: light-dark(rgba(0, 0, 0, 0.14), rgba(255, 255, 255, 0.18));
+  --focus-ring: light-dark(rgba(0, 113, 227, 0.35), rgba(10, 132, 255, 0.45));
+  --scrim: light-dark(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.55));
 
   /* Accent and semantics */
-  --accent: #0071e3;
-  --accent-hover: #0077ed;
-  --accent-soft: rgba(0, 113, 227, 0.1);
-  --success: #1a7f37;
-  --success-soft: rgba(26, 127, 55, 0.1);
-  --warning: #b25e09;
-  --warning-soft: rgba(178, 94, 9, 0.1);
-  --danger: #d70015;
-  --danger-soft: rgba(215, 0, 21, 0.1);
+  --accent: light-dark(#0071e3, #0a84ff);
+  --accent-hover: light-dark(#0077ed, #409cff);
+  --accent-soft: light-dark(rgba(0, 113, 227, 0.1), rgba(10, 132, 255, 0.16));
+
+  /* Primary button (Aceternity-style blue) */
+  --btn-primary-bg: linear-gradient(to bottom, #3b82f6, #2563eb);
+  --btn-primary-bg-hover: linear-gradient(to bottom, #2563eb, #1d4ed8);
+  --btn-primary-border: #3b82f6;
+  --btn-primary-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
+    0 2px 6px rgba(37, 99, 235, 0.35);
+  --btn-primary-shadow-hover:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
+    0 4px 12px rgba(37, 99, 235, 0.5);
+
+  --success: light-dark(#1a7f37, #30d158);
+  --success-soft: light-dark(rgba(26, 127, 55, 0.1), rgba(48, 209, 88, 0.16));
+  --warning: light-dark(#b25e09, #ff9f0a);
+  --warning-soft: light-dark(rgba(178, 94, 9, 0.1), rgba(255, 159, 10, 0.16));
+  --danger: light-dark(#d70015, #ff453a);
+  --danger-soft: light-dark(rgba(215, 0, 21, 0.1), rgba(255, 69, 58, 0.16));
 
   /* Elevation */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.12);
+  --shadow-sm: light-dark(
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 1px 2px rgba(0, 0, 0, 0.4)
+  );
+  --shadow-md: light-dark(0 8px 24px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.5));
+  --shadow-lg: light-dark(0 20px 48px rgba(0, 0, 0, 0.12), 0 20px 48px rgba(0, 0, 0, 0.6));
 
   /* Shape */
   --radius-sm: 8px;
@@ -45,28 +63,24 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Sidebar (shadcn sidebar primitive) mapped to the app palette */
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--accent);
+  --sidebar-primary-foreground: var(--text-inverse);
+  --sidebar-accent: var(--surface-hover);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--accent);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000000;
-    --surface: #1c1c1e;
-    --surface-2: #2c2c2e;
-    --surface-hover: rgba(255, 255, 255, 0.06);
-    --text: #f5f5f7;
-    --text-secondary: #a1a1a6;
-    --text-tertiary: #8e8e93;
-    --border: rgba(255, 255, 255, 0.1);
-    --border-strong: rgba(255, 255, 255, 0.18);
-    --accent: #0a84ff;
-    --accent-hover: #409cff;
-    --accent-soft: rgba(10, 132, 255, 0.16);
-    --focus-ring: rgba(10, 132, 255, 0.45);
-    --scrim: rgba(0, 0, 0, 0.55);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
-  }
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -107,6 +121,14 @@
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
 }
 
 @layer base {
@@ -217,6 +239,54 @@
     transform: scale(0.97);
   }
 
+  /*
+   * Standalone blue CTA. The Button component renders the same look through
+   * its default variant; this class is for non-Button elements (e.g. Clerk's
+   * form buttons) so the primary action matches everywhere.
+   */
+  .aceternity-blue-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-inverse);
+    background-color: #2563eb;
+    background-image: var(--btn-primary-bg);
+    border: 1px solid var(--btn-primary-border);
+    border-radius: 8px;
+    box-shadow: var(--btn-primary-shadow);
+    cursor: pointer;
+    transition:
+      background-image 200ms ease,
+      box-shadow 200ms ease,
+      transform 200ms ease;
+  }
+
+  .aceternity-blue-btn:hover {
+    background-color: #1d4ed8;
+    background-image: var(--btn-primary-bg-hover);
+    box-shadow: var(--btn-primary-shadow-hover);
+    transform: translateY(-1px);
+  }
+
+  .aceternity-blue-btn:active {
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aceternity-blue-btn {
+      transition: none;
+    }
+
+    .aceternity-blue-btn:hover {
+      transform: none;
+    }
+  }
+
   .hover-tint {
     transition: background-color 120ms ease;
   }
@@ -317,6 +387,104 @@
   }
 }
 
+/* Micro-interactions. Short, opacity/transform only, reduced-motion aware. */
+
+@keyframes theme-icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-30deg) scale(0.7);
+  }
+}
+
+@keyframes field-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes progress-fill {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes content-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@keyframes check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+.theme-icon-in {
+  animation: theme-icon-in 180ms var(--ease-out);
+}
+
+.field-error-in {
+  animation: field-error-in 160ms var(--ease-out);
+}
+
+.progress-fill {
+  animation: progress-fill 480ms var(--ease-out);
+}
+
+.empty-in {
+  animation: content-in 240ms var(--ease-out);
+}
+
+.view-in {
+  animation: content-in 150ms var(--ease-out);
+}
+
+.item-indicator-in {
+  animation: check-in 120ms var(--ease-out);
+}
+
+/*
+ * Route enter.
+ *
+ * The enter transition lives on the page's root element, not on the wrapper,
+ * so it also plays when a page resolves after its loading skeleton. Fading the
+ * wrapper instead would animate the skeleton and then snap the real content
+ * into place. `@starting-style` supplies the entering style without keyframes,
+ * so one rule covers both route changes and Suspense resolution.
+ */
+.page-in > *,
+.tab-in > * {
+  transition:
+    opacity 220ms var(--ease-out),
+    transform 220ms var(--ease-out);
+}
+
+@starting-style {
+  .page-in > *,
+  .tab-in > * {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.tab-in > * {
+  transition-duration: 180ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-slot="button"] .lucide-arrow-right {
+    transition: transform 140ms var(--ease-out);
+  }
+
+  [data-slot="button"]:hover .lucide-arrow-right {
+    transform: translateX(2px);
+  }
+}
+
 .dialog-overlay[data-state="open"] {
   animation: overlay-in 200ms var(--ease-out);
 }
@@ -363,6 +531,29 @@
     transform: none;
   }
 
+  .theme-icon-in,
+  .field-error-in,
+  .empty-in,
+  .view-in,
+  .item-indicator-in {
+    animation-name: overlay-in;
+  }
+
+  @starting-style {
+    .page-in > *,
+    .tab-in > * {
+      transform: none;
+    }
+  }
+
+  .progress-fill {
+    animation: none;
+  }
+
+  [data-slot="button"]:hover .lucide-arrow-right {
+    transform: none;
+  }
+
   .dialog-content,
   .sheet-content,
   .popover-content,
@@ -395,16 +586,8 @@
 
 @media (prefers-contrast: more) {
   :root {
-    --border: rgba(0, 0, 0, 0.28);
-    --border-strong: rgba(0, 0, 0, 0.45);
-    --text-secondary: #424245;
-  }
-}
-
-@media (prefers-color-scheme: dark) and (prefers-contrast: more) {
-  :root {
-    --border: rgba(255, 255, 255, 0.32);
-    --border-strong: rgba(255, 255, 255, 0.5);
-    --text-secondary: #d1d1d6;
+    --border: light-dark(rgba(0, 0, 0, 0.28), rgba(255, 255, 255, 0.32));
+    --border-strong: light-dark(rgba(0, 0, 0, 0.45), rgba(255, 255, 255, 0.5));
+    --text-secondary: light-dark(#424245, #d1d1d6);
   }
 }
