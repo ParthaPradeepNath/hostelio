@@ -26,7 +26,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <SidebarProvider defaultOpen={defaultOpen} className="min-h-dvh">
         <AppSidebar role={user.role} />
         <SidebarInset>
-          <Topbar role={user.role} theme={theme} />
+          <Topbar
+            user={{ name: user.name, email: user.email, role: user.role }}
+            theme={theme}
+          />
           <main
             id="main-content"
             tabIndex={-1}

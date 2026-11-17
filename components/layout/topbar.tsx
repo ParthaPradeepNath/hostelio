@@ -1,23 +1,15 @@
-import { UserButton } from "@clerk/nextjs";
+import { AccountMenu } from "@/components/auth/account-menu";
 import { RoleBadge } from "@/components/layout/role-badge";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { Theme } from "@/lib/theme";
 
-const userButtonAppearance = {
-  variables: {
-    colorPrimary: "var(--accent)",
-    colorBackground: "var(--surface)",
-    colorText: "var(--text)",
-    colorTextSecondary: "var(--text-secondary)",
-    colorInputBackground: "var(--surface-2)",
-    colorInputText: "var(--text)",
-    borderRadius: "0.75rem",
-    fontFamily: "var(--font-sans)",
-  },
+type TopbarProps = {
+  user: { name: string; email: string; role: "STUDENT" | "ADMIN" };
+  theme: Theme;
 };
 
-export function Topbar({ role, theme }: { role: "STUDENT" | "ADMIN"; theme: Theme }) {
+export function Topbar({ user, theme }: TopbarProps) {
   return (
     <header className="chrome sticky top-0 z-30 flex h-14 items-center justify-between gap-4 pl-3 pr-5 lg:pl-4 lg:pr-10">
       <div className="flex items-center gap-3">
@@ -29,8 +21,8 @@ export function Topbar({ role, theme }: { role: "STUDENT" | "ADMIN"; theme: Them
       </div>
       <div className="flex items-center gap-3">
         <ThemeToggle initialTheme={theme} />
-        <RoleBadge role={role} />
-        <UserButton appearance={userButtonAppearance} />
+        <RoleBadge role={user.role} />
+        <AccountMenu {...user} />
       </div>
     </header>
   );

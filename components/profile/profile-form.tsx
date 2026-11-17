@@ -77,7 +77,7 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
             label="Full name"
             htmlFor="profile-name"
             error={errors.name?.message}
-            hint="This also updates your Clerk account name."
+            hint="Shown to the hostel office and on your complaints."
           >
             <Input
               id="profile-name"

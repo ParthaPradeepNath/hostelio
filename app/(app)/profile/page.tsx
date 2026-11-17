@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
 import { PageHeader } from "@/components/layout/page-header";
-import { ManageAccountButton } from "@/components/profile/manage-account-button";
 import { ProfileForm } from "@/components/profile/profile-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,9 +12,6 @@ export const metadata: Metadata = { title: "Profile" };
 export default async function ProfilePage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
-
-  const clerkUser = await currentUser();
-  const imageUrl = clerkUser?.imageUrl ?? null;
 
   return (
     <div>
@@ -31,19 +25,9 @@ export default async function ProfilePage() {
           <Card>
             <CardContent className="mt-0">
               <div className="flex items-center gap-4">
-                {imageUrl ? (
-                  <Image
-                    src={imageUrl}
-                    alt=""
-                    width={56}
-                    height={56}
-                    className="size-14 rounded-pill border border-line object-cover"
-                  />
-                ) : (
-                  <span className="flex size-14 items-center justify-center rounded-pill bg-accent-soft text-[18px] font-semibold text-accent">
-                    {initials(user.name)}
-                  </span>
-                )}
+                <span className="flex size-14 items-center justify-center rounded-pill bg-accent-soft text-[18px] font-semibold text-accent">
+                  {initials(user.name)}
+                </span>
                 <div className="min-w-0">
                   <p className="truncate text-[16px] font-semibold text-ink" title={user.name}>
                     {user.name}
@@ -99,18 +83,12 @@ export default async function ProfilePage() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-ink-tertiary">Clerk user ID</dt>
+                  <dt className="text-ink-tertiary">Account ID</dt>
                   <dd className="mt-0.5 break-all font-mono text-[11px] text-ink-secondary">
-                    {user.clerkUserId}
+                    {user.id}
                   </dd>
                 </div>
               </dl>
-              <p className="mt-4 text-[12px] leading-relaxed text-ink-tertiary">
-                Change your password, email, or connected accounts in the Clerk account panel.
-              </p>
-              <div className="mt-3">
-                <ManageAccountButton />
-              </div>
             </CardContent>
           </Card>
         </div>

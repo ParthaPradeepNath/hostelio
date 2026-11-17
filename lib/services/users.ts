@@ -1,5 +1,4 @@
 import { Prisma, type User } from "@prisma/client";
-import { clerkClient } from "@clerk/nextjs/server";
 import { AppError } from "@/lib/api/errors";
 import { prisma } from "@/lib/prisma";
 import type { ProfileUpdateInput } from "@/lib/validators/profile";
@@ -12,16 +11,6 @@ export async function updateProfile(user: User, input: ProfileUpdateInput) {
   } else {
     if (input.name !== undefined && input.name !== user.name) {
       data.name = input.name;
-      try {
-        const client = await clerkClient();
-        const [firstName, ...rest] = input.name.split(/\s+/);
-        await client.users.updateUser(user.clerkUserId, {
-          firstName,
-          lastName: rest.join(" ") || undefined,
-        });
-      } catch (error) {
-        console.warn("Could not sync the updated name to Clerk", error instanceof Error ? error.message : error);
-      }
     }
     if (input.phone !== undefined) data.phone = input.phone;
     if (input.studentId !== undefined) data.studentId = input.studentId;
