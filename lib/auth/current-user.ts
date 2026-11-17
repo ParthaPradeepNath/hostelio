@@ -1,47 +1,16 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
-import type { Role, User } from "@prisma/client";
+import type { User } from "@prisma/client";
+import { getSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 
-function readRole(metadata: unknown): Role {
-  if (
-    metadata &&
-    typeof metadata === "object" &&
-    "role" in metadata &&
-    (metadata as { role?: unknown }).role === "admin"
-  ) {
-    return "ADMIN";
-  }
-  return "STUDENT";
-}
-
 /**
- * Verifies the Clerk session and keeps the Postgres user row in sync with Clerk.
- * The DB role always mirrors `publicMetadata.role`, with STUDENT as the default.
+ * Resolves the signed session cookie to the current database user.
+ * The database role is the source of truth; the JWT only identifies the user.
  */
 export async function ensureUser(): Promise<User | null> {
-  const { userId } = await auth();
-  if (!userId) return null;
+  const session = await getSession();
+  if (!session) return null;
 
-  const clerkUser = await currentUser();
-  if (!clerkUser) return null;
-
-  const email =
-    clerkUser.primaryEmailAddress?.emailAddress ??
-    clerkUser.emailAddresses[0]?.emailAddress ??
-    `${userId}@hostelio.local`;
-
-  const name =
-    [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ").trim() ||
-    clerkUser.username ||
-    email.split("@")[0];
-
-  const role = readRole(clerkUser.publicMetadata);
-
-  return prisma.user.upsert({
-    where: { clerkUserId: userId },
-    create: { clerkUserId: userId, email, name, role },
-    update: { email, name, role },
-  });
+  return prisma.user.findUnique({ where: { id: session.userId } });
 }
 
 export async function getCurrentUser(): Promise<User | null> {
