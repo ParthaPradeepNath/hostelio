@@ -214,6 +214,11 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Auth screens sit on a lifted dark surface rather than pure black. */
+  .auth-surface {
+    background-color: light-dark(var(--bg), #121212);
+  }
+
   .chrome {
     background: color-mix(in srgb, var(--surface) 82%, transparent);
     backdrop-filter: blur(20px) saturate(180%);

@@ -9,7 +9,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
   const theme = normalizeTheme(cookieStore.get(THEME_COOKIE)?.value);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center px-5 py-12">
+    <main className="auth-surface flex min-h-dvh flex-col items-center justify-center px-5 py-12">
       <div className="fixed right-3 top-3 sm:right-6 sm:top-6">
         <ThemeToggle initialTheme={theme} />
       </div>
