@@ -23,12 +23,14 @@ export default async function LoginPage({
   const { next } = await searchParams;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Welcome back</CardTitle>
+    <Card className="border-0 bg-transparent p-0 shadow-none md:p-0">
+      <CardHeader className="text-center">
+        <CardTitle className="text-[22px] tracking-[-0.02em]">
+          Welcome back
+        </CardTitle>
         <CardDescription>Sign in to manage your hostel stay.</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-6">
         <LoginForm next={next} />
       </CardContent>
     </Card>
