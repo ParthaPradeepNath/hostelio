@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { PrismaClient, RoomType } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -29,8 +30,51 @@ const RENT_BY_TYPE: Record<RoomType, string> = {
   QUAD: "3000.00",
 };
 
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL?.trim() || "admin@hostelio.local";
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD?.trim() || "Admin123!";
+const STUDENT_EMAIL = process.env.SEED_STUDENT_EMAIL?.trim() || "student@hostelio.local";
+const STUDENT_PASSWORD = process.env.SEED_STUDENT_PASSWORD?.trim() || "Student123!";
+
 function roomNumber(block: string, floor: number, index: number) {
   return `${block}-${floor}0${index}`;
+}
+
+async function seedUsers() {
+  const passwordHash = (password: string) => bcrypt.hash(password, 12);
+
+  const admin = await prisma.user.upsert({
+    where: { email: ADMIN_EMAIL },
+    create: {
+      email: ADMIN_EMAIL,
+      name: "Hostel Warden",
+      role: "ADMIN",
+      passwordHash: await passwordHash(ADMIN_PASSWORD),
+    },
+    update: {
+      name: "Hostel Warden",
+      role: "ADMIN",
+      passwordHash: await passwordHash(ADMIN_PASSWORD),
+    },
+  });
+
+  const student = await prisma.user.upsert({
+    where: { email: STUDENT_EMAIL },
+    create: {
+      email: STUDENT_EMAIL,
+      name: "Aarav Sharma",
+      role: "STUDENT",
+      passwordHash: await passwordHash(STUDENT_PASSWORD),
+      studentId: "2026CS1042",
+      department: "Computer Science",
+      year: 2,
+    },
+    update: {
+      role: "STUDENT",
+      passwordHash: await passwordHash(STUDENT_PASSWORD),
+    },
+  });
+
+  return { admin, student };
 }
 
 async function seedRooms() {
@@ -78,13 +122,7 @@ async function seedRooms() {
   return { created, updated };
 }
 
-async function seedNotices() {
-  const adminClerkId = process.env.SEED_ADMIN_CLERK_ID?.trim();
-  if (!adminClerkId) return { skipped: true as const, created: 0, reason: "SEED_ADMIN_CLERK_ID not set" };
-
-  const admin = await prisma.user.findUnique({ where: { clerkUserId: adminClerkId } });
-  if (!admin) return { skipped: true as const, created: 0, reason: "admin account not found" };
-
+async function seedNotices(authorId: string) {
   const notices = [
     {
       title: "Water supply interruption in Block A",
@@ -111,24 +149,17 @@ async function seedNotices() {
     const existing = await prisma.notice.findFirst({ where: { title: notice.title } });
     if (existing) continue;
     await prisma.notice.create({
-      data: { ...notice, authorId: admin.id },
+      data: { ...notice, authorId },
     });
     created += 1;
   }
 
-  return { skipped: false as const, created, reason: null };
+  return { created };
 }
 
-async function seedDemoRecords() {
-  const studentClerkId = process.env.SEED_STUDENT_CLERK_ID?.trim();
-  if (!studentClerkId)
-    return { skipped: true as const, allocation: false, complaints: 0, reason: "SEED_STUDENT_CLERK_ID not set" };
-
-  const student = await prisma.user.findUnique({ where: { clerkUserId: studentClerkId } });
-  if (!student) return { skipped: true as const, allocation: false, complaints: 0, reason: "student account not found" };
-
+async function seedDemoRecords(studentId: string) {
   const active = await prisma.allocation.findFirst({
-    where: { studentId: student.id, status: "ACTIVE" },
+    where: { studentId, status: "ACTIVE" },
   });
 
   let allocation = false;
@@ -143,7 +174,7 @@ async function seedDemoRecords() {
       });
       if (occupancy < room.capacity) {
         await prisma.allocation.create({
-          data: { studentId: student.id, roomId: room.id, status: "ACTIVE" },
+          data: { studentId, roomId: room.id, status: "ACTIVE" },
         });
         if (occupancy + 1 >= room.capacity) {
           await prisma.room.update({ where: { id: room.id }, data: { status: "FULL" } });
@@ -153,11 +184,11 @@ async function seedDemoRecords() {
     }
   }
 
-  const existingComplaints = await prisma.complaint.count({ where: { studentId: student.id } });
+  const existingComplaints = await prisma.complaint.count({ where: { studentId } });
   let complaints = 0;
   if (existingComplaints === 0) {
-    const room = await prisma.allocation.findFirst({
-      where: { studentId: student.id, status: "ACTIVE" },
+    const allocatedRoom = await prisma.allocation.findFirst({
+      where: { studentId, status: "ACTIVE" },
       include: { room: true },
     });
     const samples = [
@@ -200,8 +231,8 @@ async function seedDemoRecords() {
       await prisma.complaint.create({
         data: {
           ...sample,
-          studentId: student.id,
-          roomId: room?.roomId ?? null,
+          studentId,
+          roomId: allocatedRoom?.roomId ?? null,
           status: "OPEN",
           aiProvider: "seed",
           aiModel: "seed",
@@ -212,24 +243,23 @@ async function seedDemoRecords() {
     }
   }
 
-  return { skipped: false as const, allocation, complaints, reason: null };
+  return { allocation, complaints };
 }
 
 async function main() {
+  const { admin, student } = await seedUsers();
   const rooms = await seedRooms();
-  const notices = await seedNotices();
-  const demo = await seedDemoRecords();
+  const notices = await seedNotices(admin.id);
+  const demo = await seedDemoRecords(student.id);
 
   console.log(
     [
       "Hostelio seed complete.",
+      `Demo login (admin): ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`,
+      `Demo login (student): ${STUDENT_EMAIL} / ${STUDENT_PASSWORD}`,
       `Rooms: ${rooms.created} created, ${rooms.updated} updated.`,
-      notices.skipped
-        ? `Notices: skipped (${notices.reason}).`
-        : `Notices: ${notices.created} created.`,
-      demo.skipped
-        ? `Demo records: skipped (${demo.reason}).`
-        : `Demo records: allocation ${demo.allocation ? "created" : "already present"}, ${demo.complaints} complaints created.`,
+      `Notices: ${notices.created} created.`,
+      `Demo records: allocation ${demo.allocation ? "created" : "already present"}, ${demo.complaints} complaints created.`,
     ].join("\n"),
   );
 }
