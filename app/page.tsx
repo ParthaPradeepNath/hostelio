@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { Brand } from "@/components/layout/brand";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { Highlighter } from "@/components/ui/highlighter";
 import { getSession } from "@/lib/auth/session";
 import { normalizeTheme, THEME_COOKIE } from "@/lib/theme";
 
@@ -29,7 +30,16 @@ export default async function HomePage() {
       <div className="flex flex-1 items-center justify-center px-5 pb-12">
         <div className="max-w-2xl text-center">
           <h1 className="text-ink text-[clamp(2.25rem,7vw,4rem)] leading-[1.05] font-semibold tracking-[-0.04em] text-balance">
-            Hostel life, organized.
+            Hostel life,{" "}
+            <Highlighter
+              color="#3b82f6"
+              strokeWidth={2}
+              animationDuration={800}
+              isView
+            >
+              organized
+            </Highlighter>
+            .
           </h1>
           <p className="text-ink-secondary mx-auto mt-5 max-w-lg text-[15px] leading-relaxed text-pretty md:text-[17px]">
             Rooms, complaints, and notices in one calm place — built for
