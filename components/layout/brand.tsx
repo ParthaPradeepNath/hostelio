@@ -2,8 +2,11 @@ import Link from "next/link";
 
 export function Brand({ className }: { className?: string }) {
   return (
-    <Link href="/dashboard" className={`flex items-center gap-2.5 ${className ?? ""}`}>
-      <span className="flex size-9 items-center justify-center rounded-md bg-accent text-inverse">
+    <Link
+      href="/dashboard"
+      className={`flex items-center gap-2.5 ${className ?? ""}`}
+    >
+      <span className="bg-accent text-inverse flex size-9 items-center justify-center rounded-md">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -26,7 +29,9 @@ export function Brand({ className }: { className?: string }) {
           />
         </svg>
       </span>
-      <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">Hostelio</span>
+      <span className="text-ink text-[15px] font-semibold tracking-[-0.01em]">
+        Hostelio
+      </span>
     </Link>
   );
 }

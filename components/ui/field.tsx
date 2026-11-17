@@ -10,7 +10,14 @@ type FieldProps = {
   children: React.ReactNode;
 };
 
-export function Field({ label, htmlFor, error, hint, className, children }: FieldProps) {
+export function Field({
+  label,
+  htmlFor,
+  error,
+  hint,
+  className,
+  children,
+}: FieldProps) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <Label htmlFor={htmlFor}>{label}</Label>
@@ -19,12 +26,15 @@ export function Field({ label, htmlFor, error, hint, className, children }: Fiel
         <p
           id={`${htmlFor}-error`}
           role="alert"
-          className="field-error-in text-[12px] leading-snug text-danger"
+          className="field-error-in text-danger text-[12px] leading-snug"
         >
           {error}
         </p>
       ) : hint ? (
-        <p id={`${htmlFor}-hint`} className="text-[12px] leading-snug text-ink-tertiary">
+        <p
+          id={`${htmlFor}-hint`}
+          className="text-ink-tertiary text-[12px] leading-snug"
+        >
           {hint}
         </p>
       ) : null}

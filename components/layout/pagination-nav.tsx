@@ -1,5 +1,7 @@
 import Link from "next/link";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -26,35 +28,50 @@ export function PaginationNav({
   }
 
   return (
-    <nav aria-label="Pagination" className="mt-5 flex items-center justify-between gap-3">
-      <p className="text-[12px] text-ink-tertiary">
+    <nav
+      aria-label="Pagination"
+      className="mt-5 flex items-center justify-between gap-3"
+    >
+      <p className="text-ink-tertiary text-[12px]">
         Page {page} of {totalPages}
       </p>
       <div className="flex gap-2">
         {page <= 1 ? (
           <span
-            className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "opacity-50")}
+            className={cn(
+              buttonVariants({ variant: "secondary", size: "sm" }),
+              "opacity-50"
+            )}
             aria-disabled="true"
           >
             <ChevronLeft aria-hidden />
             Previous
           </span>
         ) : (
-          <Link href={href(page - 1)} className={buttonVariants({ variant: "secondary", size: "sm" })}>
+          <Link
+            href={href(page - 1)}
+            className={buttonVariants({ variant: "secondary", size: "sm" })}
+          >
             <ChevronLeft aria-hidden />
             Previous
           </Link>
         )}
         {page >= totalPages ? (
           <span
-            className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "opacity-50")}
+            className={cn(
+              buttonVariants({ variant: "secondary", size: "sm" }),
+              "opacity-50"
+            )}
             aria-disabled="true"
           >
             Next
             <ChevronRight aria-hidden />
           </span>
         ) : (
-          <Link href={href(page + 1)} className={buttonVariants({ variant: "secondary", size: "sm" })}>
+          <Link
+            href={href(page + 1)}
+            className={buttonVariants({ variant: "secondary", size: "sm" })}
+          >
             Next
             <ChevronRight aria-hidden />
           </Link>

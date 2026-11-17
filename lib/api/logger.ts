@@ -24,11 +24,22 @@ type AiLog = {
 };
 
 export function logAi(entry: AiLog) {
-  console.log(JSON.stringify({ level: entry.outcome === "failure" ? "warn" : "info", type: "ai", ...entry }));
+  console.log(
+    JSON.stringify({
+      level: entry.outcome === "failure" ? "warn" : "info",
+      type: "ai",
+      ...entry,
+    })
+  );
 }
 
-export function logServerError(entry: { requestId: string; route: string; error: unknown }) {
-  const message = entry.error instanceof Error ? entry.error.message : String(entry.error);
+export function logServerError(entry: {
+  requestId: string;
+  route: string;
+  error: unknown;
+}) {
+  const message =
+    entry.error instanceof Error ? entry.error.message : String(entry.error);
   const stack = entry.error instanceof Error ? entry.error.stack : undefined;
   console.error(
     JSON.stringify({
@@ -38,6 +49,6 @@ export function logServerError(entry: { requestId: string; route: string; error:
       route: entry.route,
       message,
       stack,
-    }),
+    })
   );
 }

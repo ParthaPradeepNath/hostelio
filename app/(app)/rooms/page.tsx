@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
 import { RoomsView } from "@/components/rooms/rooms-view";
 import type { RoomListItem } from "@/components/rooms/types";
 import { getCurrentUser } from "@/lib/auth/current-user";
@@ -20,7 +21,10 @@ export default async function RoomsPage({
   const parsed = roomQuerySchema.safeParse(raw);
   const query = parsed.success ? parsed.data : roomQuerySchema.parse({});
 
-  const [result, facets] = await Promise.all([listRooms(query), listRoomFacets()]);
+  const [result, facets] = await Promise.all([
+    listRooms(query),
+    listRoomFacets(),
+  ]);
 
   const rooms: RoomListItem[] = result.data.map((room) => ({
     id: room.id,

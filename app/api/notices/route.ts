@@ -9,6 +9,9 @@ export const GET = withAuth({}, async ({ req }) => {
   return ok(result.data, result.meta);
 });
 
-export const POST = withAuth({ role: "ADMIN", schema: noticeCreateSchema }, async ({ body, user }) => {
-  return created(await createNotice(user.id, body));
-});
+export const POST = withAuth(
+  { role: "ADMIN", schema: noticeCreateSchema },
+  async ({ body, user }) => {
+    return created(await createNotice(user.id, body));
+  }
+);

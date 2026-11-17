@@ -6,7 +6,11 @@ export const loginSchema = z.object({
 });
 
 export const signupSchema = z.object({
-  name: z.string().trim().min(2, "Enter your full name").max(80, "Name is too long"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Enter your full name")
+    .max(80, "Name is too long"),
   email: z.string().trim().toLowerCase().email("Enter a valid email address"),
   password: z
     .string()

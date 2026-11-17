@@ -1,7 +1,9 @@
+import { Suspense } from "react";
+
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { redirect } from "next/navigation";
+
 import {
   BedDouble,
   Building2,
@@ -12,11 +14,15 @@ import {
   UserPlus,
   Wrench,
 } from "lucide-react";
+
+import {
+  AiSummaryCard,
+  AiSummarySkeleton,
+} from "@/components/dashboard/ai-summary-card";
+import { StatCard } from "@/components/dashboard/stat-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { PublishNoticeDialog } from "@/components/notices/publish-notice-dialog";
 import { RoomFormDialog } from "@/components/rooms/room-form-dialog";
-import { AiSummaryCard, AiSummarySkeleton } from "@/components/dashboard/ai-summary-card";
-import { StatCard } from "@/components/dashboard/stat-card";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,7 +46,8 @@ export default async function AdminDashboardPage() {
   if (!user) redirect("/login");
   if (user.role !== "ADMIN") redirect("/dashboard/student");
 
-  const { stats, byBlock, recentComplaints, recentNotices } = await getAdminDashboardStats();
+  const { stats, byBlock, recentComplaints, recentNotices } =
+    await getAdminDashboardStats();
 
   return (
     <div>
@@ -67,8 +74,16 @@ export default async function AdminDashboardPage() {
       </PageHeader>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Total rooms" value={formatCount(stats.totalRooms)} icon={DoorOpen} />
-        <StatCard label="Total beds" value={formatCount(stats.totalBeds)} icon={BedDouble} />
+        <StatCard
+          label="Total rooms"
+          value={formatCount(stats.totalRooms)}
+          icon={DoorOpen}
+        />
+        <StatCard
+          label="Total beds"
+          value={formatCount(stats.totalBeds)}
+          icon={BedDouble}
+        />
         <StatCard
           label="Occupied beds"
           value={formatCount(stats.occupiedBeds)}
@@ -86,7 +101,11 @@ export default async function AdminDashboardPage() {
           icon={DoorOpen}
           emphasis
         />
-        <StatCard label="Open complaints" value={formatCount(stats.openComplaints)} icon={MessageSquareWarning} />
+        <StatCard
+          label="Open complaints"
+          value={formatCount(stats.openComplaints)}
+          icon={MessageSquareWarning}
+        />
         <StatCard
           label="In progress"
           value={formatCount(stats.inProgressComplaints)}
@@ -108,49 +127,61 @@ export default async function AdminDashboardPage() {
           <CardContent>
             <div className="hidden md:block">
               <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Block</TableHead>
-                  <TableHead className="text-right">Rooms</TableHead>
-                  <TableHead className="text-right">Beds</TableHead>
-                  <TableHead className="text-right">Occupied</TableHead>
-                  <TableHead className="text-right">Available</TableHead>
-                  <TableHead className="w-40">Fill</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {byBlock.map((block) => {
-                  const percent = block.beds > 0 ? (block.occupied / block.beds) * 100 : 0;
-                  return (
-                    <TableRow key={block.block}>
-                      <TableCell className="font-medium text-ink">Block {block.block}</TableCell>
-                      <TableCell className="tabular text-right text-ink-secondary">{block.rooms}</TableCell>
-                      <TableCell className="tabular text-right text-ink-secondary">{block.beds}</TableCell>
-                      <TableCell className="tabular text-right text-ink">{block.occupied}</TableCell>
-                      <TableCell className="tabular text-right text-ink-secondary">
-                        {block.available}
-                      </TableCell>
-                      <TableCell>
-                        <Progress
-                          value={percent}
-                          aria-label={`Block ${block.block}: ${Math.round(percent)}% occupied`}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Block</TableHead>
+                    <TableHead className="text-right">Rooms</TableHead>
+                    <TableHead className="text-right">Beds</TableHead>
+                    <TableHead className="text-right">Occupied</TableHead>
+                    <TableHead className="text-right">Available</TableHead>
+                    <TableHead className="w-40">Fill</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {byBlock.map((block) => {
+                    const percent =
+                      block.beds > 0 ? (block.occupied / block.beds) * 100 : 0;
+                    return (
+                      <TableRow key={block.block}>
+                        <TableCell className="text-ink font-medium">
+                          Block {block.block}
+                        </TableCell>
+                        <TableCell className="tabular text-ink-secondary text-right">
+                          {block.rooms}
+                        </TableCell>
+                        <TableCell className="tabular text-ink-secondary text-right">
+                          {block.beds}
+                        </TableCell>
+                        <TableCell className="tabular text-ink text-right">
+                          {block.occupied}
+                        </TableCell>
+                        <TableCell className="tabular text-ink-secondary text-right">
+                          {block.available}
+                        </TableCell>
+                        <TableCell>
+                          <Progress
+                            value={percent}
+                            aria-label={`Block ${block.block}: ${Math.round(percent)}% occupied`}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
             </div>
 
             <ul className="flex flex-col gap-4 md:hidden">
               {byBlock.map((block) => {
-                const percent = block.beds > 0 ? (block.occupied / block.beds) * 100 : 0;
+                const percent =
+                  block.beds > 0 ? (block.occupied / block.beds) * 100 : 0;
                 return (
                   <li key={block.block}>
                     <div className="flex items-center justify-between gap-3">
-                      <p className="text-[14px] font-medium text-ink">Block {block.block}</p>
-                      <p className="tabular text-[12px] text-ink-secondary">
+                      <p className="text-ink text-[14px] font-medium">
+                        Block {block.block}
+                      </p>
+                      <p className="tabular text-ink-secondary text-[12px]">
                         {block.available} of {block.beds} beds free
                       </p>
                     </div>
@@ -159,7 +190,7 @@ export default async function AdminDashboardPage() {
                       className="mt-2"
                       aria-label={`Block ${block.block}: ${Math.round(percent)}% occupied`}
                     />
-                    <p className="mt-1.5 text-[12px] text-ink-tertiary">
+                    <p className="text-ink-tertiary mt-1.5 text-[12px]">
                       {block.rooms} rooms · {block.occupied} occupied
                     </p>
                   </li>
@@ -184,9 +215,11 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             {recentComplaints.length === 0 ? (
-              <p className="text-[13px] text-ink-secondary">No complaints have been raised yet.</p>
+              <p className="text-ink-secondary text-[13px]">
+                No complaints have been raised yet.
+              </p>
             ) : (
-              <ul className="flex flex-col divide-y divide-line">
+              <ul className="divide-line flex flex-col divide-y">
                 {recentComplaints.map((complaint) => (
                   <li
                     key={complaint.id}
@@ -195,14 +228,17 @@ export default async function AdminDashboardPage() {
                     <div className="min-w-0">
                       <Link
                         href={`/complaints/${complaint.id}`}
-                        className="block truncate text-[14px] font-medium text-ink hover:text-accent"
+                        className="text-ink hover:text-accent block truncate text-[14px] font-medium"
                         title={complaint.title}
                       >
                         {complaint.title}
                       </Link>
-                      <p className="text-[12px] text-ink-secondary">
+                      <p className="text-ink-secondary text-[12px]">
                         {complaint.student.name}
-                        {complaint.room ? ` · Room ${complaint.room.roomNumber}` : ""} ·{" "}
+                        {complaint.room
+                          ? ` · Room ${complaint.room.roomNumber}`
+                          : ""}{" "}
+                        ·{" "}
                         {enumLabel(complaint.aiCategory ?? complaint.category)}
                       </p>
                     </div>
@@ -228,13 +264,17 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             {recentNotices.length === 0 ? (
-              <p className="text-[13px] text-ink-secondary">No notices published yet.</p>
+              <p className="text-ink-secondary text-[13px]">
+                No notices published yet.
+              </p>
             ) : (
-              <ul className="flex flex-col divide-y divide-line">
+              <ul className="divide-line flex flex-col divide-y">
                 {recentNotices.map((notice) => (
                   <li key={notice.id} className="py-3 first:pt-0 last:pb-0">
-                    <p className="text-[13px] font-medium leading-snug text-ink">{notice.title}</p>
-                    <p className="mt-1 text-[11px] text-ink-tertiary">
+                    <p className="text-ink text-[13px] leading-snug font-medium">
+                      {notice.title}
+                    </p>
+                    <p className="text-ink-tertiary mt-1 text-[11px]">
                       {notice.author.name} · {formatDate(notice.publishedAt)}
                       {notice.isPinned ? " · Pinned" : ""}
                     </p>

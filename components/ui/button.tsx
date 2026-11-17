@@ -1,6 +1,8 @@
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+
 import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -10,10 +12,13 @@ const buttonVariants = cva(
       variant: {
         default:
           "text-inverse transition-[color,box-shadow,transform] before:border-[var(--btn-primary-border)] before:[background-image:var(--btn-primary-bg)] before:[box-shadow:var(--btn-primary-shadow)] hover:-translate-y-px hover:before:[background-image:var(--btn-primary-bg-hover)] hover:before:[box-shadow:var(--btn-primary-shadow-hover)] active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-        outline: "text-ink before:border-line-strong before:bg-surface hover:before:bg-surface-hover",
-        secondary: "text-ink before:border-line before:bg-surface-2 hover:before:bg-surface-hover",
+        outline:
+          "text-ink before:border-line-strong before:bg-surface hover:before:bg-surface-hover",
+        secondary:
+          "text-ink before:border-line before:bg-surface-2 hover:before:bg-surface-hover",
         ghost: "text-ink before:bg-transparent hover:before:bg-surface-hover",
-        destructive: "text-danger before:bg-danger-soft hover:before:bg-danger/15",
+        destructive:
+          "text-danger before:bg-danger-soft hover:before:bg-danger/15",
         link: "text-accent underline-offset-4 hover:underline focus-visible:ring-0",
       },
       size: {
@@ -22,7 +27,8 @@ const buttonVariants = cva(
         sm: "h-9 gap-1 rounded-[10px] px-3 text-[13px] max-sm:h-11",
         lg: "h-11 gap-1.5 rounded-[10px] px-4 text-[13px]",
         icon: "size-10 rounded-[10px] max-sm:size-11",
-        "icon-xs": "size-8 rounded-[8px] max-sm:size-11 [&_svg:not([class*='size-'])]:size-3.5",
+        "icon-xs":
+          "size-8 rounded-[8px] max-sm:size-11 [&_svg:not([class*='size-'])]:size-3.5",
         "icon-sm": "size-9 rounded-[10px] max-sm:size-11",
         "icon-lg": "size-11 rounded-[10px]",
       },
@@ -31,7 +37,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  },
+  }
 );
 
 function Button({

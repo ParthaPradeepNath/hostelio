@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 const Dialog = DialogPrimitive.Root;
@@ -15,7 +17,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("dialog-overlay fixed inset-0 z-50 bg-scrim", className)}
+    className={cn("dialog-overlay bg-scrim fixed inset-0 z-50", className)}
     {...props}
   />
 ));
@@ -30,13 +32,13 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "dialog-content fixed left-1/2 top-1/2 z-50 max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border border-line bg-surface p-6 shadow-dialog",
-        className,
+        "dialog-content border-line bg-surface shadow-dialog fixed top-1/2 left-1/2 z-50 max-h-[85dvh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg border p-6",
+        className
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="pressable absolute right-2 top-2 inline-flex size-11 items-center justify-center rounded-md text-ink-secondary hover:bg-surface-hover sm:right-4 sm:top-4 sm:size-8">
+      <DialogPrimitive.Close className="pressable text-ink-secondary hover:bg-surface-hover absolute top-2 right-2 inline-flex size-11 items-center justify-center rounded-md sm:top-4 sm:right-4 sm:size-8">
         <X className="size-4" aria-hidden />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -46,13 +48,18 @@ const DialogContent = React.forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("flex flex-col gap-1.5 pr-8", className)} {...props} />;
+  return (
+    <div className={cn("flex flex-col gap-1.5 pr-8", className)} {...props} />
+  );
 }
 
 function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
+      className={cn(
+        "mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        className
+      )}
       {...props}
     />
   );
@@ -62,7 +69,11 @@ const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title ref={ref} className={cn("type-section text-ink", className)} {...props} />
+  <DialogPrimitive.Title
+    ref={ref}
+    className={cn("type-section text-ink", className)}
+    {...props}
+  />
 ));
 DialogTitle.displayName = DialogPrimitive.Title.displayName;
 
@@ -72,7 +83,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-[13px] leading-relaxed text-ink-secondary", className)}
+    className={cn("text-ink-secondary text-[13px] leading-relaxed", className)}
     {...props}
   />
 ));
@@ -87,8 +98,8 @@ const SheetContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "sheet-content fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r border-line bg-surface shadow-dialog",
-        className,
+        "sheet-content border-line bg-surface shadow-dialog fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r",
+        className
       )}
       {...props}
     >

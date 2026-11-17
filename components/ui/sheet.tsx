@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 const Sheet = SheetPrimitive.Root;
@@ -16,7 +18,7 @@ const SheetOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
     ref={ref}
-    className={cn("dialog-overlay fixed inset-0 z-50 bg-scrim", className)}
+    className={cn("dialog-overlay bg-scrim fixed inset-0 z-50", className)}
     {...props}
   />
 ));
@@ -34,14 +36,14 @@ const SheetContent = React.forwardRef<
       ref={ref}
       data-side={side}
       className={cn(
-        "sheet-content fixed inset-y-0 z-50 flex flex-col border-line bg-surface shadow-dialog",
+        "sheet-content border-line bg-surface shadow-dialog fixed inset-y-0 z-50 flex flex-col",
         side === "left" ? "left-0 border-r" : "right-0 border-l",
-        className,
+        className
       )}
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="pressable absolute right-2 top-2 inline-flex size-11 items-center justify-center rounded-md text-ink-secondary hover:bg-surface-hover sm:right-3 sm:size-8">
+      <SheetPrimitive.Close className="pressable text-ink-secondary hover:bg-surface-hover absolute top-2 right-2 inline-flex size-11 items-center justify-center rounded-md sm:right-3 sm:size-8">
         <X className="size-4" aria-hidden />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
@@ -51,18 +53,29 @@ const SheetContent = React.forwardRef<
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("flex flex-col gap-1.5 p-4", className)} {...props} />;
+  return (
+    <div className={cn("flex flex-col gap-1.5 p-4", className)} {...props} />
+  );
 }
 
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("mt-auto flex flex-col gap-2 p-4", className)} {...props} />;
+  return (
+    <div
+      className={cn("mt-auto flex flex-col gap-2 p-4", className)}
+      {...props}
+    />
+  );
 }
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title ref={ref} className={cn("type-section text-ink", className)} {...props} />
+  <SheetPrimitive.Title
+    ref={ref}
+    className={cn("type-section text-ink", className)}
+    {...props}
+  />
 ));
 SheetTitle.displayName = SheetPrimitive.Title.displayName;
 
@@ -72,7 +85,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Description
     ref={ref}
-    className={cn("text-[13px] leading-relaxed text-ink-secondary", className)}
+    className={cn("text-ink-secondary text-[13px] leading-relaxed", className)}
     {...props}
   />
 ));

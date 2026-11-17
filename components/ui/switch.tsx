@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+
 import * as SwitchPrimitive from "@radix-ui/react-switch";
+
 import { cn } from "@/lib/utils";
 
 const Switch = React.forwardRef<
@@ -11,12 +13,12 @@ const Switch = React.forwardRef<
   <SwitchPrimitive.Root
     ref={ref}
     className={cn(
-      "peer relative inline-flex h-6 w-10 shrink-0 cursor-pointer items-center rounded-pill border border-transparent bg-line-strong transition-colors duration-200 ease-[var(--ease-out)] after:absolute after:-inset-2.5 after:content-[''] data-[state=checked]:bg-accent disabled:cursor-not-allowed disabled:opacity-50",
-      className,
+      "peer rounded-pill bg-line-strong data-[state=checked]:bg-accent relative inline-flex h-6 w-10 shrink-0 cursor-pointer items-center border border-transparent transition-colors duration-200 ease-[var(--ease-out)] after:absolute after:-inset-2.5 after:content-[''] disabled:cursor-not-allowed disabled:opacity-50",
+      className
     )}
     {...props}
   >
-    <SwitchPrimitive.Thumb className="pointer-events-none block size-5 rounded-pill bg-surface shadow-card transition-transform duration-200 ease-[var(--ease-out)] motion-reduce:transition-none data-[state=checked]:translate-x-4" />
+    <SwitchPrimitive.Thumb className="rounded-pill bg-surface shadow-card pointer-events-none block size-5 transition-transform duration-200 ease-[var(--ease-out)] data-[state=checked]:translate-x-4 motion-reduce:transition-none" />
   </SwitchPrimitive.Root>
 ));
 Switch.displayName = SwitchPrimitive.Root.displayName;

@@ -1,5 +1,5 @@
-import bcrypt from "bcryptjs";
 import { PrismaClient, RoomType } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -30,10 +30,13 @@ const RENT_BY_TYPE: Record<RoomType, string> = {
   QUAD: "3000.00",
 };
 
-const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL?.trim() || "admin@hostelio.local";
+const ADMIN_EMAIL =
+  process.env.SEED_ADMIN_EMAIL?.trim() || "admin@hostelio.local";
 const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD?.trim() || "Admin123!";
-const STUDENT_EMAIL = process.env.SEED_STUDENT_EMAIL?.trim() || "student@hostelio.local";
-const STUDENT_PASSWORD = process.env.SEED_STUDENT_PASSWORD?.trim() || "Student123!";
+const STUDENT_EMAIL =
+  process.env.SEED_STUDENT_EMAIL?.trim() || "student@hostelio.local";
+const STUDENT_PASSWORD =
+  process.env.SEED_STUDENT_PASSWORD?.trim() || "Student123!";
 
 function roomNumber(block: string, floor: number, index: number) {
   return `${block}-${floor}0${index}`;
@@ -88,7 +91,9 @@ async function seedRooms() {
         const { type, capacity } = ROOM_TYPES[index];
         const monthlyRent = RENT_BY_TYPE[type];
 
-        const existing = await prisma.room.findUnique({ where: { roomNumber: number } });
+        const existing = await prisma.room.findUnique({
+          where: { roomNumber: number },
+        });
 
         await prisma.room.upsert({
           where: { roomNumber: number },
@@ -101,7 +106,10 @@ async function seedRooms() {
             monthlyRent,
             status: "AVAILABLE",
             amenities: AMENITIES[type],
-            notes: index === ROOMS_PER_FLOOR ? "Corner room with extra daylight." : null,
+            notes:
+              index === ROOMS_PER_FLOOR
+                ? "Corner room with extra daylight."
+                : null,
           },
           update: {
             block,
@@ -146,7 +154,9 @@ async function seedNotices(authorId: string) {
 
   let created = 0;
   for (const notice of notices) {
-    const existing = await prisma.notice.findFirst({ where: { title: notice.title } });
+    const existing = await prisma.notice.findFirst({
+      where: { title: notice.title },
+    });
     if (existing) continue;
     await prisma.notice.create({
       data: { ...notice, authorId },
@@ -177,14 +187,19 @@ async function seedDemoRecords(studentId: string) {
           data: { studentId, roomId: room.id, status: "ACTIVE" },
         });
         if (occupancy + 1 >= room.capacity) {
-          await prisma.room.update({ where: { id: room.id }, data: { status: "FULL" } });
+          await prisma.room.update({
+            where: { id: room.id },
+            data: { status: "FULL" },
+          });
         }
         allocation = true;
       }
     }
   }
 
-  const existingComplaints = await prisma.complaint.count({ where: { studentId } });
+  const existingComplaints = await prisma.complaint.count({
+    where: { studentId },
+  });
   let complaints = 0;
   if (existingComplaints === 0) {
     const allocatedRoom = await prisma.allocation.findFirst({
@@ -260,7 +275,7 @@ async function main() {
       `Rooms: ${rooms.created} created, ${rooms.updated} updated.`,
       `Notices: ${notices.created} created.`,
       `Demo records: allocation ${demo.allocation ? "created" : "already present"}, ${demo.complaints} complaints created.`,
-    ].join("\n"),
+    ].join("\n")
   );
 }
 

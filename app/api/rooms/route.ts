@@ -9,6 +9,9 @@ export const GET = withAuth({}, async ({ req }) => {
   return ok(result.data, result.meta);
 });
 
-export const POST = withAuth({ role: "ADMIN", schema: roomCreateSchema }, async ({ body }) => {
-  return created(await createRoom(body));
-});
+export const POST = withAuth(
+  { role: "ADMIN", schema: roomCreateSchema },
+  async ({ body }) => {
+    return created(await createRoom(body));
+  }
+);

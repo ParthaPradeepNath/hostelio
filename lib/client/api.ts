@@ -3,7 +3,14 @@ export class ApiClientError extends Error {
   details?: Record<string, string>;
   status?: number;
 
-  constructor(message: string, options?: { code?: string; details?: Record<string, string>; status?: number }) {
+  constructor(
+    message: string,
+    options?: {
+      code?: string;
+      details?: Record<string, string>;
+      status?: number;
+    }
+  ) {
     super(message);
     this.name = "ApiClientError";
     this.code = options?.code;
@@ -12,7 +19,10 @@ export class ApiClientError extends Error {
   }
 }
 
-export async function apiRequest<T>(url: string, init?: RequestInit): Promise<T> {
+export async function apiRequest<T>(
+  url: string,
+  init?: RequestInit
+): Promise<T> {
   const response = await fetch(url, {
     ...init,
     headers: {
@@ -27,7 +37,11 @@ export async function apiRequest<T>(url: string, init?: RequestInit): Promise<T>
     let details: Record<string, string> | undefined;
     try {
       const payload = (await response.json()) as {
-        error?: { code?: string; message?: string; details?: Record<string, string> };
+        error?: {
+          code?: string;
+          message?: string;
+          details?: Record<string, string>;
+        };
       };
       message = payload.error?.message ?? message;
       code = payload.error?.code;
@@ -35,7 +49,11 @@ export async function apiRequest<T>(url: string, init?: RequestInit): Promise<T>
     } catch {
       // Keep the generic message when the body is not JSON.
     }
-    throw new ApiClientError(message, { code, details, status: response.status });
+    throw new ApiClientError(message, {
+      code,
+      details,
+      status: response.status,
+    });
   }
 
   if (response.status === 204) return undefined as T;

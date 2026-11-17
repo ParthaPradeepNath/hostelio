@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Check } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
@@ -18,10 +20,12 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "popover-content z-50 min-w-40 rounded-md border border-line bg-surface p-1 shadow-popover",
-        className,
+        "popover-content border-line bg-surface shadow-popover z-50 min-w-40 rounded-md border p-1",
+        className
       )}
-      style={{ transformOrigin: "var(--radix-dropdown-menu-content-transform-origin)" }}
+      style={{
+        transformOrigin: "var(--radix-dropdown-menu-content-transform-origin)",
+      }}
       {...props}
     />
   </DropdownMenuPrimitive.Portal>
@@ -35,8 +39,8 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-2 text-[13px] text-ink outline-none transition-colors data-[highlighted]:bg-surface-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
-      className,
+      "text-ink data-[highlighted]:bg-surface-hover flex cursor-default items-center gap-2 rounded-sm px-2 py-2 text-[13px] transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
+      className
     )}
     {...props}
   />
@@ -50,8 +54,8 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center gap-2 rounded-sm py-2 pl-2 pr-8 text-[13px] text-ink outline-none transition-colors data-[highlighted]:bg-surface-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
-      className,
+      "text-ink data-[highlighted]:bg-surface-hover relative flex cursor-default items-center gap-2 rounded-sm py-2 pr-8 pl-2 text-[13px] transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
+      className
     )}
     {...props}
   >
@@ -71,7 +75,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn("my-1 h-px bg-line", className)}
+    className={cn("bg-line my-1 h-px", className)}
     {...props}
   />
 ));
@@ -83,7 +87,10 @@ const DropdownMenuLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
-    className={cn("px-2 py-1.5 text-[11px] font-medium text-ink-tertiary", className)}
+    className={cn(
+      "text-ink-tertiary px-2 py-1.5 text-[11px] font-medium",
+      className
+    )}
     {...props}
   />
 ));

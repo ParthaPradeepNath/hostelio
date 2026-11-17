@@ -1,5 +1,7 @@
 import * as React from "react";
+
 import { cva, type VariantProps } from "class-variance-authority";
+
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
@@ -18,17 +20,25 @@ const badgeVariants = cva(
     defaultVariants: {
       tone: "neutral",
     },
-  },
+  }
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {
   dot?: boolean;
   pulse?: boolean;
 }
 
-function Badge({ className, tone, dot, pulse, children, ...props }: BadgeProps) {
+function Badge({
+  className,
+  tone,
+  dot,
+  pulse,
+  children,
+  ...props
+}: BadgeProps) {
   const dotColor =
     tone === "success"
       ? "bg-success"
@@ -45,9 +55,9 @@ function Badge({ className, tone, dot, pulse, children, ...props }: BadgeProps) 
       {dot ? (
         <span
           className={cn(
-            "size-1.5 rounded-pill",
+            "rounded-pill size-1.5",
             dotColor,
-            pulse && "animate-pulse motion-reduce:animate-none",
+            pulse && "animate-pulse motion-reduce:animate-none"
           )}
           aria-hidden
         />

@@ -20,7 +20,8 @@ const sessionClaims = z.object({
   role: z.enum(["STUDENT", "ADMIN"]),
 });
 
-const DEV_SECRET = "hostelio-local-development-secret-change-me-before-deploying";
+const DEV_SECRET =
+  "hostelio-local-development-secret-change-me-before-deploying";
 
 function secretKey(): Uint8Array {
   const configured = process.env.JWT_SECRET?.trim();
@@ -52,11 +53,15 @@ export async function signSession(session: Session): Promise<string> {
     .sign(secretKey());
 }
 
-export async function verifySession(token: string | undefined): Promise<Session | null> {
+export async function verifySession(
+  token: string | undefined
+): Promise<Session | null> {
   if (!token) return null;
 
   try {
-    const { payload } = await jwtVerify(token, secretKey(), { algorithms: ["HS256"] });
+    const { payload } = await jwtVerify(token, secretKey(), {
+      algorithms: ["HS256"],
+    });
     const claims = sessionClaims.safeParse(payload);
     if (!claims.success) return null;
 

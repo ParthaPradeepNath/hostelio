@@ -1,8 +1,14 @@
 import { Prisma, type User } from "@prisma/client";
+
 import { AppError, conflict, forbidden, notFound } from "@/lib/api/errors";
 import { paginationMeta } from "@/lib/api/responses";
 import { prisma } from "@/lib/prisma";
-import type { ComplaintCreateInput, ComplaintQuery, ComplaintStudentUpdateInput, ComplaintAdminUpdateInput } from "@/lib/validators/complaint";
+import type {
+  ComplaintAdminUpdateInput,
+  ComplaintCreateInput,
+  ComplaintQuery,
+  ComplaintStudentUpdateInput,
+} from "@/lib/validators/complaint";
 import { ALLOWED_TRANSITIONS } from "@/lib/validators/complaint";
 
 export const complaintInclude = {
@@ -10,7 +16,10 @@ export const complaintInclude = {
   room: { select: { id: true, roomNumber: true, block: true } },
 } satisfies Prisma.ComplaintInclude;
 
-export async function listComplaints(user: Pick<User, "id" | "role">, query: ComplaintQuery) {
+export async function listComplaints(
+  user: Pick<User, "id" | "role">,
+  query: ComplaintQuery
+) {
   const where: Prisma.ComplaintWhereInput = {
     ...(user.role === "STUDENT" ? { studentId: user.id } : {}),
     ...(query.status ? { status: query.status } : {}),
@@ -43,7 +52,10 @@ export async function listComplaints(user: Pick<User, "id" | "role">, query: Com
   };
 }
 
-export async function getComplaintForUser(user: Pick<User, "id" | "role">, id: string) {
+export async function getComplaintForUser(
+  user: Pick<User, "id" | "role">,
+  id: string
+) {
   const complaint = await prisma.complaint.findUnique({
     where: { id },
     include: complaintInclude,
@@ -70,7 +82,10 @@ export async function createComplaint(user: User, input: ComplaintCreateInput) {
   const roomId = input.roomId ?? active?.roomId ?? null;
 
   if (roomId) {
-    const room = await prisma.room.findUnique({ where: { id: roomId }, select: { id: true } });
+    const room = await prisma.room.findUnique({
+      where: { id: roomId },
+      select: { id: true },
+    });
     if (!room) throw notFound("Room not found");
   }
 
@@ -79,7 +94,10 @@ export async function createComplaint(user: User, input: ComplaintCreateInput) {
     where: { studentId: user.id, createdAt: { gte: oneHourAgo } },
   });
   if (recentCount >= 5) {
-    throw new AppError("RATE_LIMITED", "You can raise up to 5 complaints per hour. Try again later.");
+    throw new AppError(
+      "RATE_LIMITED",
+      "You can raise up to 5 complaints per hour. Try again later."
+    );
   }
 
   const complaint = await prisma.complaint.create({
@@ -102,7 +120,7 @@ export async function createComplaint(user: User, input: ComplaintCreateInput) {
 export async function updateComplaint(
   user: User,
   id: string,
-  input: ComplaintStudentUpdateInput | ComplaintAdminUpdateInput,
+  input: ComplaintStudentUpdateInput | ComplaintAdminUpdateInput
 ) {
   const existing = await prisma.complaint.findUnique({ where: { id } });
   if (!existing) throw notFound("Complaint not found");
@@ -110,16 +128,25 @@ export async function updateComplaint(
   if (user.role === "STUDENT") {
     if (existing.studentId !== user.id) throw notFound("Complaint not found");
     if (existing.status !== "OPEN") {
-      throw conflict("COMPLAINT_LOCKED", "This complaint can no longer be edited");
+      throw conflict(
+        "COMPLAINT_LOCKED",
+        "This complaint can no longer be edited"
+      );
     }
 
     const studentInput = input as ComplaintStudentUpdateInput;
     return prisma.complaint.update({
       where: { id },
       data: {
-        ...(studentInput.title !== undefined ? { title: studentInput.title } : {}),
-        ...(studentInput.description !== undefined ? { description: studentInput.description } : {}),
-        ...(studentInput.category !== undefined ? { category: studentInput.category } : {}),
+        ...(studentInput.title !== undefined
+          ? { title: studentInput.title }
+          : {}),
+        ...(studentInput.description !== undefined
+          ? { description: studentInput.description }
+          : {}),
+        ...(studentInput.category !== undefined
+          ? { category: studentInput.category }
+          : {}),
       },
       include: complaintInclude,
     });
@@ -132,7 +159,7 @@ export async function updateComplaint(
     if (!allowed.includes(adminInput.status)) {
       throw new AppError(
         "INVALID_TRANSITION",
-        `A complaint cannot move from ${existing.status} to ${adminInput.status}`,
+        `A complaint cannot move from ${existing.status} to ${adminInput.status}`
       );
     }
   }
@@ -151,9 +178,15 @@ export async function updateComplaint(
                   : existing.resolvedAt,
           }
         : {}),
-      ...(adminInput.priority !== undefined ? { priority: adminInput.priority } : {}),
-      ...(adminInput.category !== undefined ? { category: adminInput.category } : {}),
-      ...(adminInput.adminResponse !== undefined ? { adminResponse: adminInput.adminResponse } : {}),
+      ...(adminInput.priority !== undefined
+        ? { priority: adminInput.priority }
+        : {}),
+      ...(adminInput.category !== undefined
+        ? { category: adminInput.category }
+        : {}),
+      ...(adminInput.adminResponse !== undefined
+        ? { adminResponse: adminInput.adminResponse }
+        : {}),
     },
     include: complaintInclude,
   });
@@ -174,7 +207,12 @@ export async function getStudentComplaintSummary(studentId: string) {
     }),
   ]);
 
-  const counts: Record<string, number> = { OPEN: 0, IN_PROGRESS: 0, RESOLVED: 0, REJECTED: 0 };
+  const counts: Record<string, number> = {
+    OPEN: 0,
+    IN_PROGRESS: 0,
+    RESOLVED: 0,
+    REJECTED: 0,
+  };
   for (const group of grouped) counts[group.status] = group._count._all;
   const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
 

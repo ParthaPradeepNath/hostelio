@@ -12,7 +12,10 @@ export default function NoticesLoading() {
       </div>
       <div className="flex flex-col gap-4">
         {Array.from({ length: 3 }).map((_, index) => (
-          <div key={index} className="rounded-lg border border-line bg-surface p-5 shadow-card md:p-6">
+          <div
+            key={index}
+            className="border-line bg-surface shadow-card rounded-lg border p-5 md:p-6"
+          >
             <Skeleton className="h-5 w-2/3 max-w-md" />
             <Skeleton className="mt-2 h-3 w-48" />
             <Skeleton className="mt-4 h-4 w-full" />

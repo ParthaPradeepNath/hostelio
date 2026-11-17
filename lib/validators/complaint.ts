@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { paginationSchema, trimmedNullableString } from "@/lib/validators/common";
+
+import {
+  paginationSchema,
+  trimmedNullableString,
+} from "@/lib/validators/common";
 
 export const COMPLAINT_CATEGORIES = [
   "ELECTRICAL",
@@ -12,14 +16,23 @@ export const COMPLAINT_CATEGORIES = [
   "OTHER",
 ] as const;
 
-export const COMPLAINT_STATUSES = ["OPEN", "IN_PROGRESS", "RESOLVED", "REJECTED"] as const;
+export const COMPLAINT_STATUSES = [
+  "OPEN",
+  "IN_PROGRESS",
+  "RESOLVED",
+  "REJECTED",
+] as const;
 export const PRIORITIES = ["LOW", "MEDIUM", "HIGH", "URGENT"] as const;
 
 export const complaintCategoryEnum = z.enum(COMPLAINT_CATEGORIES);
 export const complaintStatusEnum = z.enum(COMPLAINT_STATUSES);
 export const priorityEnum = z.enum(PRIORITIES);
 
-const title = z.string().trim().min(5, "Use at least 5 characters").max(120, "Use at most 120 characters");
+const title = z
+  .string()
+  .trim()
+  .min(5, "Use at least 5 characters")
+  .max(120, "Use at most 120 characters");
 const description = z
   .string()
   .trim()
@@ -71,6 +84,10 @@ export const ALLOWED_TRANSITIONS: Record<string, string[]> = {
 };
 
 export type ComplaintCreateInput = z.infer<typeof complaintCreateSchema>;
-export type ComplaintStudentUpdateInput = z.infer<typeof complaintStudentUpdateSchema>;
-export type ComplaintAdminUpdateInput = z.infer<typeof complaintAdminUpdateSchema>;
+export type ComplaintStudentUpdateInput = z.infer<
+  typeof complaintStudentUpdateSchema
+>;
+export type ComplaintAdminUpdateInput = z.infer<
+  typeof complaintAdminUpdateSchema
+>;
 export type ComplaintQuery = z.infer<typeof complaintQuerySchema>;

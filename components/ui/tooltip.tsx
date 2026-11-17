@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+
 import { cn } from "@/lib/utils";
 
 const TooltipProvider = TooltipPrimitive.Provider;
@@ -17,10 +19,12 @@ const TooltipContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "tooltip-content z-50 max-w-64 rounded-md border border-line bg-surface px-2.5 py-1.5 text-[12px] leading-snug text-ink shadow-popover",
-        className,
+        "tooltip-content border-line bg-surface text-ink shadow-popover z-50 max-w-64 rounded-md border px-2.5 py-1.5 text-[12px] leading-snug",
+        className
       )}
-      style={{ transformOrigin: "var(--radix-tooltip-content-transform-origin)" }}
+      style={{
+        transformOrigin: "var(--radix-tooltip-content-transform-origin)",
+      }}
       {...props}
     />
   </TooltipPrimitive.Portal>

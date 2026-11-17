@@ -1,9 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { DoorOpen, LayoutGrid, List, Plus, RotateCcw, Search } from "lucide-react";
+
+import {
+  DoorOpen,
+  LayoutGrid,
+  List,
+  Plus,
+  RotateCcw,
+  Search,
+} from "lucide-react";
+
 import { EmptyState } from "@/components/layout/empty-state";
 import { PageHeader } from "@/components/layout/page-header";
 import { RoomFormDialog } from "@/components/rooms/room-form-dialog";
@@ -12,7 +22,13 @@ import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -21,8 +37,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn, formatCount, formatRent, pluralize } from "@/lib/utils";
 import type { PaginationMeta } from "@/lib/api/responses";
+import { cn, formatCount, formatRent, pluralize } from "@/lib/utils";
 
 type Filters = {
   block?: string;
@@ -88,7 +104,13 @@ export function RoomsView({
     return `${pathname}?${params.toString()}`;
   }
 
-  const hasFilters = Boolean(filters.q || filters.block || filters.floor !== undefined || filters.type || filters.status);
+  const hasFilters = Boolean(
+    filters.q ||
+    filters.block ||
+    filters.floor !== undefined ||
+    filters.type ||
+    filters.status
+  );
 
   function resetFilters() {
     router.push(pathname);
@@ -118,9 +140,12 @@ export function RoomsView({
         ) : null}
       </PageHeader>
 
-      <div className="mb-5 flex flex-col gap-3 rounded-lg border border-line bg-surface p-3 shadow-card md:flex-row md:items-center">
+      <div className="border-line bg-surface shadow-card mb-5 flex flex-col gap-3 rounded-lg border p-3 md:flex-row md:items-center">
         <div className="relative min-w-0 flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ink-tertiary" aria-hidden />
+          <Search
+            className="text-ink-tertiary pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
+            aria-hidden
+          />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -130,7 +155,10 @@ export function RoomsView({
           />
         </div>
         <div className="grid grid-cols-2 gap-2 md:flex md:items-center">
-          <Select value={filters.block ?? "all"} onValueChange={(value) => updateParam("block", value)}>
+          <Select
+            value={filters.block ?? "all"}
+            onValueChange={(value) => updateParam("block", value)}
+          >
             <SelectTrigger aria-label="Filter by block" className="md:w-36">
               <SelectValue placeholder="All blocks" />
             </SelectTrigger>
@@ -161,7 +189,10 @@ export function RoomsView({
             </SelectContent>
           </Select>
 
-          <Select value={filters.type ?? "all"} onValueChange={(value) => updateParam("type", value)}>
+          <Select
+            value={filters.type ?? "all"}
+            onValueChange={(value) => updateParam("type", value)}
+          >
             <SelectTrigger aria-label="Filter by room type" className="md:w-36">
               <SelectValue placeholder="All types" />
             </SelectTrigger>
@@ -175,7 +206,10 @@ export function RoomsView({
             </SelectContent>
           </Select>
 
-          <Select value={filters.status ?? "all"} onValueChange={(value) => updateParam("status", value)}>
+          <Select
+            value={filters.status ?? "all"}
+            onValueChange={(value) => updateParam("status", value)}
+          >
             <SelectTrigger aria-label="Filter by status" className="md:w-36">
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
@@ -188,14 +222,19 @@ export function RoomsView({
           </Select>
 
           {hasFilters ? (
-            <Button variant="ghost" size="sm" onClick={resetFilters} className="col-span-2 justify-self-start md:col-span-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={resetFilters}
+              className="col-span-2 justify-self-start md:col-span-1"
+            >
               <RotateCcw aria-hidden />
               Reset
             </Button>
           ) : null}
         </div>
 
-        <div className="hidden items-center gap-1 rounded-md border border-line bg-surface-2 p-0.5 lg:flex">
+        <div className="border-line bg-surface-2 hidden items-center gap-1 rounded-md border p-0.5 lg:flex">
           <Button
             variant={view === "table" ? "secondary" : "ghost"}
             size="icon-sm"
@@ -217,7 +256,7 @@ export function RoomsView({
         </div>
       </div>
 
-      <p className="mb-3 text-[12px] text-ink-tertiary">
+      <p className="text-ink-tertiary mb-3 text-[12px]">
         {formatCount(meta.total)} {meta.total === 1 ? "room" : "rooms"}
       </p>
 
@@ -235,7 +274,7 @@ export function RoomsView({
       ) : (
         <div key={view} className="view-in">
           {view === "table" ? (
-            <div className="hidden overflow-hidden rounded-lg border border-line bg-surface shadow-card md:block">
+            <div className="border-line bg-surface shadow-card hidden overflow-hidden rounded-lg border md:block">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -247,7 +286,9 @@ export function RoomsView({
                     <TableHead className="text-right">Available</TableHead>
                     <TableHead className="text-right">Rent</TableHead>
                     <TableHead>Status</TableHead>
-                    {isAdmin ? <TableHead className="w-12 text-right">Actions</TableHead> : null}
+                    {isAdmin ? (
+                      <TableHead className="w-12 text-right">Actions</TableHead>
+                    ) : null}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -256,24 +297,30 @@ export function RoomsView({
                       <TableCell>
                         <Link
                           href={`/rooms/${room.id}`}
-                          className="font-medium text-ink hover:text-accent"
+                          className="text-ink hover:text-accent font-medium"
                         >
                           {room.roomNumber}
                         </Link>
-                        <p className="text-[12px] text-ink-tertiary">Floor {room.floor}</p>
+                        <p className="text-ink-tertiary text-[12px]">
+                          Floor {room.floor}
+                        </p>
                       </TableCell>
-                      <TableCell className="text-ink-secondary">{room.block}</TableCell>
-                      <TableCell className="text-ink-secondary">{TYPE_LABELS[room.type]}</TableCell>
-                      <TableCell className="tabular text-right text-ink-secondary">
+                      <TableCell className="text-ink-secondary">
+                        {room.block}
+                      </TableCell>
+                      <TableCell className="text-ink-secondary">
+                        {TYPE_LABELS[room.type]}
+                      </TableCell>
+                      <TableCell className="tabular text-ink-secondary text-right">
                         {room.capacity}
                       </TableCell>
-                      <TableCell className="tabular text-right text-ink">
+                      <TableCell className="tabular text-ink text-right">
                         {room.occupancy}
                       </TableCell>
-                      <TableCell className="tabular text-right text-ink-secondary">
+                      <TableCell className="tabular text-ink-secondary text-right">
                         {room.availableBeds}
                       </TableCell>
-                      <TableCell className="tabular text-right text-ink-secondary">
+                      <TableCell className="tabular text-ink-secondary text-right">
                         {formatRent(room.monthlyRent)}
                       </TableCell>
                       <TableCell>
@@ -302,26 +349,31 @@ export function RoomsView({
           <div
             className={cn(
               "grid gap-4 sm:grid-cols-2 xl:grid-cols-3",
-              view === "table" ? "md:hidden" : "",
+              view === "table" ? "md:hidden" : ""
             )}
           >
             {rooms.map((room) => (
-              <div key={room.id} className="rounded-lg border border-line bg-surface p-5 shadow-card">
+              <div
+                key={room.id}
+                className="border-line bg-surface shadow-card rounded-lg border p-5"
+              >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <Link
                       href={`/rooms/${room.id}`}
-                      className="text-[15px] font-semibold text-ink hover:text-accent"
+                      className="text-ink hover:text-accent text-[15px] font-semibold"
                     >
                       {room.roomNumber}
                     </Link>
-                    <p className="mt-0.5 text-[12px] text-ink-secondary">
-                      Block {room.block} · Floor {room.floor} · {TYPE_LABELS[room.type]}
-                    </p>                  </div>
+                    <p className="text-ink-secondary mt-0.5 text-[12px]">
+                      Block {room.block} · Floor {room.floor} ·{" "}
+                      {TYPE_LABELS[room.type]}
+                    </p>{" "}
+                  </div>
                   <StatusBadge value={room.status} />
                 </div>
 
-                <div className="mt-4 flex items-center justify-between text-[12px] text-ink-secondary">
+                <div className="text-ink-secondary mt-4 flex items-center justify-between text-[12px]">
                   <span>Occupancy</span>
                   <span className="tabular text-ink">
                     {room.occupancy}/{room.capacity}
@@ -336,13 +388,15 @@ export function RoomsView({
                 <div className="mt-4 grid grid-cols-2 gap-3 text-[12px]">
                   <div>
                     <p className="text-ink-tertiary">Available</p>
-                    <p className="tabular mt-0.5 text-ink">
+                    <p className="tabular text-ink mt-0.5">
                       {pluralize(room.availableBeds, "bed")}
                     </p>
                   </div>
                   <div>
                     <p className="text-ink-tertiary">Rent</p>
-                    <p className="tabular mt-0.5 text-ink">{formatRent(room.monthlyRent)}</p>
+                    <p className="tabular text-ink mt-0.5">
+                      {formatRent(room.monthlyRent)}
+                    </p>
                   </div>
                 </div>
 
@@ -367,7 +421,7 @@ export function RoomsView({
 
       {meta.totalPages > 1 ? (
         <div className="mt-5 flex items-center justify-between gap-3">
-          <p className="text-[12px] text-ink-tertiary">
+          <p className="text-ink-tertiary text-[12px]">
             Page {meta.page} of {meta.totalPages}
           </p>
           <div className="flex gap-2">

@@ -1,9 +1,11 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+
 import { Prisma, type Role, type User } from "@prisma/client";
 import { z } from "zod";
+
 import { AppError } from "@/lib/api/errors";
-import { fail } from "@/lib/api/responses";
 import { logRequest, logServerError } from "@/lib/api/logger";
+import { fail } from "@/lib/api/responses";
 import { requireUser } from "@/lib/auth/guards";
 import { fieldErrors } from "@/lib/validators/common";
 
@@ -26,11 +28,17 @@ type RouteContext<TParams extends Record<string, string>> = {
   params: Promise<TParams>;
 };
 
-export function withAuth<S extends z.ZodTypeAny = z.ZodType<unknown>, TParams extends Record<string, string> = Record<string, string>>(
+export function withAuth<
+  S extends z.ZodTypeAny = z.ZodType<unknown>,
+  TParams extends Record<string, string> = Record<string, string>,
+>(
   options: AuthOptions<S>,
-  handler: (args: HandlerArgs<z.infer<S>>) => Promise<NextResponse>,
+  handler: (args: HandlerArgs<z.infer<S>>) => Promise<NextResponse>
 ) {
-  return async (req: NextRequest, context: RouteContext<TParams>): Promise<NextResponse> => {
+  return async (
+    req: NextRequest,
+    context: RouteContext<TParams>
+  ): Promise<NextResponse> => {
     const startedAt = Date.now();
     const requestId = crypto.randomUUID();
     const route = new URL(req.url).pathname;
@@ -42,16 +50,22 @@ export function withAuth<S extends z.ZodTypeAny = z.ZodType<unknown>, TParams ex
       user = await requireUser();
 
       if (options.role) {
-        const roles = Array.isArray(options.role) ? options.role : [options.role];
+        const roles = Array.isArray(options.role)
+          ? options.role
+          : [options.role];
         if (!roles.includes(user.role)) {
-          throw new AppError("FORBIDDEN", "You do not have access to this action");
+          throw new AppError(
+            "FORBIDDEN",
+            "You do not have access to this action"
+          );
         }
       }
 
       const params = await context.params;
 
       let body = undefined as z.infer<S>;
-      const shouldParse = options.parseBody ?? !["GET", "DELETE"].includes(req.method);
+      const shouldParse =
+        options.parseBody ?? !["GET", "DELETE"].includes(req.method);
 
       if (shouldParse) {
         let json: unknown;
@@ -64,7 +78,11 @@ export function withAuth<S extends z.ZodTypeAny = z.ZodType<unknown>, TParams ex
         if (options.schema) {
           const parsed = options.schema.safeParse(json);
           if (!parsed.success) {
-            throw new AppError("VALIDATION_ERROR", "Invalid input", fieldErrors(parsed.error));
+            throw new AppError(
+              "VALIDATION_ERROR",
+              "Invalid input",
+              fieldErrors(parsed.error)
+            );
           }
           body = parsed.data as z.infer<S>;
         } else {
@@ -106,21 +124,37 @@ export function withAuth<S extends z.ZodTypeAny = z.ZodType<unknown>, TParams ex
 
 function errorResponse(error: unknown) {
   if (error instanceof AppError) {
-    const response = fail(error.code, error.message, error.status, error.details);
+    const response = fail(
+      error.code,
+      error.message,
+      error.status,
+      error.details
+    );
     response.headers.set("x-error-code", error.code);
     return response;
   }
 
   if (error instanceof z.ZodError) {
-    const response = fail("VALIDATION_ERROR", "Invalid input", 422, fieldErrors(error));
+    const response = fail(
+      "VALIDATION_ERROR",
+      "Invalid input",
+      422,
+      fieldErrors(error)
+    );
     response.headers.set("x-error-code", "VALIDATION_ERROR");
     return response;
   }
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === "P2002") {
-      const target = Array.isArray(error.meta?.target) ? (error.meta?.target as string[]).join(", ") : "value";
-      const response = fail("CONFLICT", `A record with this ${target} already exists`, 409);
+      const target = Array.isArray(error.meta?.target)
+        ? (error.meta?.target as string[]).join(", ")
+        : "value";
+      const response = fail(
+        "CONFLICT",
+        `A record with this ${target} already exists`,
+        409
+      );
       response.headers.set("x-error-code", "CONFLICT");
       return response;
     }
@@ -134,14 +168,21 @@ function errorResponse(error: unknown) {
   return fail("INTERNAL", "Something went wrong on our side. Try again.", 500);
 }
 
-export function parseQuery<S extends z.ZodTypeAny>(schema: S, searchParams: URLSearchParams): z.infer<S> {
+export function parseQuery<S extends z.ZodTypeAny>(
+  schema: S,
+  searchParams: URLSearchParams
+): z.infer<S> {
   const raw: Record<string, string> = {};
   for (const [key, value] of searchParams.entries()) {
     if (value !== "") raw[key] = value;
   }
   const parsed = schema.safeParse(raw);
   if (!parsed.success) {
-    throw new AppError("VALIDATION_ERROR", "Invalid query parameters", fieldErrors(parsed.error));
+    throw new AppError(
+      "VALIDATION_ERROR",
+      "Invalid query parameters",
+      fieldErrors(parsed.error)
+    );
   }
   return parsed.data as z.infer<S>;
 }

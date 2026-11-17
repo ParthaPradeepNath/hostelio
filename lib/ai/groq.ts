@@ -1,4 +1,5 @@
 import Groq from "groq-sdk";
+
 import type { AiJsonRequest } from "@/lib/ai/client";
 
 let client: Groq | null = null;
@@ -14,7 +15,10 @@ export function groqConfigured() {
   return Boolean(process.env.GROQ_API_KEY?.trim());
 }
 
-export async function generateWithGroq(request: AiJsonRequest, signal: AbortSignal): Promise<string> {
+export async function generateWithGroq(
+  request: AiJsonRequest,
+  signal: AbortSignal
+): Promise<string> {
   const groq = getClient();
   const model = process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-120b";
 
@@ -29,7 +33,10 @@ export async function generateWithGroq(request: AiJsonRequest, signal: AbortSign
         ? {
             type: "json_schema",
             json_schema: {
-              name: request.operation === "summarize" ? "hostel_summary" : "complaint_categorization",
+              name:
+                request.operation === "summarize"
+                  ? "hostel_summary"
+                  : "complaint_categorization",
               schema: request.jsonSchema,
               strict: true,
             },
@@ -38,7 +45,7 @@ export async function generateWithGroq(request: AiJsonRequest, signal: AbortSign
       temperature: request.temperature ?? 0.2,
       max_tokens: request.maxOutputTokens ?? 900,
     },
-    { signal },
+    { signal }
   );
 
   const content = completion.choices[0]?.message?.content;

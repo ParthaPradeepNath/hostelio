@@ -42,7 +42,9 @@ const rentFormatter = new Intl.NumberFormat("en-IN", {
   maximumFractionDigits: 0,
 });
 
-export function formatRent(value: { toString(): string } | number | null | undefined) {
+export function formatRent(
+  value: { toString(): string } | number | null | undefined
+) {
   if (value === null || value === undefined) return "—";
   const amount = typeof value === "number" ? value : Number(value.toString());
   if (!Number.isFinite(amount)) return "—";
@@ -75,14 +77,20 @@ export function enumLabel(value: string | null | undefined) {
   return titleCase(value);
 }
 
-export function pluralize(count: number, singular: string, plural = `${singular}s`) {
+export function pluralize(
+  count: number,
+  singular: string,
+  plural = `${singular}s`
+) {
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
 export function formatAge(value: Date | string) {
   const date = typeof value === "string" ? new Date(value) : value;
   if (Number.isNaN(date.getTime())) return "—";
-  const days = Math.floor((Date.now() - date.getTime()) / (24 * 60 * 60 * 1000));
+  const days = Math.floor(
+    (Date.now() - date.getTime()) / (24 * 60 * 60 * 1000)
+  );
   if (days <= 0) return "Today";
   if (days === 1) return "1 day";
   if (days < 14) return `${days} days`;

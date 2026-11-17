@@ -1,8 +1,13 @@
 import { z } from "zod";
+
 import { paginationSchema } from "@/lib/validators/common";
 
 export const noticeCreateSchema = z.object({
-  title: z.string().trim().min(5, "Use at least 5 characters").max(140, "Use at most 140 characters"),
+  title: z
+    .string()
+    .trim()
+    .min(5, "Use at least 5 characters")
+    .max(140, "Use at most 140 characters"),
   content: z
     .string()
     .trim()

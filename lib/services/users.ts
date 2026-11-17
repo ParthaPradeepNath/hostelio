@@ -1,4 +1,5 @@
 import { Prisma, type User } from "@prisma/client";
+
 import { AppError } from "@/lib/api/errors";
 import { prisma } from "@/lib/prisma";
 import type { ProfileUpdateInput } from "@/lib/validators/profile";
@@ -21,10 +22,17 @@ export async function updateProfile(user: User, input: ProfileUpdateInput) {
   try {
     return await prisma.user.update({ where: { id: user.id }, data });
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-      throw new AppError("VALIDATION_ERROR", "That student ID is already in use", {
-        studentId: "This student ID belongs to another account",
-      });
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "That student ID is already in use",
+        {
+          studentId: "This student ID belongs to another account",
+        }
+      );
     }
     throw error;
   }

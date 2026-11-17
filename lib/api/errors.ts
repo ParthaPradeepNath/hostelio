@@ -42,7 +42,11 @@ export class AppError extends Error {
   readonly status: number;
   readonly details?: Record<string, string>;
 
-  constructor(code: ErrorCode, message: string, details?: Record<string, string>) {
+  constructor(
+    code: ErrorCode,
+    message: string,
+    details?: Record<string, string>
+  ) {
     super(message);
     this.name = "AppError";
     this.code = code;

@@ -1,9 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import type { LucideIcon } from "lucide-react";
+
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -42,7 +45,7 @@ export function SidebarNav({ items }: { items: SidebarNavItem[] }) {
   const measure = useCallback(() => {
     const list = listRef.current;
     const button = list?.querySelector<HTMLElement>(
-      '[data-slot="sidebar-menu-button"][data-active="true"]',
+      '[data-slot="sidebar-menu-button"][data-active="true"]'
     );
     if (!list || !button) {
       setPill(null);
@@ -57,9 +60,13 @@ export function SidebarNav({ items }: { items: SidebarNavItem[] }) {
       h: buttonRect.height,
     };
     setPill((prev) =>
-      prev && prev.x === next.x && prev.y === next.y && prev.w === next.w && prev.h === next.h
+      prev &&
+      prev.x === next.x &&
+      prev.y === next.y &&
+      prev.w === next.w &&
+      prev.h === next.h
         ? prev
-        : next,
+        : next
     );
   }, []);
 
@@ -67,7 +74,7 @@ export function SidebarNav({ items }: { items: SidebarNavItem[] }) {
   useEffect(() => {
     measure();
     const button = listRef.current?.querySelector<HTMLElement>(
-      '[data-slot="sidebar-menu-button"][data-active="true"]',
+      '[data-slot="sidebar-menu-button"][data-active="true"]'
     );
     const observer = button ? new ResizeObserver(measure) : null;
     if (button) observer?.observe(button);
@@ -93,9 +100,9 @@ export function SidebarNav({ items }: { items: SidebarNavItem[] }) {
           <span
             aria-hidden="true"
             className={cn(
-              "pointer-events-none absolute top-0 left-0 z-0 rounded-md bg-accent-soft",
+              "bg-accent-soft pointer-events-none absolute top-0 left-0 z-0 rounded-md",
               ready &&
-                "transition-[transform,width,height,opacity] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none",
+                "transition-[transform,width,height,opacity] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none"
             )}
             style={{
               width: pill?.w ?? 0,
@@ -114,9 +121,12 @@ export function SidebarNav({ items }: { items: SidebarNavItem[] }) {
                   asChild
                   isActive={active}
                   tooltip={item.label}
-                  className="h-9 text-[13px] font-medium data-[active=true]:bg-transparent! data-[active=true]:text-accent! data-[active=true]:hover:bg-transparent!"
+                  className="data-[active=true]:text-accent! h-9 text-[13px] font-medium data-[active=true]:bg-transparent! data-[active=true]:hover:bg-transparent!"
                 >
-                  <Link href={item.href} aria-current={active ? "page" : undefined}>
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                  >
                     <Icon strokeWidth={1.8} aria-hidden />
                     <span>{item.label}</span>
                   </Link>

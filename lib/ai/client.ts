@@ -1,7 +1,8 @@
 import { z } from "zod";
-import { logAi } from "@/lib/api/logger";
-import { generateWithGemini, geminiConfigured } from "@/lib/ai/gemini";
+
+import { geminiConfigured, generateWithGemini } from "@/lib/ai/gemini";
 import { generateWithGroq, groqConfigured } from "@/lib/ai/groq";
+import { logAi } from "@/lib/api/logger";
 
 export type AiProvider = "gemini" | "groq";
 
@@ -30,7 +31,10 @@ export class AiUnavailableError extends Error {
   }
 }
 
-type ProviderCall = (request: AiJsonRequest, signal: AbortSignal) => Promise<string>;
+type ProviderCall = (
+  request: AiJsonRequest,
+  signal: AbortSignal
+) => Promise<string>;
 
 const PROVIDERS: Record<
   AiProvider,
@@ -50,9 +54,12 @@ const PROVIDERS: Record<
 
 function providerOrder(): AiProvider[] {
   if (!process.env.AI_PROVIDER?.trim()) return [];
-  const primary: AiProvider = process.env.AI_PROVIDER === "groq" ? "groq" : "gemini";
+  const primary: AiProvider =
+    process.env.AI_PROVIDER === "groq" ? "groq" : "gemini";
   const secondary: AiProvider = primary === "gemini" ? "groq" : "gemini";
-  return [primary, secondary].filter((provider) => PROVIDERS[provider].configured());
+  return [primary, secondary].filter((provider) =>
+    PROVIDERS[provider].configured()
+  );
 }
 
 export function isAiConfigured() {
@@ -66,12 +73,16 @@ export function aiProviderLabel() {
 
 function timeoutMs() {
   const parsed = Number(process.env.AI_TIMEOUT_MS ?? 8000);
-  return Number.isFinite(parsed) ? Math.min(Math.max(parsed, 1000), 30000) : 8000;
+  return Number.isFinite(parsed)
+    ? Math.min(Math.max(parsed, 1000), 30000)
+    : 8000;
 }
 
 function maxRetries() {
   const parsed = Number(process.env.AI_MAX_RETRIES ?? 1);
-  return Number.isFinite(parsed) ? Math.min(Math.max(Math.trunc(parsed), 0), 2) : 1;
+  return Number.isFinite(parsed)
+    ? Math.min(Math.max(Math.trunc(parsed), 0), 2)
+    : 1;
 }
 
 function sleep(ms: number) {
@@ -80,22 +91,28 @@ function sleep(ms: number) {
 
 function statusOf(error: unknown): number | undefined {
   if (error && typeof error === "object") {
-    const candidate = error as { status?: unknown; statusCode?: unknown; response?: { status?: unknown } };
-    const status = candidate.status ?? candidate.statusCode ?? candidate.response?.status;
+    const candidate = error as {
+      status?: unknown;
+      statusCode?: unknown;
+      response?: { status?: unknown };
+    };
+    const status =
+      candidate.status ?? candidate.statusCode ?? candidate.response?.status;
     if (typeof status === "number") return status;
   }
   return undefined;
 }
 
 function errorSummary(error: unknown) {
-  if (error instanceof Error) return `${error.name}: ${error.message}`.slice(0, 240);
+  if (error instanceof Error)
+    return `${error.name}: ${error.message}`.slice(0, 240);
   return String(error).slice(0, 240);
 }
 
 async function callProviderWithTimeout(
   provider: AiProvider,
   request: AiJsonRequest,
-  budgetMs: number,
+  budgetMs: number
 ): Promise<string> {
   const controller = new AbortController();
   let rejectTimeout: (error: Error) => void = () => {};
@@ -117,7 +134,9 @@ async function callProviderWithTimeout(
   }
 }
 
-export async function generateJson<T>(request: AiJsonRequest): Promise<AiJsonResult<T>> {
+export async function generateJson<T>(
+  request: AiJsonRequest
+): Promise<AiJsonResult<T>> {
   const order = providerOrder();
   if (order.length === 0) {
     throw new AiUnavailableError("No AI provider is configured");
@@ -161,7 +180,11 @@ export async function generateJson<T>(request: AiJsonRequest): Promise<AiJsonRes
         });
 
         const status = statusOf(error);
-        const nonRetryable = status !== undefined && status >= 400 && status < 500 && status !== 429;
+        const nonRetryable =
+          status !== undefined &&
+          status >= 400 &&
+          status < 500 &&
+          status !== 429;
         if (nonRetryable) break;
         if (attempt < retries) await sleep(400);
       }
@@ -169,6 +192,8 @@ export async function generateJson<T>(request: AiJsonRequest): Promise<AiJsonRes
   }
 
   throw new AiUnavailableError(
-    lastError instanceof Error ? `AI providers failed: ${lastError.message}` : "All AI providers failed",
+    lastError instanceof Error
+      ? `AI providers failed: ${lastError.message}`
+      : "All AI providers failed"
   );
 }

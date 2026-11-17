@@ -1,8 +1,14 @@
 import { Prisma, type Room } from "@prisma/client";
+
 import { AppError, conflict, notFound } from "@/lib/api/errors";
-import { prisma } from "@/lib/prisma";
 import { paginationMeta } from "@/lib/api/responses";
-import { BEDS_BY_TYPE, type RoomCreateInput, type RoomQuery, type RoomUpdateInput } from "@/lib/validators/room";
+import { prisma } from "@/lib/prisma";
+import {
+  BEDS_BY_TYPE,
+  type RoomCreateInput,
+  type RoomQuery,
+  type RoomUpdateInput,
+} from "@/lib/validators/room";
 
 export const roomOccupancyInclude = {
   _count: { select: { allocations: { where: { status: "ACTIVE" as const } } } },
@@ -33,7 +39,12 @@ export async function listRooms(query: RoomQuery) {
     ...(query.type ? { type: query.type } : {}),
     ...(query.status ? { status: query.status } : {}),
     ...(query.q
-      ? { roomNumber: { contains: query.q.toUpperCase(), mode: "insensitive" as const } }
+      ? {
+          roomNumber: {
+            contains: query.q.toUpperCase(),
+            mode: "insensitive" as const,
+          },
+        }
       : {}),
   };
 
@@ -83,7 +94,9 @@ export async function getRoomDetails(id: string) {
         select: {
           id: true,
           startDate: true,
-          student: { select: { id: true, name: true, email: true, studentId: true } },
+          student: {
+            select: { id: true, name: true, email: true, studentId: true },
+          },
         },
       },
       complaints: {
@@ -116,7 +129,10 @@ export async function getRoomDetails(id: string) {
   };
 }
 
-async function assertRoomNumberAvailable(roomNumber: string, exceptId?: string) {
+async function assertRoomNumberAvailable(
+  roomNumber: string,
+  exceptId?: string
+) {
   const duplicate = await prisma.room.findFirst({
     where: {
       roomNumber: { equals: roomNumber, mode: "insensitive" },
@@ -125,7 +141,10 @@ async function assertRoomNumberAvailable(roomNumber: string, exceptId?: string) 
     select: { id: true },
   });
   if (duplicate) {
-    throw conflict("DUPLICATE_ROOM_NUMBER", `Room ${roomNumber} already exists`);
+    throw conflict(
+      "DUPLICATE_ROOM_NUMBER",
+      `Room ${roomNumber} already exists`
+    );
   }
 }
 
@@ -139,7 +158,10 @@ export async function createRoom(input: RoomCreateInput) {
       floor: input.floor,
       type: input.type,
       capacity: input.capacity,
-      monthlyRent: input.monthlyRent === null || input.monthlyRent === undefined ? null : input.monthlyRent,
+      monthlyRent:
+        input.monthlyRent === null || input.monthlyRent === undefined
+          ? null
+          : input.monthlyRent,
       status: input.status,
       amenities: input.amenities,
       notes: input.notes ?? null,
@@ -164,7 +186,7 @@ export async function updateRoom(id: string, input: RoomUpdateInput) {
   if (nextCapacity < occupancy) {
     throw conflict(
       "ROOM_CAPACITY_BELOW_OCCUPANCY",
-      `Capacity cannot be lower than the ${occupancy} active occupant${occupancy === 1 ? "" : "s"}`,
+      `Capacity cannot be lower than the ${occupancy} active occupant${occupancy === 1 ? "" : "s"}`
     );
   }
 
@@ -174,16 +196,22 @@ export async function updateRoom(id: string, input: RoomUpdateInput) {
       `A ${nextType.toLowerCase()} room must have ${BEDS_BY_TYPE[nextType]} bed${
         BEDS_BY_TYPE[nextType] === 1 ? "" : "s"
       }`,
-      { capacity: "Capacity must match the room type" },
+      { capacity: "Capacity must match the room type" }
     );
   }
 
   if (input.status === "MAINTENANCE" && occupancy > 0) {
-    throw conflict("ROOM_OCCUPIED", "Move occupants out before putting this room under maintenance");
+    throw conflict(
+      "ROOM_OCCUPIED",
+      "Move occupants out before putting this room under maintenance"
+    );
   }
 
   if (input.status === "FULL" && occupancy !== nextCapacity) {
-    throw conflict("ROOM_STATUS_INVALID", "A room is full only when every bed is occupied");
+    throw conflict(
+      "ROOM_STATUS_INVALID",
+      "A room is full only when every bed is occupied"
+    );
   }
 
   if (input.roomNumber && input.roomNumber !== existing.roomNumber) {
@@ -218,7 +246,10 @@ export async function updateRoom(id: string, input: RoomUpdateInput) {
   return toRoomDto(room);
 }
 
-export async function recomputeRoomStatus(tx: Prisma.TransactionClient, roomId: string) {
+export async function recomputeRoomStatus(
+  tx: Prisma.TransactionClient,
+  roomId: string
+) {
   const room = await tx.room.findUnique({
     where: { id: roomId },
     select: { capacity: true, status: true },
@@ -231,7 +262,10 @@ export async function recomputeRoomStatus(tx: Prisma.TransactionClient, roomId: 
 
   const nextStatus = occupancy >= room.capacity ? "FULL" : "AVAILABLE";
   if (nextStatus !== room.status) {
-    await tx.room.update({ where: { id: roomId }, data: { status: nextStatus } });
+    await tx.room.update({
+      where: { id: roomId },
+      data: { status: nextStatus },
+    });
   }
 }
 
@@ -252,7 +286,9 @@ export async function listRoomFacets() {
   });
 
   return {
-    blocks: [...new Set(rooms.map((room) => room.block))].sort((a, b) => a.localeCompare(b)),
+    blocks: [...new Set(rooms.map((room) => room.block))].sort((a, b) =>
+      a.localeCompare(b)
+    ),
     floors: [...new Set(rooms.map((room) => room.floor))].sort((a, b) => a - b),
   };
 }

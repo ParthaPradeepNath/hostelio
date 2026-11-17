@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
 import { Megaphone, Pin } from "lucide-react";
+
 import { EmptyState } from "@/components/layout/empty-state";
 import { PageHeader } from "@/components/layout/page-header";
 import { PaginationNav } from "@/components/layout/pagination-nav";
@@ -48,27 +50,32 @@ export default async function NoticesPage({
         />
       ) : (
         <>
-          <p className="mb-3 text-[12px] text-ink-tertiary">
+          <p className="text-ink-tertiary mb-3 text-[12px]">
             {pluralize(result.meta.total, "notice")}
           </p>
           <ul className="flex flex-col gap-4">
             {result.data.map((notice) => (
               <li key={notice.id}>
-                <article className="rounded-lg border border-line bg-surface p-5 shadow-card md:p-6">
+                <article className="border-line bg-surface shadow-card rounded-lg border p-5 md:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <h2 className="flex items-start gap-2 text-[16px] font-semibold leading-snug text-ink">
+                      <h2 className="text-ink flex items-start gap-2 text-[16px] leading-snug font-semibold">
                         {notice.isPinned ? (
-                          <Pin className="mt-1 size-4 shrink-0 text-accent" aria-hidden />
+                          <Pin
+                            className="text-accent mt-1 size-4 shrink-0"
+                            aria-hidden
+                          />
                         ) : null}
                         <span>{notice.title}</span>
                       </h2>
-                      <p className="mt-1 text-[12px] text-ink-secondary">
+                      <p className="text-ink-secondary mt-1 text-[12px]">
                         {notice.author.name} · {formatDate(notice.publishedAt)}
                       </p>
                     </div>
                   </div>
-                  <div className="type-reading mt-4 text-[14px] text-ink">{notice.content}</div>
+                  <div className="type-reading text-ink mt-4 text-[14px]">
+                    {notice.content}
+                  </div>
                 </article>
               </li>
             ))}

@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+
 import { LogOut, UserRound } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -48,15 +51,19 @@ export function AccountMenu({ name, email }: AccountMenuProps) {
           aria-label="Account menu"
           className="rounded-pill"
         >
-          <span className="flex size-7 items-center justify-center rounded-pill bg-accent-soft text-[11px] font-semibold text-accent">
+          <span className="rounded-pill bg-accent-soft text-accent flex size-7 items-center justify-center text-[11px] font-semibold">
             {initials(name)}
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
         <DropdownMenuLabel className="flex flex-col gap-0.5">
-          <span className="truncate text-[13px] font-medium text-ink">{name}</span>
-          <span className="truncate text-[11px] font-normal text-ink-tertiary">{email}</span>
+          <span className="text-ink truncate text-[13px] font-medium">
+            {name}
+          </span>
+          <span className="text-ink-tertiary truncate text-[11px] font-normal">
+            {email}
+          </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

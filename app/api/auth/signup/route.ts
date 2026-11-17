@@ -1,20 +1,26 @@
-import bcrypt from "bcryptjs";
-import { Prisma } from "@prisma/client";
 import type { NextRequest } from "next/server";
+
+import { Prisma } from "@prisma/client";
+import bcrypt from "bcryptjs";
+
 import { AppError } from "@/lib/api/errors";
 import { publicErrorResponse, readJsonBody } from "@/lib/api/public-handler";
 import { ok } from "@/lib/api/responses";
 import { toSessionUser } from "@/lib/auth/dto";
 import { setSessionCookie } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
-import { fieldErrors } from "@/lib/validators/common";
 import { signupSchema } from "@/lib/validators/auth";
+import { fieldErrors } from "@/lib/validators/common";
 
 export async function POST(req: NextRequest) {
   try {
     const parsed = signupSchema.safeParse(await readJsonBody(req));
     if (!parsed.success) {
-      throw new AppError("VALIDATION_ERROR", "Invalid input", fieldErrors(parsed.error));
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "Invalid input",
+        fieldErrors(parsed.error)
+      );
     }
 
     const { name, email, password, role, adminCode } = parsed.data;
@@ -35,10 +41,17 @@ export async function POST(req: NextRequest) {
         data: { name, email, role, passwordHash },
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-        throw new AppError("CONFLICT", "An account with this email already exists", {
-          email: "This email is already registered",
-        });
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new AppError(
+          "CONFLICT",
+          "An account with this email already exists",
+          {
+            email: "This email is already registered",
+          }
+        );
       }
       throw error;
     }

@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+
 import type { AiJsonRequest } from "@/lib/ai/client";
 
 let client: GoogleGenAI | null = null;
@@ -14,7 +15,10 @@ export function geminiConfigured() {
   return Boolean(process.env.GEMINI_API_KEY?.trim());
 }
 
-export async function generateWithGemini(request: AiJsonRequest, signal: AbortSignal): Promise<string> {
+export async function generateWithGemini(
+  request: AiJsonRequest,
+  signal: AbortSignal
+): Promise<string> {
   const ai = getClient();
   const model = process.env.GEMINI_MODEL?.trim() || "gemini-2.0-flash";
 

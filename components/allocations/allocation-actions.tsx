@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { DoorOpen, MoreHorizontal, MoveRight, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
 import { ConfirmDialog } from "@/components/allocations/confirm-dialog";
-import { MoveRoomDialog, type AllocatableRoom } from "@/components/allocations/move-room-dialog";
+import {
+  type AllocatableRoom,
+  MoveRoomDialog,
+} from "@/components/allocations/move-room-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -39,7 +45,9 @@ function useAllocationActions(allocationId: string, studentName: string) {
 
   async function remove() {
     try {
-      await apiRequest(`/api/allocations/${allocationId}`, { method: "DELETE" });
+      await apiRequest(`/api/allocations/${allocationId}`, {
+        method: "DELETE",
+      });
       toast.success("Allocation record deleted");
       router.refresh();
     } catch (error) {
@@ -124,7 +132,11 @@ export function AllocationRowActions({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon-sm" aria-label={`Actions for ${studentName}`}>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label={`Actions for ${studentName}`}
+          >
             <MoreHorizontal aria-hidden />
           </Button>
         </DropdownMenuTrigger>

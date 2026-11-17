@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { isoDate, paginationSchema, startDateSchema } from "@/lib/validators/common";
+
+import {
+  isoDate,
+  paginationSchema,
+  startDateSchema,
+} from "@/lib/validators/common";
 
 export const allocationStatusEnum = z.enum(["ACTIVE", "VACATED"]);
 
@@ -29,7 +34,8 @@ export const allocationUpdateSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["form"],
-        message: "Choose exactly one action: vacate, move room, or reassign student",
+        message:
+          "Choose exactly one action: vacate, move room, or reassign student",
       });
     }
     if (value.status === "VACATED" && value.roomId) {

@@ -1,4 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+
 import { SESSION_COOKIE, verifySession } from "@/lib/auth/jwt";
 
 const PUBLIC_PATHS = ["/", "/login", "/sign-up"];
@@ -21,5 +22,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|apple-icon.png|icon.svg|.*\\..*).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|apple-icon.png|icon.svg|.*\\..*).*)",
+  ],
 };

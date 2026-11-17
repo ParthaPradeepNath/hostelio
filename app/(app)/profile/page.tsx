@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
 import { PageHeader } from "@/components/layout/page-header";
 import { ProfileForm } from "@/components/profile/profile-form";
 import { Badge } from "@/components/ui/badge";
@@ -25,14 +26,20 @@ export default async function ProfilePage() {
           <Card>
             <CardContent className="mt-0">
               <div className="flex items-center gap-4">
-                <span className="flex size-14 items-center justify-center rounded-pill bg-accent-soft text-[18px] font-semibold text-accent">
+                <span className="rounded-pill bg-accent-soft text-accent flex size-14 items-center justify-center text-[18px] font-semibold">
                   {initials(user.name)}
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-[16px] font-semibold text-ink" title={user.name}>
+                  <p
+                    className="text-ink truncate text-[16px] font-semibold"
+                    title={user.name}
+                  >
                     {user.name}
                   </p>
-                  <p className="truncate text-[13px] text-ink-secondary" title={user.email}>
+                  <p
+                    className="text-ink-secondary truncate text-[13px]"
+                    title={user.email}
+                  >
                     {user.email}
                   </p>
                   <div className="mt-1.5">
@@ -43,24 +50,29 @@ export default async function ProfilePage() {
                 </div>
               </div>
               {user.role === "STUDENT" ? (
-                <dl className="mt-5 flex flex-col gap-2.5 border-t border-line pt-4 text-[13px]">
+                <dl className="border-line mt-5 flex flex-col gap-2.5 border-t pt-4 text-[13px]">
                   <div className="flex items-center justify-between gap-3">
                     <dt className="text-ink-tertiary">Student ID</dt>
                     <dd className="text-ink">{user.studentId ?? "Not set"}</dd>
                   </div>
                   <div className="flex items-center justify-between gap-3">
                     <dt className="text-ink-tertiary">Department</dt>
-                    <dd className="truncate text-right text-ink" title={user.department ?? undefined}>
+                    <dd
+                      className="text-ink truncate text-right"
+                      title={user.department ?? undefined}
+                    >
                       {user.department ?? "Not set"}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between gap-3">
                     <dt className="text-ink-tertiary">Year</dt>
-                    <dd className="text-ink">{user.year ? `Year ${user.year}` : "Not set"}</dd>
+                    <dd className="text-ink">
+                      {user.year ? `Year ${user.year}` : "Not set"}
+                    </dd>
                   </div>
                 </dl>
               ) : null}
-              <p className="mt-4 border-t border-line pt-4 text-[12px] text-ink-tertiary">
+              <p className="border-line text-ink-tertiary mt-4 border-t pt-4 text-[12px]">
                 Joined {formatDate(user.createdAt)}
               </p>
             </CardContent>
@@ -74,17 +86,17 @@ export default async function ProfilePage() {
               <dl className="flex flex-col gap-3 text-[13px]">
                 <div>
                   <dt className="text-ink-tertiary">Email</dt>
-                  <dd className="mt-0.5 break-all text-ink">{user.email}</dd>
+                  <dd className="text-ink mt-0.5 break-all">{user.email}</dd>
                 </div>
                 <div>
                   <dt className="text-ink-tertiary">Role</dt>
-                  <dd className="mt-0.5 text-ink">
+                  <dd className="text-ink mt-0.5">
                     {user.role === "ADMIN" ? "Administrator" : "Student"}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-ink-tertiary">Account ID</dt>
-                  <dd className="mt-0.5 break-all font-mono text-[11px] text-ink-secondary">
+                  <dd className="text-ink-secondary mt-0.5 font-mono text-[11px] break-all">
                     {user.id}
                   </dd>
                 </div>

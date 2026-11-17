@@ -1,4 +1,5 @@
 import type { User } from "@prisma/client";
+
 import { AppError } from "@/lib/api/errors";
 import { ensureUser } from "@/lib/auth/current-user";
 

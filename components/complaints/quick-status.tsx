@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { ChevronDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +19,10 @@ import {
 import { apiRequest, errorMessage } from "@/lib/client/api";
 import { cn } from "@/lib/utils";
 
-const TRANSITIONS: Record<string, { status: string; label: string; destructive?: boolean }[]> = {
+const TRANSITIONS: Record<
+  string,
+  { status: string; label: string; destructive?: boolean }[]
+> = {
   OPEN: [
     { status: "IN_PROGRESS", label: "Start work" },
     { status: "REJECTED", label: "Reject", destructive: true },
@@ -84,7 +90,10 @@ export function QuickStatus({
             disabled={pending}
           >
             {pending ? (
-              <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden />
+              <Loader2
+                className="animate-spin motion-reduce:animate-none"
+                aria-hidden
+              />
             ) : (
               <ChevronDown aria-hidden />
             )}
@@ -96,7 +105,10 @@ export function QuickStatus({
             <DropdownMenuItem
               key={option.status}
               onSelect={() => update(option.status)}
-              className={cn(option.destructive && "text-danger data-[highlighted]:bg-danger-soft")}
+              className={cn(
+                option.destructive &&
+                  "text-danger data-[highlighted]:bg-danger-soft"
+              )}
             >
               {option.label}
             </DropdownMenuItem>

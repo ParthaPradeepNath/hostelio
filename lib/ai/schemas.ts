@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { COMPLAINT_CATEGORIES, PRIORITIES } from "@/lib/validators/complaint";
 
 const uppercase = (value: unknown) =>
@@ -24,7 +25,7 @@ export const summarySchema = z.object({
         category: categoryValue,
         count: z.coerce.number().int().min(0),
         note: z.string().max(300).optional(),
-      }),
+      })
     )
     .max(6),
   recommendedActions: z.array(z.string().min(3).max(300)).max(5),

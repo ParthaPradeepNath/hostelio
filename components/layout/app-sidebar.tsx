@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import {
   CircleUserRound,
   DoorOpen,
@@ -9,7 +10,11 @@ import {
   Megaphone,
   MessageSquareWarning,
 } from "lucide-react";
-import { SidebarNav, type SidebarNavItem } from "@/components/layout/sidebar-nav";
+
+import {
+  SidebarNav,
+  type SidebarNavItem,
+} from "@/components/layout/sidebar-nav";
 import {
   Sidebar,
   SidebarContent,
@@ -39,7 +44,11 @@ function navItems(role: "STUDENT" | "ADMIN"): SidebarNavItem[] {
   const items: NavItem[] = [
     { key: "dashboard", href: "/dashboard", label: "Dashboard" },
     { key: "rooms", href: "/rooms", label: "Rooms" },
-    { key: "allocations", href: "/allocations", label: role === "ADMIN" ? "Allocations" : "My allocation" },
+    {
+      key: "allocations",
+      href: "/allocations",
+      label: role === "ADMIN" ? "Allocations" : "My allocation",
+    },
     { key: "complaints", href: "/complaints", label: "Complaints" },
     { key: "notices", href: "/notices", label: "Notices" },
     { key: "profile", href: "/profile", label: "Profile" },
@@ -52,7 +61,7 @@ function BrandMark({ className }: { className?: string }) {
   return (
     <span
       aria-hidden="true"
-      className={`flex size-6 shrink-0 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground ${className ?? ""}`}
+      className={`bg-sidebar-primary text-sidebar-primary-foreground flex size-6 shrink-0 items-center justify-center rounded-md ${className ?? ""}`}
     >
       <svg viewBox="0 0 24 24" fill="none" className="size-3.5">
         <path
@@ -81,8 +90,12 @@ function BrandButton() {
           <Link href="/dashboard">
             <BrandMark className="size-8 rounded-lg [&>svg]:size-4" />
             <span className="grid min-w-0 flex-1 text-left leading-tight group-data-[collapsible=icon]:sr-only">
-              <span className="truncate text-sm font-semibold tracking-[-0.01em]">Hostelio</span>
-              <span className="truncate text-xs text-sidebar-foreground/70">Hostel operations</span>
+              <span className="truncate text-sm font-semibold tracking-[-0.01em]">
+                Hostelio
+              </span>
+              <span className="text-sidebar-foreground/70 truncate text-xs">
+                Hostel operations
+              </span>
             </span>
           </Link>
         </SidebarMenuButton>
@@ -93,7 +106,7 @@ function BrandButton() {
 
 export function AppSidebar({ role }: { role: "STUDENT" | "ADMIN" }) {
   return (
-    <Sidebar collapsible="icon" className="border-r border-line">
+    <Sidebar collapsible="icon" className="border-line border-r">
       <SidebarHeader className="px-2 py-3">
         <BrandButton />
       </SidebarHeader>

@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Controller } from "react-hook-form";
+
+import { useRouter } from "next/navigation";
+
 import { Loader2, Pencil } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,16 +19,30 @@ import {
 } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
 import { Input, Textarea } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ApiClientError, apiRequest, errorMessage } from "@/lib/client/api";
 import { useAppForm } from "@/lib/client/use-app-form";
-import { COMPLAINT_CATEGORIES, complaintStudentUpdateSchema } from "@/lib/validators/complaint";
 import { enumLabel } from "@/lib/utils";
+import {
+  COMPLAINT_CATEGORIES,
+  complaintStudentUpdateSchema,
+} from "@/lib/validators/complaint";
 
 export function StudentComplaintEdit({
   complaint,
 }: {
-  complaint: { id: string; title: string; description: string; category: string };
+  complaint: {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+  };
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -45,7 +62,11 @@ export function StudentComplaintEdit({
     formState: { errors, isSubmitting },
   } = form;
 
-  async function onSubmit(values: { title?: string; description?: string; category?: string }) {
+  async function onSubmit(values: {
+    title?: string;
+    description?: string;
+    category?: string;
+  }) {
     try {
       await apiRequest(`/api/complaints/${complaint.id}`, {
         method: "PUT",
@@ -58,7 +79,11 @@ export function StudentComplaintEdit({
       toast.error(errorMessage(error));
       if (error instanceof ApiClientError && error.details) {
         for (const [field, message] of Object.entries(error.details)) {
-          if (field === "title" || field === "description" || field === "category") {
+          if (
+            field === "title" ||
+            field === "description" ||
+            field === "category"
+          ) {
             setError(field, { message });
           }
         }
@@ -82,16 +107,27 @@ export function StudentComplaintEdit({
         <DialogHeader>
           <DialogTitle>Edit complaint</DialogTitle>
           <DialogDescription id="edit-complaint-description">
-            You can edit while the complaint is open. Once work starts, it becomes read-only.
+            You can edit while the complaint is open. Once work starts, it
+            becomes read-only.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-5 flex flex-col gap-4" noValidate>
-          <Field label="Title" htmlFor="edit-complaint-title" error={errors.title?.message}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-5 flex flex-col gap-4"
+          noValidate
+        >
+          <Field
+            label="Title"
+            htmlFor="edit-complaint-title"
+            error={errors.title?.message}
+          >
             <Input
               id="edit-complaint-title"
               aria-invalid={Boolean(errors.title)}
-              aria-describedby={errors.title ? "edit-complaint-title-error" : undefined}
+              aria-describedby={
+                errors.title ? "edit-complaint-title-error" : undefined
+              }
               {...register("title")}
             />
           </Field>
@@ -106,13 +142,19 @@ export function StudentComplaintEdit({
               rows={5}
               aria-invalid={Boolean(errors.description)}
               aria-describedby={
-                errors.description ? "edit-complaint-description-error" : undefined
+                errors.description
+                  ? "edit-complaint-description-error"
+                  : undefined
               }
               {...register("description")}
             />
           </Field>
 
-          <Field label="Category" htmlFor="edit-complaint-category" error={errors.category?.message}>
+          <Field
+            label="Category"
+            htmlFor="edit-complaint-category"
+            error={errors.category?.message}
+          >
             <Controller
               control={control}
               name="category"
@@ -134,11 +176,20 @@ export function StudentComplaintEdit({
           </Field>
 
           <DialogFooter>
-            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
+              {isSubmitting ? (
+                <Loader2
+                  className="animate-spin motion-reduce:animate-none"
+                  aria-hidden
+                />
+              ) : null}
               Save changes
             </Button>
           </DialogFooter>

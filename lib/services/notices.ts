@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+
 import { paginationMeta } from "@/lib/api/responses";
 import { prisma } from "@/lib/prisma";
 import type { NoticeCreateInput, NoticeQuery } from "@/lib/validators/notice";

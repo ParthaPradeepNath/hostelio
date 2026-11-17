@@ -2,13 +2,13 @@
 
 **Product Requirements Document**
 
-| Field | Value |
-|---|---|
-| Project | 43 — Hostel Management System |
-| Version | 1.0 |
-| Status | Draft for approval |
-| Date | 10 Nov 2026 |
-| Stack | Next.js + Bun + JWT auth + Neon Postgres + Prisma + Gemini/Groq |
+| Field      | Value                                                           |
+| ---------- | --------------------------------------------------------------- |
+| Project    | 43 — Hostel Management System                                   |
+| Version    | 1.0                                                             |
+| Status     | Draft for approval                                              |
+| Date       | 10 Nov 2026                                                     |
+| Stack      | Next.js + Bun + JWT auth + Neon Postgres + Prisma + Gemini/Groq |
 | Deployment | Not planned. Local/dev and hosted environments documented only. |
 
 > **Implementation note (17 Nov 2026):** Authentication has moved from Clerk to in-app JWT
@@ -29,17 +29,17 @@ Hostelio digitizes basic hostel administration for universities and student host
 
 ### 1.1 Platform at a glance
 
-| Concern | Choice |
-|---|---|
-| Frontend | Next.js App Router (Server Components + Client Components) |
-| Backend | Next.js Route Handlers under `/api/*` |
-| Runtime / package manager | Bun (install, scripts, optional runtime) |
-| Auth | Clerk (hosted sessions), role in `publicMetadata` |
-| Database | Neon Postgres (5 tables) |
-| ORM | Prisma |
-| AI | Gemini and Groq behind one provider interface, env-selected with fallback |
-| UI | Tailwind CSS + shadcn/ui |
-| Visual direction | Clean, minimal, Apple-inspired; calm surfaces, one accent, purposeful motion |
+| Concern                   | Choice                                                                       |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| Frontend                  | Next.js App Router (Server Components + Client Components)                   |
+| Backend                   | Next.js Route Handlers under `/api/*`                                        |
+| Runtime / package manager | Bun (install, scripts, optional runtime)                                     |
+| Auth                      | Clerk (hosted sessions), role in `publicMetadata`                            |
+| Database                  | Neon Postgres (5 tables)                                                     |
+| ORM                       | Prisma                                                                       |
+| AI                        | Gemini and Groq behind one provider interface, env-selected with fallback    |
+| UI                        | Tailwind CSS + shadcn/ui                                                     |
+| Visual direction          | Clean, minimal, Apple-inspired; calm surfaces, one accent, purposeful motion |
 
 **Design direction:** the interface follows the Apple-inspired system defined in §4.4 — quiet neutral surfaces, one accent, system typography, generous spacing, restrained elevation, and motion used only when it clarifies. The installed design skills (`apple-design`, `emil-design-eng`, Jakub Krehel's `better-*` suite, and the supporting craft/QA skills) are part of the definition of done.
 
@@ -72,10 +72,10 @@ Hostelio digitizes basic hostel administration for universities and student host
 
 ## 3. Users and roles
 
-| Role | Source of truth | Capabilities |
-|---|---|---|
-| `STUDENT` | Clerk `publicMetadata.role` (default when absent) | View rooms, own allocation, own complaints, notices, edit own profile, create complaints |
-| `ADMIN` | Clerk `publicMetadata.role = "admin"` | Everything students can read; manage rooms, allocations, complaints; publish notices; see AI summary |
+| Role      | Source of truth                                   | Capabilities                                                                                         |
+| --------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `STUDENT` | Clerk `publicMetadata.role` (default when absent) | View rooms, own allocation, own complaints, notices, edit own profile, create complaints             |
+| `ADMIN`   | Clerk `publicMetadata.role = "admin"`             | Everything students can read; manage rooms, allocations, complaints; publish notices; see AI summary |
 
 **Role rules**
 
@@ -197,40 +197,40 @@ hostelio/
 
 The installed design skills are part of the build process, not optional inspiration. The `better-*` suite (Jakub Krehel) is the primary review system; Apple and Emil Kowalski's skills set the foundation and craft bar.
 
-| Skill | Applied to |
-|---|---|
-| `apple-design` | Foundations: fluid interaction, springs, materials, typography, reduced motion, the eight design principles |
-| `emil-design-eng` | Craft and motion decisions, component polish, animation review, press feedback, easing and duration |
-| `interface-design` | Dashboard and data-interface hierarchy, density, states, token consistency |
-| `impeccable` | Whole-interface polish and audit pass |
+| Skill              | Applied to                                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `apple-design`     | Foundations: fluid interaction, springs, materials, typography, reduced motion, the eight design principles |
+| `emil-design-eng`  | Craft and motion decisions, component polish, animation review, press feedback, easing and duration         |
+| `interface-design` | Dashboard and data-interface hierarchy, density, states, token consistency                                  |
+| `impeccable`       | Whole-interface polish and audit pass                                                                       |
 
 **Jakub Krehel `better-*` review suite**
 
-| Skill | Applied to |
-|---|---|
-| `better-interface` | Orchestrated, ranked review of a screen or flow before sign-off |
-| `better-layout` | Grouping, alignment, reading order, responsive structure, translated-text resilience |
-| `better-typography` | Type scale, line length, wrapping, truncation, punctuation, numbering |
-| `better-colors` | Palette, semantic tokens, contrast checks, light/dark parity |
-| `better-ui` | Surface treatment, radii, shadows, icon states, exact motion values |
-| `better-accessibility` | Keyboard, focus, ARIA, accessible names, announcements, WCAG 2.2 AA |
-| `better-writing` | Labels, error messages, empty states, confirmations, interface voice |
-| `interface-review` | Change-scoped review of a branch, PR, or uncommitted work |
+| Skill                  | Applied to                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------ |
+| `better-interface`     | Orchestrated, ranked review of a screen or flow before sign-off                      |
+| `better-layout`        | Grouping, alignment, reading order, responsive structure, translated-text resilience |
+| `better-typography`    | Type scale, line length, wrapping, truncation, punctuation, numbering                |
+| `better-colors`        | Palette, semantic tokens, contrast checks, light/dark parity                         |
+| `better-ui`            | Surface treatment, radii, shadows, icon states, exact motion values                  |
+| `better-accessibility` | Keyboard, focus, ARIA, accessible names, announcements, WCAG 2.2 AA                  |
+| `better-writing`       | Labels, error messages, empty states, confirmations, interface voice                 |
+| `interface-review`     | Change-scoped review of a branch, PR, or uncommitted work                            |
 
 **Craft, motion, and QA**
 
-| Skill | Applied to |
-|---|---|
-| `animate` | Any new interaction that genuinely benefits from motion |
-| `review-animations` | Critique of existing motion before it is considered finished |
-| `animation-performance` | Composite-only properties, jank diagnosis, `will-change` discipline |
-| `mobile-native` | Touch targets, sticky hover, safe areas, 100vh behavior, scroll feel |
-| `state-machine` | Render every state of a component on a workbench page |
-| `break` / `break-ui` | Worst-case data and hostile-scenario stress tests |
+| Skill                   | Applied to                                                             |
+| ----------------------- | ---------------------------------------------------------------------- |
+| `animate`               | Any new interaction that genuinely benefits from motion                |
+| `review-animations`     | Critique of existing motion before it is considered finished           |
+| `animation-performance` | Composite-only properties, jank diagnosis, `will-change` discipline    |
+| `mobile-native`         | Touch targets, sticky hover, safe areas, 100vh behavior, scroll feel   |
+| `state-machine`         | Render every state of a component on a workbench page                  |
+| `break` / `break-ui`    | Worst-case data and hostile-scenario stress tests                      |
 | `variant` / `prototype` | Explore deliberately different versions of a component behind a picker |
-| `pick-ui-library` | Choose a library only when a real need appears |
-| `explain-interface` | Reverse-engineer a reference from a URL or screenshot |
-| `ask-sonner` | Toast configuration, theming, stacking, and edge cases |
+| `pick-ui-library`       | Choose a library only when a real need appears                         |
+| `explain-interface`     | Reverse-engineer a reference from a URL or screenshot                  |
+| `ask-sonner`            | Toast configuration, theming, stacking, and edge cases                 |
 
 **Workflow per page**
 
@@ -325,18 +325,20 @@ Rules:
 Use the platform system font first. It ships optical sizing and legibility tuning; no custom display face for v1.
 
 ```css
---font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+--font-sans:
+  -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto,
+  Helvetica, Arial, sans-serif;
 ```
 
-| Role | Size / line-height | Weight | Tracking |
-|---|---|---|---|
-| Display (login, empty hero) | 32–40 / 1.1 | 600 | -0.02em |
-| Page title | 24–28 / 1.2 | 600 | -0.01em |
-| Section title | 17–20 / 1.3 | 600 | -0.01em |
-| Body | 15–16 / 1.5 | 400 | 0 |
-| UI label | 13–14 / 1.4 | 500 | 0 |
-| Caption / meta | 12–13 / 1.4 | 400 | +0.01em |
-| Table number | 14 / 1.4 | 500 | tabular-nums |
+| Role                        | Size / line-height | Weight | Tracking     |
+| --------------------------- | ------------------ | ------ | ------------ |
+| Display (login, empty hero) | 32–40 / 1.1        | 600    | -0.02em      |
+| Page title                  | 24–28 / 1.2        | 600    | -0.01em      |
+| Section title               | 17–20 / 1.3        | 600    | -0.01em      |
+| Body                        | 15–16 / 1.5        | 400    | 0            |
+| UI label                    | 13–14 / 1.4        | 500    | 0            |
+| Caption / meta              | 12–13 / 1.4        | 400    | +0.01em      |
+| Table number                | 14 / 1.4           | 500    | tabular-nums |
 
 Rules:
 
@@ -399,16 +401,16 @@ Motion is functional, sparse, and fast. Most interactions have no animation.
 --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 ```
 
-| Interaction | Treatment |
-|---|---|
-| Button press | `scale(0.97)`, 100–160 ms ease-out, on pointer-down |
-| Hover (fine pointer only) | Background/color 120–150 ms ease |
-| Tooltip / small popover | 125–200 ms, origin-aware, scale from 0.97 + opacity 0 |
-| Dropdown / select | 150–220 ms ease-out |
-| Dialog | 200–320 ms, centered origin, scale from 0.96 + opacity 0 |
-| Bottom sheet / drawer | 220–320 ms, `--ease-drawer`, drag + spring dismissal |
-| Toast | Enter 240 ms ease-out, exit 180 ms; interruptible transitions |
-| Page content | No transition by default; optional 120 ms opacity on route change |
+| Interaction               | Treatment                                                         |
+| ------------------------- | ----------------------------------------------------------------- |
+| Button press              | `scale(0.97)`, 100–160 ms ease-out, on pointer-down               |
+| Hover (fine pointer only) | Background/color 120–150 ms ease                                  |
+| Tooltip / small popover   | 125–200 ms, origin-aware, scale from 0.97 + opacity 0             |
+| Dropdown / select         | 150–220 ms ease-out                                               |
+| Dialog                    | 200–320 ms, centered origin, scale from 0.96 + opacity 0          |
+| Bottom sheet / drawer     | 220–320 ms, `--ease-drawer`, drag + spring dismissal              |
+| Toast                     | Enter 240 ms ease-out, exit 180 ms; interruptible transitions     |
+| Page content              | No transition by default; optional 120 ms opacity on route change |
 
 **Rules**
 
@@ -425,23 +427,23 @@ Motion is functional, sparse, and fast. Most interactions have no animation.
 
 #### 4.4.8 Components
 
-| Component | Specification |
-|---|---|
-| **Primary button** | Accent fill, white text, 36–40 px height, 12 px radius, 0.97 active scale, visible focus ring |
-| **Secondary button** | `--surface-2` or `--surface-hover`, `--text`, hairline border, no shadow |
-| **Destructive action** | Tinted danger, never a solid red block except in the final confirm dialog |
-| **Inputs** | 40 px height, 12 px radius, 1 px `--border-strong`, 3 px focus ring, inline error text below |
-| **Labels** | 13 px medium, above the field; helper text 12 px secondary; errors are specific |
-| **Cards** | `--surface`, 18 px radius, 20–24 px padding, hairline border, `--shadow-sm`; no nested cards |
-| **Tables** | Borderless, 52–56 px rows, hairline row separators, hover tint, right-aligned tabular numbers, sticky header |
-| **Badges** | 999 px radius, 11–12 px medium, soft tinted background + matching text; optional 6 px status dot |
-| **Dialogs** | Max 480–560 px, 18 px radius, centered, dimmed scrim, focus trap, Escape closes, title + description |
-| **Sheets** | Mobile bottom sheet, 20 px top radius, drag handle, safe-area padding, spring/`--ease-drawer` |
-| **Sidebar** | 18 px icons, 36 px rows, active item `--accent-soft`, no gradients, collapsible |
-| **Toasts** | Sonner, top-right desktop / bottom mobile, 4 s, one action maximum |
-| **Empty states** | One muted 32 px icon or none, one sentence, one action; no illustration |
-| **Skeletons** | Neutral blocks matching final layout; no shimmer under reduced motion |
-| **Charts** | Simple horizontal/vertical bars in accent or status tints; no 3D, no pie charts, no chart library unless needed |
+| Component              | Specification                                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Primary button**     | Accent fill, white text, 36–40 px height, 12 px radius, 0.97 active scale, visible focus ring                   |
+| **Secondary button**   | `--surface-2` or `--surface-hover`, `--text`, hairline border, no shadow                                        |
+| **Destructive action** | Tinted danger, never a solid red block except in the final confirm dialog                                       |
+| **Inputs**             | 40 px height, 12 px radius, 1 px `--border-strong`, 3 px focus ring, inline error text below                    |
+| **Labels**             | 13 px medium, above the field; helper text 12 px secondary; errors are specific                                 |
+| **Cards**              | `--surface`, 18 px radius, 20–24 px padding, hairline border, `--shadow-sm`; no nested cards                    |
+| **Tables**             | Borderless, 52–56 px rows, hairline row separators, hover tint, right-aligned tabular numbers, sticky header    |
+| **Badges**             | 999 px radius, 11–12 px medium, soft tinted background + matching text; optional 6 px status dot                |
+| **Dialogs**            | Max 480–560 px, 18 px radius, centered, dimmed scrim, focus trap, Escape closes, title + description            |
+| **Sheets**             | Mobile bottom sheet, 20 px top radius, drag handle, safe-area padding, spring/`--ease-drawer`                   |
+| **Sidebar**            | 18 px icons, 36 px rows, active item `--accent-soft`, no gradients, collapsible                                 |
+| **Toasts**             | Sonner, top-right desktop / bottom mobile, 4 s, one action maximum                                              |
+| **Empty states**       | One muted 32 px icon or none, one sentence, one action; no illustration                                         |
+| **Skeletons**          | Neutral blocks matching final layout; no shimmer under reduced motion                                           |
+| **Charts**             | Simple horizontal/vertical bars in accent or status tints; no 3D, no pie charts, no chart library unless needed |
 
 Interaction rules:
 
@@ -455,18 +457,18 @@ Interaction rules:
 
 #### 4.4.9 Page application
 
-| Page | Design notes |
-|---|---|
-| Login | Centered card on a quiet full-bleed surface; brand mark, one heading, Clerk component; no marketing sections, no illustration |
-| Student dashboard | One summary card for the room, one compact complaints list, one notices list; generous whitespace; no chart clutter |
-| Admin dashboard | Four stat cards maximum per row; occupancy bars; AI briefing card with a clear text hierarchy; recent activity lists |
-| Rooms | Table-first on desktop, cards on mobile; status badges; filters in a single quiet toolbar; one primary "Add room" |
-| Room details | Two columns on desktop: room facts and amenities left, occupancy and actions right; collapses to one column |
-| Allocations | Table with student/room identity as the primary columns; actions in a row menu; allocation dialog keeps student and room selection in one view |
-| Complaints | Filterable list with calm badges; "New complaint" is the only accent action for students; admin row actions are quiet |
-| Complaint details | Reading column max 75ch; description first, metadata second; action panel separated by a hairline |
-| Notices | Reading-first list with pinned notices distinguished by a small pin and weight, not a colored block |
-| Profile | Grouped form sections (Identity, Academic, Contact); read-only fields visually distinct; one save action |
+| Page              | Design notes                                                                                                                                   |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Login             | Centered card on a quiet full-bleed surface; brand mark, one heading, Clerk component; no marketing sections, no illustration                  |
+| Student dashboard | One summary card for the room, one compact complaints list, one notices list; generous whitespace; no chart clutter                            |
+| Admin dashboard   | Four stat cards maximum per row; occupancy bars; AI briefing card with a clear text hierarchy; recent activity lists                           |
+| Rooms             | Table-first on desktop, cards on mobile; status badges; filters in a single quiet toolbar; one primary "Add room"                              |
+| Room details      | Two columns on desktop: room facts and amenities left, occupancy and actions right; collapses to one column                                    |
+| Allocations       | Table with student/room identity as the primary columns; actions in a row menu; allocation dialog keeps student and room selection in one view |
+| Complaints        | Filterable list with calm badges; "New complaint" is the only accent action for students; admin row actions are quiet                          |
+| Complaint details | Reading column max 75ch; description first, metadata second; action panel separated by a hairline                                              |
+| Notices           | Reading-first list with pinned notices distinguished by a small pin and weight, not a colored block                                            |
+| Profile           | Grouped form sections (Identity, Academic, Contact); read-only fields visually distinct; one save action                                       |
 
 #### 4.4.10 Anti-patterns (reject in review)
 
@@ -495,7 +497,6 @@ A page is not done until:
 - [ ] `prefers-reduced-motion` removes movement without removing feedback.
 - [ ] Tables use tabular numbers and long content is handled gracefully.
 - [ ] No anti-pattern from §4.4.10 is present.
-
 
 ---
 
@@ -727,25 +728,31 @@ User 1 ──< Notice (author)
 - Success envelope: `{ "data": ... }`, optionally `{ "data": ..., "meta": {...} }`.
 - Error envelope:
   ```json
-  { "error": { "code": "VALIDATION_ERROR", "message": "Invalid input", "details": { "title": "Too short" } } }
+  {
+    "error": {
+      "code": "VALIDATION_ERROR",
+      "message": "Invalid input",
+      "details": { "title": "Too short" }
+    }
+  }
   ```
 - Dates are ISO 8601 UTC strings.
 - IDs are Prisma `cuid()` strings. Clerk IDs are never accepted as foreign keys in request bodies.
 - Pagination defaults: `page=1`, `pageSize=20`, max `pageSize=50`.
 
-| HTTP | Code | When |
-|---|---|---|
-| 200 | `OK` | Read or update success |
-| 201 | `CREATED` | Resource created |
-| 204 | — | Delete success (no body) |
-| 400 | `BAD_REQUEST` | Malformed JSON |
-| 401 | `UNAUTHENTICATED` | No/expired Clerk session |
-| 403 | `FORBIDDEN` | Authenticated but wrong role or not owner |
-| 404 | `NOT_FOUND` | Resource missing |
-| 409 | `CONFLICT` | Duplicate room number, student already allocated, room full/maintenance |
-| 422 | `VALIDATION_ERROR` | Zod failure |
-| 429 | `RATE_LIMITED` | Complaint creation throttle (optional, §11.3) |
-| 500 | `INTERNAL` | Unhandled server error (details logged, not returned) |
+| HTTP | Code               | When                                                                    |
+| ---- | ------------------ | ----------------------------------------------------------------------- |
+| 200  | `OK`               | Read or update success                                                  |
+| 201  | `CREATED`          | Resource created                                                        |
+| 204  | —                  | Delete success (no body)                                                |
+| 400  | `BAD_REQUEST`      | Malformed JSON                                                          |
+| 401  | `UNAUTHENTICATED`  | No/expired Clerk session                                                |
+| 403  | `FORBIDDEN`        | Authenticated but wrong role or not owner                               |
+| 404  | `NOT_FOUND`        | Resource missing                                                        |
+| 409  | `CONFLICT`         | Duplicate room number, student already allocated, room full/maintenance |
+| 422  | `VALIDATION_ERROR` | Zod failure                                                             |
+| 429  | `RATE_LIMITED`     | Complaint creation throttle (optional, §11.3)                           |
+| 500  | `INTERNAL`         | Unhandled server error (details logged, not returned)                   |
 
 `withAuth(handler, { role })` performs auth → role → body parse → Zod → handler, and maps `Prisma.PrismaClientKnownRequestError` (`P2002` → 409, `P2025` → 404) to the envelope.
 
@@ -783,15 +790,15 @@ The authenticated app layout also calls `ensureUser()` on every request, so the 
 
 Query params:
 
-| Param | Type | Default | Notes |
-|---|---|---|---|
-| `page` | int | 1 | ≥ 1 |
-| `pageSize` | int | 20 | 1–50 |
-| `block` | string | — | Exact match |
-| `floor` | int | — | Exact match |
-| `type` | `RoomType` | — | |
-| `status` | `RoomStatus` | — | |
-| `q` | string | — | Case-insensitive room number prefix/contains |
+| Param      | Type         | Default | Notes                                        |
+| ---------- | ------------ | ------- | -------------------------------------------- |
+| `page`     | int          | 1       | ≥ 1                                          |
+| `pageSize` | int          | 20      | 1–50                                         |
+| `block`    | string       | —       | Exact match                                  |
+| `floor`    | int          | —       | Exact match                                  |
+| `type`     | `RoomType`   | —       |                                              |
+| `status`   | `RoomStatus` | —       |                                              |
+| `q`        | string       | —       | Case-insensitive room number prefix/contains |
 
 **200**
 
@@ -835,17 +842,17 @@ Query params:
 
 Validation:
 
-| Field | Rule |
-|---|---|
-| `roomNumber` | 2–12 chars, `^[A-Z0-9][A-Z0-9-]*$`, unique (case-insensitive) |
-| `block` | 1–8 chars, uppercase letters/digits |
-| `floor` | 0–20 |
-| `type` | enum; must be consistent with capacity (`SINGLE`=1, `DOUBLE`=2, `TRIPLE`=3, `QUAD`=4) |
-| `capacity` | 1–6 and equal to the type's bed count |
-| `monthlyRent` | ≥ 0, max 2 decimals, optional |
-| `status` | enum; new rooms default `AVAILABLE`; `FULL` is rejected on create |
-| `amenities` | ≤ 12 items, each 1–40 chars, deduplicated |
-| `notes` | ≤ 500 chars |
+| Field         | Rule                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| `roomNumber`  | 2–12 chars, `^[A-Z0-9][A-Z0-9-]*$`, unique (case-insensitive)                         |
+| `block`       | 1–8 chars, uppercase letters/digits                                                   |
+| `floor`       | 0–20                                                                                  |
+| `type`        | enum; must be consistent with capacity (`SINGLE`=1, `DOUBLE`=2, `TRIPLE`=3, `QUAD`=4) |
+| `capacity`    | 1–6 and equal to the type's bed count                                                 |
+| `monthlyRent` | ≥ 0, max 2 decimals, optional                                                         |
+| `status`      | enum; new rooms default `AVAILABLE`; `FULL` is rejected on create                     |
+| `amenities`   | ≤ 12 items, each 1–40 chars, deduplicated                                             |
+| `notes`       | ≤ 500 chars                                                                           |
 
 **201** returns the room with `occupancy: 0`, `availableBeds: capacity`. **409** on duplicate `roomNumber`.
 
@@ -882,8 +889,19 @@ Admin only. Partial update; at least one field required.
       "status": "ACTIVE",
       "startDate": "2026-07-01T00:00:00.000Z",
       "endDate": null,
-      "student": { "id": "usr_...", "name": "Asha Rao", "studentId": "2023CS014", "email": "asha@example.edu" },
-      "room": { "id": "room_...", "roomNumber": "A-101", "block": "A", "floor": 1, "capacity": 2 }
+      "student": {
+        "id": "usr_...",
+        "name": "Asha Rao",
+        "studentId": "2023CS014",
+        "email": "asha@example.edu"
+      },
+      "room": {
+        "id": "room_...",
+        "roomNumber": "A-101",
+        "block": "A",
+        "floor": 1,
+        "capacity": 2
+      }
     }
   ],
   "meta": { "page": 1, "pageSize": 20, "total": 1, "totalPages": 1 }
@@ -893,7 +911,11 @@ Admin only. Partial update; at least one field required.
 **POST — allocate a student (admin only)**
 
 ```json
-{ "studentId": "usr_...", "roomId": "room_...", "startDate": "2026-07-01T00:00:00.000Z" }
+{
+  "studentId": "usr_...",
+  "roomId": "room_...",
+  "startDate": "2026-07-01T00:00:00.000Z"
+}
 ```
 
 Rules (all checked in one transaction):
@@ -911,11 +933,11 @@ Rules (all checked in one transaction):
 
 Admin only. Three supported operations, in one transaction each:
 
-| Request | Effect |
-|---|---|
-| `{ "status": "VACATED", "endDate"?: ISO }` | Ends the active allocation; `endDate` defaults to now; frees the bed; recomputes room status. 409 if already vacated. |
-| `{ "roomId": "room_..." }` | Moves the student: old allocation becomes `VACATED` with `endDate = now`, new `ACTIVE` allocation is created in the target room. Target must pass capacity/maintenance checks. 409 `STUDENT_ALREADY_ALLOCATED` if already in that room. |
-| `{ "studentId": "usr_..." }` | Reassigns an active allocation to a different student. Both students must be `STUDENT`; target must have no active allocation. Rare, but supported as an admin correction. |
+| Request                                    | Effect                                                                                                                                                                                                                                  |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `{ "status": "VACATED", "endDate"?: ISO }` | Ends the active allocation; `endDate` defaults to now; frees the bed; recomputes room status. 409 if already vacated.                                                                                                                   |
+| `{ "roomId": "room_..." }`                 | Moves the student: old allocation becomes `VACATED` with `endDate = now`, new `ACTIVE` allocation is created in the target room. Target must pass capacity/maintenance checks. 409 `STUDENT_ALREADY_ALLOCATED` if already in that room. |
+| `{ "studentId": "usr_..." }`               | Reassigns an active allocation to a different student. Both students must be `STUDENT`; target must have no active allocation. Rare, but supported as an admin correction.                                                              |
 
 - `roomId` and `status: "VACATED"` cannot be combined.
 - **200** returns the resulting allocation(s): `{ "data": { "allocation": {...}, "previous": {...} | null } }`.
@@ -955,7 +977,11 @@ Admin only. Three supported operations, in one transaction each:
       "aiConfidence": 0.94,
       "createdAt": "2026-11-10T09:12:00.000Z",
       "resolvedAt": null,
-      "student": { "id": "usr_...", "name": "Asha Rao", "studentId": "2023CS014" },
+      "student": {
+        "id": "usr_...",
+        "name": "Asha Rao",
+        "studentId": "2023CS014"
+      },
       "room": { "id": "room_...", "roomNumber": "A-101", "block": "A" }
     }
   ],
@@ -981,12 +1007,12 @@ Admin only. Three supported operations, in one transaction each:
 
 Validation:
 
-| Field | Rule |
-|---|---|
-| `title` | 5–120 chars, trimmed |
+| Field         | Rule                   |
+| ------------- | ---------------------- |
+| `title`       | 5–120 chars, trimmed   |
 | `description` | 20–2000 chars, trimmed |
-| `roomId` | cuid, optional |
-| `category` | enum, optional |
+| `roomId`      | cuid, optional         |
+| `category`    | enum, optional         |
 
 ### 6.8 `PUT /api/complaints/:id`
 
@@ -1074,7 +1100,7 @@ Profile mutations use a Server Action rather than a public route handler:
 
 ```ts
 // app/profile/actions.ts
-export async function updateProfile(input: ProfileInput): Promise<ActionResult>
+export async function updateProfile(input: ProfileInput): Promise<ActionResult>;
 ```
 
 - Auth required; only the current user's row is updated.
@@ -1089,18 +1115,18 @@ export async function updateProfile(input: ProfileInput): Promise<ActionResult>
 
 ### 7.1 Route and access matrix
 
-| # | Page | Route | Student | Admin |
-|---|---|---|---|---|
-| 1 | Login | `/login` | Public | Public |
-| 2 | Student Dashboard | `/dashboard/student` | ✅ | Redirect to admin |
-| 3 | Admin Dashboard | `/dashboard/admin` | Redirect to student | ✅ |
-| 4 | Rooms | `/rooms` | Read-only | Read + create/edit |
-| 5 | Room Details | `/rooms/[id]` | Read-only, no occupant names | Read + edit + occupant actions |
-| 6 | Student Allocation | `/allocations` | Own history only | Full management |
-| 7 | Complaints | `/complaints` | Own list + create | All + triage |
-| 8 | Complaint Details | `/complaints/[id]` | Own only | Any |
-| 9 | Notices | `/notices` | Read-only | Read + publish |
-| 10 | Profile | `/profile` | Own | Own |
+| #   | Page               | Route                | Student                      | Admin                          |
+| --- | ------------------ | -------------------- | ---------------------------- | ------------------------------ |
+| 1   | Login              | `/login`             | Public                       | Public                         |
+| 2   | Student Dashboard  | `/dashboard/student` | ✅                           | Redirect to admin              |
+| 3   | Admin Dashboard    | `/dashboard/admin`   | Redirect to student          | ✅                             |
+| 4   | Rooms              | `/rooms`             | Read-only                    | Read + create/edit             |
+| 5   | Room Details       | `/rooms/[id]`        | Read-only, no occupant names | Read + edit + occupant actions |
+| 6   | Student Allocation | `/allocations`       | Own history only             | Full management                |
+| 7   | Complaints         | `/complaints`        | Own list + create            | All + triage                   |
+| 8   | Complaint Details  | `/complaints/[id]`   | Own only                     | Any                            |
+| 9   | Notices            | `/notices`           | Read-only                    | Read + publish                 |
+| 10  | Profile            | `/profile`           | Own                          | Own                            |
 
 `/dashboard` resolves the role and redirects. Unknown or missing role defaults to `STUDENT`.
 
@@ -1248,7 +1274,9 @@ export interface AiJsonResult<T> {
   latencyMs: number;
 }
 
-export async function generateJson<T>(req: AiJsonRequest): Promise<AiJsonResult<T>>;
+export async function generateJson<T>(
+  req: AiJsonRequest
+): Promise<AiJsonResult<T>>;
 ```
 
 **Execution order**
@@ -1314,8 +1342,17 @@ Description: The fan in A-101 sparks when switched on. It happened twice today.
 ```ts
 // lib/ai/schemas.ts
 export const categorizationSchema = z.object({
-  category: z.enum(["ELECTRICAL","PLUMBING","CLEANING","INTERNET","FURNITURE","FOOD","SECURITY","OTHER"]),
-  priority: z.enum(["LOW","MEDIUM","HIGH","URGENT"]),
+  category: z.enum([
+    "ELECTRICAL",
+    "PLUMBING",
+    "CLEANING",
+    "INTERNET",
+    "FURNITURE",
+    "FOOD",
+    "SECURITY",
+    "OTHER",
+  ]),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
   confidence: z.number().min(0).max(1),
   reason: z.string().max(300).optional(),
 });
@@ -1365,8 +1402,16 @@ Rules:
 {
   "summary": "Electrical and plumbing issues account for 62% of the 48 complaints this month, with 6 marked high priority...",
   "topIssues": [
-    { "category": "ELECTRICAL", "count": 18, "note": "Mostly fans and light fixtures in Block A." },
-    { "category": "PLUMBING", "count": 12, "note": "Repeated leaks on floor 2." }
+    {
+      "category": "ELECTRICAL",
+      "count": 18,
+      "note": "Mostly fans and light fixtures in Block A."
+    },
+    {
+      "category": "PLUMBING",
+      "count": 12,
+      "note": "Repeated leaks on floor 2."
+    }
   ],
   "recommendedActions": [
     "Schedule an electrical inspection for Block A.",
@@ -1434,22 +1479,22 @@ Called from the authenticated layout and from `POST /api/auth/login`. API guards
 
 ### 9.3 Authorization matrix
 
-| Action | Student | Admin | Guard |
-|---|---|---|---|
-| View rooms / room details | ✅ | ✅ | authenticated |
-| Create/edit rooms | ❌ | ✅ | `requireAdmin` |
-| View own allocation | ✅ | ✅ | owner filter |
-| View all allocations | ❌ | ✅ | `requireAdmin` |
-| Create/move/vacate/delete allocation | ❌ | ✅ | `requireAdmin` |
-| View own complaints | ✅ | ✅ | owner filter |
-| View all complaints | ❌ | ✅ | `requireAdmin` |
-| Create complaint | ✅ | ❌ | `requireStudent` |
-| Edit complaint (open) | own | — | owner + status |
-| Triage complaint | ❌ | ✅ | `requireAdmin` |
-| View notices | ✅ | ✅ | authenticated |
-| Publish notice | ❌ | ✅ | `requireAdmin` |
-| Edit own profile | ✅ | ✅ | owner |
-| Admin dashboard / AI summary | ❌ | ✅ | `requireAdmin` |
+| Action                               | Student | Admin | Guard            |
+| ------------------------------------ | ------- | ----- | ---------------- |
+| View rooms / room details            | ✅      | ✅    | authenticated    |
+| Create/edit rooms                    | ❌      | ✅    | `requireAdmin`   |
+| View own allocation                  | ✅      | ✅    | owner filter     |
+| View all allocations                 | ❌      | ✅    | `requireAdmin`   |
+| Create/move/vacate/delete allocation | ❌      | ✅    | `requireAdmin`   |
+| View own complaints                  | ✅      | ✅    | owner filter     |
+| View all complaints                  | ❌      | ✅    | `requireAdmin`   |
+| Create complaint                     | ✅      | ❌    | `requireStudent` |
+| Edit complaint (open)                | own     | —     | owner + status   |
+| Triage complaint                     | ❌      | ✅    | `requireAdmin`   |
+| View notices                         | ✅      | ✅    | authenticated    |
+| Publish notice                       | ❌      | ✅    | `requireAdmin`   |
+| Edit own profile                     | ✅      | ✅    | owner            |
+| Admin dashboard / AI summary         | ❌      | ✅    | `requireAdmin`   |
 
 Rules:
 
@@ -1499,19 +1544,19 @@ Rules:
 
 ### 10.5 Validation summary
 
-| Entity | Field | Rule |
-|---|---|---|
-| User | `phone` | optional, `^\+?[0-9 -]{7,15}$` |
-| User | `studentId` | optional, 2–20 alphanumeric/`-`, unique |
-| User | `department` | optional, ≤ 80 chars |
-| User | `year` | optional, integer 1–5 |
-| Room | `roomNumber` | `^[A-Z0-9][A-Z0-9-]{1,11}$`, unique |
-| Room | `capacity` | 1–6 |
-| Allocation | `startDate` | valid ISO date, not more than 1 year in the future |
-| Complaint | `title` | 5–120 chars |
-| Complaint | `description` | 20–2000 chars |
-| Notice | `title` | 5–140 chars |
-| Notice | `content` | 10–5000 chars |
+| Entity     | Field         | Rule                                               |
+| ---------- | ------------- | -------------------------------------------------- |
+| User       | `phone`       | optional, `^\+?[0-9 -]{7,15}$`                     |
+| User       | `studentId`   | optional, 2–20 alphanumeric/`-`, unique            |
+| User       | `department`  | optional, ≤ 80 chars                               |
+| User       | `year`        | optional, integer 1–5                              |
+| Room       | `roomNumber`  | `^[A-Z0-9][A-Z0-9-]{1,11}$`, unique                |
+| Room       | `capacity`    | 1–6                                                |
+| Allocation | `startDate`   | valid ISO date, not more than 1 year in the future |
+| Complaint  | `title`       | 5–120 chars                                        |
+| Complaint  | `description` | 20–2000 chars                                      |
+| Notice     | `title`       | 5–140 chars                                        |
+| Notice     | `content`     | 10–5000 chars                                      |
 
 Zod schemas live in `lib/validators/*` and are shared by forms and route handlers. `.strict()` is used where unknown keys must be rejected; elsewhere unknown keys are stripped so AI/system fields cannot be injected.
 
@@ -1575,16 +1620,16 @@ Zod schemas live in `lib/validators/*` and are shared by forms and route handler
 
 ### 12.2 Key dependencies
 
-| Area | Packages |
-|---|---|
-| Framework | `next`, `react`, `react-dom` |
-| Auth | `@clerk/nextjs` |
-| DB | `@prisma/client`, `prisma` (dev) |
-| Validation/forms | `zod`, `react-hook-form`, `@hookform/resolvers` |
-| UI | `tailwindcss`, shadcn/ui, `lucide-react`, `sonner` |
-| Motion | CSS transitions first; add `motion` only where springs, gestures, or velocity handoff are required |
-| AI | `@google/genai`, `groq-sdk` |
-| Dates | `date-fns` |
+| Area             | Packages                                                                                           |
+| ---------------- | -------------------------------------------------------------------------------------------------- |
+| Framework        | `next`, `react`, `react-dom`                                                                       |
+| Auth             | `@clerk/nextjs`                                                                                    |
+| DB               | `@prisma/client`, `prisma` (dev)                                                                   |
+| Validation/forms | `zod`, `react-hook-form`, `@hookform/resolvers`                                                    |
+| UI               | `tailwindcss`, shadcn/ui, `lucide-react`, `sonner`                                                 |
+| Motion           | CSS transitions first; add `motion` only where springs, gestures, or velocity handoff are required |
+| AI               | `@google/genai`, `groq-sdk`                                                                        |
+| Dates            | `date-fns`                                                                                         |
 
 ### 12.3 Environment variables
 
@@ -1728,15 +1773,15 @@ Seed output logs a summary: created/updated rooms, skipped notices, skipped demo
 
 ## 15. Milestones
 
-| Phase | Deliverable | Exit criteria |
-|---|---|---|
-| **M0 — Inputs** | PRD approval; Neon DB + connection strings; Clerk app + keys; Gemini and Groq keys | `.env.local` complete; keys verified with a read-only call |
-| **M1 — Foundation** | Next.js + Bun + Tailwind + shadcn scaffold; design tokens, type scale, app shell; Prisma schema + initial migration; Clerk middleware, `/login`, layout, `ensureUser`, role guards; seed rooms | Both roles can sign in; role sync works; rooms visible; shell and tokens reviewed with `better-layout` and `better-ui` |
-| **M2 — Rooms** | Room list/detail, admin create/edit, occupancy calculation, filters/pagination | §14.2 and §14.7 pass for rooms |
-| **M3 — Allocations** | Allocation list, create, move, vacate, delete, transactional locking, room status sync | §14.3 and §14.7 pass for allocations |
-| **M4 — Complaints + AI** | Complaint list/create/detail/triage; AI provider client, categorization, admin summary, degradation | §14.4 and §14.7 pass for complaints |
-| **M5 — Notices, profile, dashboards** | Notices list/publish; profile + Server Action; student/admin dashboards | §14.5, §14.6, and §14.7 pass |
-| **M6 — Hardening** | Error boundaries, motion review, `break-ui` and `mobile-native` passes, full design audit, typecheck/lint, API tests, README | Full acceptance checklist green; `better-interface` and `impeccable` sign-off |
+| Phase                                 | Deliverable                                                                                                                                                                                    | Exit criteria                                                                                                          |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **M0 — Inputs**                       | PRD approval; Neon DB + connection strings; Clerk app + keys; Gemini and Groq keys                                                                                                             | `.env.local` complete; keys verified with a read-only call                                                             |
+| **M1 — Foundation**                   | Next.js + Bun + Tailwind + shadcn scaffold; design tokens, type scale, app shell; Prisma schema + initial migration; Clerk middleware, `/login`, layout, `ensureUser`, role guards; seed rooms | Both roles can sign in; role sync works; rooms visible; shell and tokens reviewed with `better-layout` and `better-ui` |
+| **M2 — Rooms**                        | Room list/detail, admin create/edit, occupancy calculation, filters/pagination                                                                                                                 | §14.2 and §14.7 pass for rooms                                                                                         |
+| **M3 — Allocations**                  | Allocation list, create, move, vacate, delete, transactional locking, room status sync                                                                                                         | §14.3 and §14.7 pass for allocations                                                                                   |
+| **M4 — Complaints + AI**              | Complaint list/create/detail/triage; AI provider client, categorization, admin summary, degradation                                                                                            | §14.4 and §14.7 pass for complaints                                                                                    |
+| **M5 — Notices, profile, dashboards** | Notices list/publish; profile + Server Action; student/admin dashboards                                                                                                                        | §14.5, §14.6, and §14.7 pass                                                                                           |
+| **M6 — Hardening**                    | Error boundaries, motion review, `break-ui` and `mobile-native` passes, full design audit, typecheck/lint, API tests, README                                                                   | Full acceptance checklist green; `better-interface` and `impeccable` sign-off                                          |
 
 Each phase ends with a review of the running app; no phase is considered done with failing acceptance criteria.
 
@@ -1773,18 +1818,18 @@ Each phase ends with a review of the running app; no phase is considered done wi
 
 ## 17. Risks and mitigations
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| Prisma + Neon connection limits | Requests fail under load | Pooled URL, singleton client, pagination, no N+1 queries |
-| Clerk role metadata stale in session | Wrong access for a short period | Read fresh `currentUser()` on sync; DB role mirrors Clerk; server checks DB role |
-| Overbooking under concurrency | Double-allocated bed | Transaction + `SELECT ... FOR UPDATE`; DB partial unique index |
-| AI latency blocks requests | Slow creation/dashboard | `after()` for categorization; Suspense + 10-min cache for summary |
-| AI returns invalid JSON | Broken categorization | Strict schema validation, retry, provider fallback, `FAILED` state |
-| Provider rate limits / quota | AI unavailable | Fallback provider, short timeout, deterministic fallback UI |
-| Prompt injection in complaint text | Skewed classification | Delimit input, explicit instruction to treat as data, JSON schema, low temperatures |
-| Detail reads and immutability constraints | Missing detail endpoint/delete | Read detail pages through Server Components; retirement via status; documented in §4.3 and §6 |
-| Design drift across pages | Interface feels inconsistent or generic | Shared tokens in §4.4, per-page `better-interface` review, M6 `impeccable` audit |
-| Bun/Next/Prisma incompatibility | Local dev friction | Bun for install/scripts; verify runtime compatibility before forcing `bun --bun` |
+| Risk                                      | Impact                                  | Mitigation                                                                                    |
+| ----------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Prisma + Neon connection limits           | Requests fail under load                | Pooled URL, singleton client, pagination, no N+1 queries                                      |
+| Clerk role metadata stale in session      | Wrong access for a short period         | Read fresh `currentUser()` on sync; DB role mirrors Clerk; server checks DB role              |
+| Overbooking under concurrency             | Double-allocated bed                    | Transaction + `SELECT ... FOR UPDATE`; DB partial unique index                                |
+| AI latency blocks requests                | Slow creation/dashboard                 | `after()` for categorization; Suspense + 10-min cache for summary                             |
+| AI returns invalid JSON                   | Broken categorization                   | Strict schema validation, retry, provider fallback, `FAILED` state                            |
+| Provider rate limits / quota              | AI unavailable                          | Fallback provider, short timeout, deterministic fallback UI                                   |
+| Prompt injection in complaint text        | Skewed classification                   | Delimit input, explicit instruction to treat as data, JSON schema, low temperatures           |
+| Detail reads and immutability constraints | Missing detail endpoint/delete          | Read detail pages through Server Components; retirement via status; documented in §4.3 and §6 |
+| Design drift across pages                 | Interface feels inconsistent or generic | Shared tokens in §4.4, per-page `better-interface` review, M6 `impeccable` audit              |
+| Bun/Next/Prisma incompatibility           | Local dev friction                      | Bun for install/scripts; verify runtime compatibility before forcing `bun --bun`              |
 
 ---
 

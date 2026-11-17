@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { MessageSquareWarning, RotateCcw, Search } from "lucide-react";
-import { EmptyState } from "@/components/layout/empty-state";
-import { PageHeader } from "@/components/layout/page-header";
-import { PaginationNav } from "@/components/layout/pagination-nav";
+
 import { NewComplaintDialog } from "@/components/complaints/new-complaint-dialog";
 import { QuickStatus } from "@/components/complaints/quick-status";
 import type {
@@ -14,11 +14,20 @@ import type {
   ComplaintFilters,
   ComplaintListItem,
 } from "@/components/complaints/types";
+import { EmptyState } from "@/components/layout/empty-state";
+import { PageHeader } from "@/components/layout/page-header";
+import { PaginationNav } from "@/components/layout/pagination-nav";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -28,8 +37,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { PaginationMeta } from "@/lib/api/responses";
-import { COMPLAINT_CATEGORIES, PRIORITIES } from "@/lib/validators/complaint";
 import { enumLabel, formatAge, formatDate } from "@/lib/utils";
+import { COMPLAINT_CATEGORIES, PRIORITIES } from "@/lib/validators/complaint";
 
 export function ComplaintsView({
   complaints,
@@ -49,7 +58,9 @@ export function ComplaintsView({
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(filters.q ?? "");
   const isAdmin = role === "ADMIN";
-  const hasPending = complaints.some((complaint) => complaint.aiStatus === "PENDING");
+  const hasPending = complaints.some(
+    (complaint) => complaint.aiStatus === "PENDING"
+  );
 
   useEffect(() => {
     setQuery(filters.q ?? "");
@@ -85,7 +96,9 @@ export function ComplaintsView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  const hasFilters = Boolean(filters.q || filters.status || filters.category || filters.priority);
+  const hasFilters = Boolean(
+    filters.q || filters.status || filters.category || filters.priority
+  );
 
   function resetFilters() {
     router.push(pathname);
@@ -112,10 +125,10 @@ export function ComplaintsView({
         {!isAdmin ? <NewComplaintDialog activeRoom={activeRoom} /> : null}
       </PageHeader>
 
-      <div className="mb-5 flex flex-col gap-3 rounded-lg border border-line bg-surface p-3 shadow-card md:flex-row md:items-center">
+      <div className="border-line bg-surface shadow-card mb-5 flex flex-col gap-3 rounded-lg border p-3 md:flex-row md:items-center">
         <div className="relative min-w-0 flex-1">
           <Search
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ink-tertiary"
+            className="text-ink-tertiary pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
             aria-hidden
           />
           <Input
@@ -165,7 +178,10 @@ export function ComplaintsView({
               value={filters.priority ?? "all"}
               onValueChange={(value) => updateParam("priority", value)}
             >
-              <SelectTrigger aria-label="Filter by priority" className="md:w-32">
+              <SelectTrigger
+                aria-label="Filter by priority"
+                className="md:w-32"
+              >
                 <SelectValue placeholder="All priorities" />
               </SelectTrigger>
               <SelectContent>
@@ -193,7 +209,7 @@ export function ComplaintsView({
         </div>
       </div>
 
-      <p className="mb-3 text-[12px] text-ink-tertiary">
+      <p className="text-ink-tertiary mb-3 text-[12px]">
         {meta.total} {meta.total === 1 ? "complaint" : "complaints"}
         {hasPending ? " · analyzing new complaints" : ""}
       </p>
@@ -201,7 +217,9 @@ export function ComplaintsView({
       {complaints.length === 0 ? (
         <EmptyState
           icon={MessageSquareWarning}
-          title={isAdmin ? "No complaints match these filters" : "No complaints yet"}
+          title={
+            isAdmin ? "No complaints match these filters" : "No complaints yet"
+          }
           description={
             isAdmin
               ? "Try a different status, category, or search term."
@@ -219,7 +237,7 @@ export function ComplaintsView({
         />
       ) : (
         <>
-          <div className="hidden overflow-hidden rounded-lg border border-line bg-surface shadow-card md:block">
+          <div className="border-line bg-surface shadow-card hidden overflow-hidden rounded-lg border md:block">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -253,11 +271,14 @@ export function ComplaintsView({
                       <>
                         <TableCell>
                           <div className="max-w-56">
-                            <p className="truncate font-medium text-ink" title={complaint.student.name}>
+                            <p
+                              className="text-ink truncate font-medium"
+                              title={complaint.student.name}
+                            >
                               {complaint.student.name}
                             </p>
                             <p
-                              className="truncate text-[12px] text-ink-tertiary"
+                              className="text-ink-tertiary truncate text-[12px]"
                               title={complaint.student.studentId ?? undefined}
                             >
                               {complaint.student.studentId ?? "No student ID"}
@@ -267,7 +288,7 @@ export function ComplaintsView({
                         <TableCell className="max-w-72">
                           <Link
                             href={`/complaints/${complaint.id}`}
-                            className="block truncate font-medium text-ink hover:text-accent"
+                            className="text-ink hover:text-accent block truncate font-medium"
                             title={complaint.title}
                           >
                             {complaint.title}
@@ -292,7 +313,7 @@ export function ComplaintsView({
                         <TableCell>
                           <StatusBadge value={complaint.aiStatus} dot={false} />
                         </TableCell>
-                        <TableCell className="tabular text-right text-[12px] text-ink-tertiary">
+                        <TableCell className="tabular text-ink-tertiary text-right text-[12px]">
                           {formatAge(complaint.createdAt)}
                         </TableCell>
                       </>
@@ -301,13 +322,15 @@ export function ComplaintsView({
                         <TableCell className="max-w-72">
                           <Link
                             href={`/complaints/${complaint.id}`}
-                            className="block truncate font-medium text-ink hover:text-accent"
+                            className="text-ink hover:text-accent block truncate font-medium"
                             title={complaint.title}
                           >
                             {complaint.title}
                           </Link>
-                          <p className="text-[12px] text-ink-tertiary">
-                            {complaint.room ? `Room ${complaint.room.roomNumber}` : "No room"}
+                          <p className="text-ink-tertiary text-[12px]">
+                            {complaint.room
+                              ? `Room ${complaint.room.roomNumber}`
+                              : "No room"}
                           </p>
                         </TableCell>
                         <TableCell className="text-ink-secondary">
@@ -322,7 +345,7 @@ export function ComplaintsView({
                         <TableCell>
                           <StatusBadge value={complaint.aiStatus} dot={false} />
                         </TableCell>
-                        <TableCell className="tabular text-right text-[12px] text-ink-tertiary">
+                        <TableCell className="tabular text-ink-tertiary text-right text-[12px]">
                           {formatDate(complaint.createdAt)}
                         </TableCell>
                       </>
@@ -337,31 +360,36 @@ export function ComplaintsView({
             {complaints.map((complaint) => (
               <div
                 key={complaint.id}
-                className="rounded-lg border border-line bg-surface p-4 shadow-card"
+                className="border-line bg-surface shadow-card rounded-lg border p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <Link
                     href={`/complaints/${complaint.id}`}
-                    className="min-w-0 text-[14px] font-medium leading-snug text-ink"
+                    className="text-ink min-w-0 text-[14px] leading-snug font-medium"
                   >
                     {complaint.title}
                   </Link>
                   <StatusBadge value={complaint.status} />
                 </div>
                 {isAdmin ? (
-                  <p className="mt-1 text-[12px] text-ink-secondary">
+                  <p className="text-ink-secondary mt-1 text-[12px]">
                     {complaint.student.name}
-                    {complaint.room ? ` · Room ${complaint.room.roomNumber}` : ""}
+                    {complaint.room
+                      ? ` · Room ${complaint.room.roomNumber}`
+                      : ""}
                   </p>
                 ) : null}
                 <div className="mt-3 flex flex-wrap items-center gap-1.5">
                   <StatusBadge value={complaint.priority} dot={false} />
                   <Badge tone="neutral">{enumLabel(complaint.category)}</Badge>
                   <Badge tone="outline">
-                    AI {complaint.aiStatus === "DONE" ? "categorized" : complaint.aiStatus.toLowerCase()}
+                    AI{" "}
+                    {complaint.aiStatus === "DONE"
+                      ? "categorized"
+                      : complaint.aiStatus.toLowerCase()}
                   </Badge>
                 </div>
-                <p className="mt-2 text-[11px] text-ink-tertiary">
+                <p className="text-ink-tertiary mt-2 text-[11px]">
                   {formatAge(complaint.createdAt)}
                 </p>
               </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { Loader2, MoveRight } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +17,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { apiRequest, errorMessage } from "@/lib/client/api";
 import { pluralize } from "@/lib/utils";
 
@@ -83,7 +92,8 @@ export function MoveRoomDialog({
         <DialogHeader>
           <DialogTitle>Move {studentName}</DialogTitle>
           <DialogDescription id="move-description">
-            The current allocation is vacated and a new active allocation is created in the target room.
+            The current allocation is vacated and a new active allocation is
+            created in the target room.
           </DialogDescription>
         </DialogHeader>
 
@@ -95,12 +105,14 @@ export function MoveRoomDialog({
               </SelectTrigger>
               <SelectContent>
                 {options.length === 0 ? (
-                  <div className="px-2 py-3 text-[12px] text-ink-tertiary">No rooms have available beds.</div>
+                  <div className="text-ink-tertiary px-2 py-3 text-[12px]">
+                    No rooms have available beds.
+                  </div>
                 ) : (
                   options.map((room) => (
                     <SelectItem key={room.id} value={room.id}>
-                      {room.roomNumber} · Block {room.block} · Floor {room.floor} ·{" "}
-                      {pluralize(room.availableBeds, "bed")} free
+                      {room.roomNumber} · Block {room.block} · Floor{" "}
+                      {room.floor} · {pluralize(room.availableBeds, "bed")} free
                     </SelectItem>
                   ))
                 )}
@@ -110,11 +122,22 @@ export function MoveRoomDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="secondary" onClick={() => onOpenChange(false)} disabled={pending}>
+          <Button
+            variant="secondary"
+            onClick={() => onOpenChange(false)}
+            disabled={pending}
+          >
             Cancel
           </Button>
           <Button onClick={submit} disabled={pending || options.length === 0}>
-            {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : <MoveRight aria-hidden />}
+            {pending ? (
+              <Loader2
+                className="animate-spin motion-reduce:animate-none"
+                aria-hidden
+              />
+            ) : (
+              <MoveRight aria-hidden />
+            )}
             Move student
           </Button>
         </DialogFooter>

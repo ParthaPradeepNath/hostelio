@@ -1,9 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { Check, Loader2, Plus, Search } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -55,8 +58,8 @@ export function AllocateDialog({
     if (!query) return students;
     return students.filter((student) =>
       [student.name, student.email, student.studentId ?? ""].some((value) =>
-        value.toLowerCase().includes(query),
-      ),
+        value.toLowerCase().includes(query)
+      )
     );
   }, [students, studentQuery]);
 
@@ -64,7 +67,7 @@ export function AllocateDialog({
     const query = roomQuery.trim().toLowerCase();
     if (!query) return rooms;
     return rooms.filter((room) =>
-      `${room.roomNumber} ${room.block}`.toLowerCase().includes(query),
+      `${room.roomNumber} ${room.block}`.toLowerCase().includes(query)
     );
   }, [rooms, roomQuery]);
 
@@ -82,7 +85,9 @@ export function AllocateDialog({
         method: "POST",
         body: JSON.stringify({ studentId, roomId }),
       });
-      toast.success(`${selectedStudent?.name ?? "Student"} allocated to ${selectedRoom?.roomNumber}`);
+      toast.success(
+        `${selectedStudent?.name ?? "Student"} allocated to ${selectedRoom?.roomNumber}`
+      );
       setOpen(false);
       setStudentId("");
       setRoomId("");
@@ -105,11 +110,15 @@ export function AllocateDialog({
           Allocate student
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[35rem]" aria-describedby="allocate-description">
+      <DialogContent
+        className="max-w-[35rem]"
+        aria-describedby="allocate-description"
+      >
         <DialogHeader>
           <DialogTitle>Allocate a student</DialogTitle>
           <DialogDescription id="allocate-description">
-            Students can hold one active allocation. Only rooms with free beds are listed.
+            Students can hold one active allocation. Only rooms with free beds
+            are listed.
           </DialogDescription>
         </DialogHeader>
 
@@ -118,7 +127,7 @@ export function AllocateDialog({
             <p className="type-label text-ink">Student</p>
             <div className="relative mt-1.5">
               <Search
-                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ink-tertiary"
+                className="text-ink-tertiary pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                 aria-hidden
               />
               <Input
@@ -131,10 +140,10 @@ export function AllocateDialog({
             </div>
             <ul
               aria-label="Unallocated students"
-              className="mt-2 max-h-64 overflow-y-auto rounded-md border border-line"
+              className="border-line mt-2 max-h-64 overflow-y-auto rounded-md border"
             >
               {filteredStudents.length === 0 ? (
-                <li className="px-3 py-4 text-[12px] text-ink-tertiary">
+                <li className="text-ink-tertiary px-3 py-4 text-[12px]">
                   {students.length === 0
                     ? "Every student already has an active allocation."
                     : "No students match this search."}
@@ -149,25 +158,30 @@ export function AllocateDialog({
                         aria-pressed={selected}
                         onClick={() => setStudentId(student.id)}
                         className={cn(
-                          "flex w-full items-center justify-between gap-2 border-b border-line px-3 py-2.5 text-left transition-colors last:border-b-0",
-                          selected ? "bg-accent-soft" : "hover:bg-surface-hover",
+                          "border-line flex w-full items-center justify-between gap-2 border-b px-3 py-2.5 text-left transition-colors last:border-b-0",
+                          selected ? "bg-accent-soft" : "hover:bg-surface-hover"
                         )}
                       >
                         <span className="min-w-0">
                           <span
-                            className="block truncate text-[13px] font-medium text-ink"
+                            className="text-ink block truncate text-[13px] font-medium"
                             title={student.name}
                           >
                             {student.name}
                           </span>
                           <span
-                            className="block truncate text-[11px] text-ink-secondary"
+                            className="text-ink-secondary block truncate text-[11px]"
                             title={student.studentId ?? student.email}
                           >
                             {student.studentId ?? student.email}
                           </span>
                         </span>
-                        {selected ? <Check className="size-4 shrink-0 text-accent" aria-hidden /> : null}
+                        {selected ? (
+                          <Check
+                            className="text-accent size-4 shrink-0"
+                            aria-hidden
+                          />
+                        ) : null}
                       </button>
                     </li>
                   );
@@ -180,7 +194,7 @@ export function AllocateDialog({
             <p className="type-label text-ink">Room</p>
             <div className="relative mt-1.5">
               <Search
-                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ink-tertiary"
+                className="text-ink-tertiary pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                 aria-hidden
               />
               <Input
@@ -193,10 +207,10 @@ export function AllocateDialog({
             </div>
             <ul
               aria-label="Available rooms"
-              className="mt-2 max-h-64 overflow-y-auto rounded-md border border-line"
+              className="border-line mt-2 max-h-64 overflow-y-auto rounded-md border"
             >
               {filteredRooms.length === 0 ? (
-                <li className="px-3 py-4 text-[12px] text-ink-tertiary">
+                <li className="text-ink-tertiary px-3 py-4 text-[12px]">
                   {rooms.length === 0
                     ? "No room has a free bed right now."
                     : "No rooms match this search."}
@@ -211,19 +225,25 @@ export function AllocateDialog({
                         aria-pressed={selected}
                         onClick={() => setRoomId(room.id)}
                         className={cn(
-                          "flex w-full items-center justify-between gap-2 border-b border-line px-3 py-2.5 text-left transition-colors last:border-b-0",
-                          selected ? "bg-accent-soft" : "hover:bg-surface-hover",
+                          "border-line flex w-full items-center justify-between gap-2 border-b px-3 py-2.5 text-left transition-colors last:border-b-0",
+                          selected ? "bg-accent-soft" : "hover:bg-surface-hover"
                         )}
                       >
                         <span className="min-w-0">
-                          <span className="block truncate text-[13px] font-medium text-ink">
+                          <span className="text-ink block truncate text-[13px] font-medium">
                             {room.roomNumber}
                           </span>
-                          <span className="block truncate text-[11px] text-ink-secondary">
-                            Block {room.block} · Floor {room.floor} · {pluralize(room.availableBeds, "bed")} free
+                          <span className="text-ink-secondary block truncate text-[11px]">
+                            Block {room.block} · Floor {room.floor} ·{" "}
+                            {pluralize(room.availableBeds, "bed")} free
                           </span>
                         </span>
-                        {selected ? <Check className="size-4 shrink-0 text-accent" aria-hidden /> : null}
+                        {selected ? (
+                          <Check
+                            className="text-accent size-4 shrink-0"
+                            aria-hidden
+                          />
+                        ) : null}
                       </button>
                     </li>
                   );
@@ -234,11 +254,20 @@ export function AllocateDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="secondary" onClick={() => setOpen(false)} disabled={pending}>
+          <Button
+            variant="secondary"
+            onClick={() => setOpen(false)}
+            disabled={pending}
+          >
             Cancel
           </Button>
           <Button onClick={submit} disabled={pending || !studentId || !roomId}>
-            {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
+            {pending ? (
+              <Loader2
+                className="animate-spin motion-reduce:animate-none"
+                aria-hidden
+              />
+            ) : null}
             Allocate room
           </Button>
         </DialogFooter>

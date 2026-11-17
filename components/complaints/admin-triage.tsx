@@ -1,16 +1,29 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { apiRequest, errorMessage } from "@/lib/client/api";
-import { COMPLAINT_CATEGORIES, PRIORITIES, ALLOWED_TRANSITIONS } from "@/lib/validators/complaint";
 import { enumLabel } from "@/lib/utils";
+import {
+  ALLOWED_TRANSITIONS,
+  COMPLAINT_CATEGORIES,
+  PRIORITIES,
+} from "@/lib/validators/complaint";
 
 const TRANSITION_LABELS: Record<string, string> = {
   IN_PROGRESS: "Start work",
@@ -52,7 +65,9 @@ export function AdminTriage({
           ...(nextStatus ? { status: nextStatus } : {}),
           ...(priority !== complaint.priority ? { priority } : {}),
           ...(category !== complaint.category ? { category } : {}),
-          ...(response !== (complaint.adminResponse ?? "") ? { adminResponse: response } : {}),
+          ...(response !== (complaint.adminResponse ?? "")
+            ? { adminResponse: response }
+            : {}),
         }),
       });
       toast.success("Complaint updated");
@@ -71,9 +86,9 @@ export function AdminTriage({
       <div>
         <p className="type-label text-ink">Move status</p>
         {transitions.length === 0 ? (
-          <p className="mt-1.5 text-[13px] leading-relaxed text-ink-secondary">
-            This complaint is rejected and closed. Rejecting is final — if the issue returns, ask the
-            student to raise a new complaint.
+          <p className="text-ink-secondary mt-1.5 text-[13px] leading-relaxed">
+            This complaint is rejected and closed. Rejecting is final — if the
+            issue returns, ask the student to raise a new complaint.
           </p>
         ) : (
           <>
@@ -101,7 +116,7 @@ export function AdminTriage({
                 );
               })}
             </div>
-            <p className="mt-2 text-[12px] text-ink-tertiary">
+            <p className="text-ink-tertiary mt-2 text-[12px]">
               {complaint.status === "RESOLVED"
                 ? "Resolved complaints can be reopened if the issue persists."
                 : "Choose a new status, then save to apply it with the changes below."}
@@ -112,7 +127,11 @@ export function AdminTriage({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Priority" htmlFor="triage-priority">
-          <Select value={priority} onValueChange={setPriority} disabled={pending}>
+          <Select
+            value={priority}
+            onValueChange={setPriority}
+            disabled={pending}
+          >
             <SelectTrigger id="triage-priority">
               <SelectValue />
             </SelectTrigger>
@@ -126,7 +145,11 @@ export function AdminTriage({
           </Select>
         </Field>
         <Field label="Category" htmlFor="triage-category">
-          <Select value={category} onValueChange={setCategory} disabled={pending}>
+          <Select
+            value={category}
+            onValueChange={setCategory}
+            disabled={pending}
+          >
             <SelectTrigger id="triage-category">
               <SelectValue />
             </SelectTrigger>
@@ -158,11 +181,20 @@ export function AdminTriage({
       </Field>
 
       <div className="flex items-center justify-between gap-3">
-        <p className="text-[12px] text-ink-tertiary">
-          {response.length > 0 ? `${response.length}/2000 characters` : "No response yet"}
+        <p className="text-ink-tertiary text-[12px]">
+          {response.length > 0
+            ? `${response.length}/2000 characters`
+            : "No response yet"}
         </p>
         <Button type="button" onClick={save} disabled={pending || !changed}>
-          {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : <Save aria-hidden />}
+          {pending ? (
+            <Loader2
+              className="animate-spin motion-reduce:animate-none"
+              aria-hidden
+            />
+          ) : (
+            <Save aria-hidden />
+          )}
           Save changes
         </Button>
       </div>

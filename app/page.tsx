@@ -1,7 +1,9 @@
-import Link from "next/link";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+
 import { ArrowRight } from "lucide-react";
+
 import { Brand } from "@/components/layout/brand";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -16,7 +18,7 @@ export default async function HomePage() {
 
   return (
     <main className="relative flex min-h-dvh flex-col">
-      <div className="fixed right-3 top-3 sm:right-6 sm:top-6">
+      <div className="fixed top-3 right-3 sm:top-6 sm:right-6">
         <ThemeToggle initialTheme={theme} />
       </div>
 
@@ -26,12 +28,12 @@ export default async function HomePage() {
 
       <div className="flex flex-1 items-center justify-center px-5 pb-12">
         <div className="max-w-2xl text-center">
-          <h1 className="text-balance text-[clamp(2.25rem,7vw,4rem)] font-semibold leading-[1.05] tracking-[-0.04em] text-ink">
+          <h1 className="text-ink text-[clamp(2.25rem,7vw,4rem)] leading-[1.05] font-semibold tracking-[-0.04em] text-balance">
             Hostel life, organized.
           </h1>
-          <p className="mx-auto mt-5 max-w-lg text-pretty text-[15px] leading-relaxed text-ink-secondary md:text-[17px]">
-            Rooms, complaints, and notices in one calm place — built for students and the wardens who
-            look after them.
+          <p className="text-ink-secondary mx-auto mt-5 max-w-lg text-[15px] leading-relaxed text-pretty md:text-[17px]">
+            Rooms, complaints, and notices in one calm place — built for
+            students and the wardens who look after them.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button size="lg" asChild>
@@ -44,13 +46,13 @@ export default async function HomePage() {
               <Link href="/sign-up">Create account</Link>
             </Button>
           </div>
-          <p className="mt-5 text-[12px] text-ink-tertiary">
+          <p className="text-ink-tertiary mt-5 text-[12px]">
             Students and wardens each get a dashboard tailored to their role.
           </p>
         </div>
       </div>
 
-      <footer className="px-5 py-6 text-center text-[12px] text-ink-tertiary">
+      <footer className="text-ink-tertiary px-5 py-6 text-center text-[12px]">
         Hostelio · A quieter way to run a hostel.
       </footer>
     </main>

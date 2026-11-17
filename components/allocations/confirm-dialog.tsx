@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+
 import { Loader2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -48,10 +50,16 @@ export function ConfirmDialog({
       <DialogContent aria-describedby="confirm-description">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription id="confirm-description">{description}</DialogDescription>
+          <DialogDescription id="confirm-description">
+            {description}
+          </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="secondary" onClick={() => onOpenChange(false)} disabled={pending}>
+          <Button
+            variant="secondary"
+            onClick={() => onOpenChange(false)}
+            disabled={pending}
+          >
             Cancel
           </Button>
           <Button
@@ -59,7 +67,12 @@ export function ConfirmDialog({
             onClick={handleConfirm}
             disabled={pending}
           >
-            {pending ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
+            {pending ? (
+              <Loader2
+                className="animate-spin motion-reduce:animate-none"
+                aria-hidden
+              />
+            ) : null}
             {confirmLabel}
           </Button>
         </DialogFooter>

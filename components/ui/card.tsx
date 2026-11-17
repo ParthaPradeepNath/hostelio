@@ -1,10 +1,14 @@
 import * as React from "react";
+
 import { cn } from "@/lib/utils";
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("rounded-lg border border-line bg-surface p-5 shadow-card md:p-6", className)}
+      className={cn(
+        "border-line bg-surface shadow-card rounded-lg border p-5 md:p-6",
+        className
+      )}
       {...props}
     />
   );
@@ -19,7 +23,15 @@ function CardTitle({ className, ...props }: React.ComponentProps<"h2">) {
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p className={cn("text-[13px] leading-relaxed text-ink-secondary", className)} {...props} />;
+  return (
+    <p
+      className={cn(
+        "text-ink-secondary text-[13px] leading-relaxed",
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
@@ -27,7 +39,16 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("mt-5 flex items-center gap-2", className)} {...props} />;
+  return (
+    <div className={cn("mt-5 flex items-center gap-2", className)} {...props} />
+  );
 }
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter };
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+};

@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { Loader2, Megaphone } from "lucide-react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -44,7 +47,11 @@ export function PublishNoticeDialog() {
 
   const isPinned = watch("isPinned");
 
-  async function onSubmit(values: { title: string; content: string; isPinned: boolean }) {
+  async function onSubmit(values: {
+    title: string;
+    content: string;
+    isPinned: boolean;
+  }) {
     try {
       await apiRequest("/api/notices", {
         method: "POST",
@@ -84,12 +91,21 @@ export function PublishNoticeDialog() {
         <DialogHeader>
           <DialogTitle>Publish a notice</DialogTitle>
           <DialogDescription id="publish-notice-description">
-            Notices are visible to every student and cannot be edited or deleted after publishing.
+            Notices are visible to every student and cannot be edited or deleted
+            after publishing.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-5 flex flex-col gap-4" noValidate>
-          <Field label="Title" htmlFor="notice-title" error={errors.title?.message}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-5 flex flex-col gap-4"
+          noValidate
+        >
+          <Field
+            label="Title"
+            htmlFor="notice-title"
+            error={errors.title?.message}
+          >
             <Input
               id="notice-title"
               placeholder="Water supply interruption on Saturday"
@@ -111,15 +127,17 @@ export function PublishNoticeDialog() {
               rows={7}
               placeholder="Block A will have no water supply from 10:00 to 14:00..."
               aria-invalid={Boolean(errors.content)}
-              aria-describedby={errors.content ? "notice-content-error" : "notice-content-hint"}
+              aria-describedby={
+                errors.content ? "notice-content-error" : "notice-content-hint"
+              }
               {...register("content")}
             />
           </Field>
 
-          <div className="flex items-center justify-between gap-4 rounded-md border border-line bg-surface-2 px-3.5 py-3">
+          <div className="border-line bg-surface-2 flex items-center justify-between gap-4 rounded-md border px-3.5 py-3">
             <div className="min-w-0">
               <Label htmlFor="notice-pinned">Pin to top</Label>
-              <p className="mt-0.5 text-[12px] text-ink-tertiary">
+              <p className="text-ink-tertiary mt-0.5 text-[12px]">
                 Pinned notices appear above the chronological list.
               </p>
             </div>
@@ -131,11 +149,20 @@ export function PublishNoticeDialog() {
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : null}
+              {isSubmitting ? (
+                <Loader2
+                  className="animate-spin motion-reduce:animate-none"
+                  aria-hidden
+                />
+              ) : null}
               Publish notice
             </Button>
           </DialogFooter>

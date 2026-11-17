@@ -1,10 +1,16 @@
-import { createHash } from "node:crypto";
 import { unstable_cache } from "next/cache";
-import type { ComplaintCategory, ComplaintStatus, Priority } from "@prisma/client";
-import { logAi } from "@/lib/api/logger";
-import { generateJson, isAiConfigured, aiProviderLabel } from "@/lib/ai/client";
+
+import type {
+  ComplaintCategory,
+  ComplaintStatus,
+  Priority,
+} from "@prisma/client";
+import { createHash } from "node:crypto";
+
+import { aiProviderLabel, generateJson, isAiConfigured } from "@/lib/ai/client";
 import type { SummaryResult } from "@/lib/ai/schemas";
 import { summaryJsonSchema, summarySchema } from "@/lib/ai/schemas";
+import { logAi } from "@/lib/api/logger";
 import { prisma } from "@/lib/prisma";
 import { COMPLAINT_CATEGORIES } from "@/lib/validators/complaint";
 
@@ -16,7 +22,12 @@ Rules:
 - Do not include student names or personal data.
 - Return strict JSON only.`;
 
-const STATUSES: ComplaintStatus[] = ["OPEN", "IN_PROGRESS", "RESOLVED", "REJECTED"];
+const STATUSES: ComplaintStatus[] = [
+  "OPEN",
+  "IN_PROGRESS",
+  "RESOLVED",
+  "REJECTED",
+];
 
 type CategoryCount = { category: ComplaintCategory; count: number };
 type StatusCount = { status: ComplaintStatus; count: number };
@@ -64,26 +75,34 @@ type SummaryPayload = {
   }[];
 };
 
-function countByCategory(complaints: { category: ComplaintCategory }[]): CategoryCount[] {
+function countByCategory(
+  complaints: { category: ComplaintCategory }[]
+): CategoryCount[] {
   return COMPLAINT_CATEGORIES.map((category) => ({
     category,
-    count: complaints.filter((complaint) => complaint.category === category).length,
+    count: complaints.filter((complaint) => complaint.category === category)
+      .length,
   })).filter((entry) => entry.count > 0);
 }
 
-function countByStatus(complaints: { status: ComplaintStatus }[]): StatusCount[] {
+function countByStatus(
+  complaints: { status: ComplaintStatus }[]
+): StatusCount[] {
   return STATUSES.map((status) => ({
     status,
     count: complaints.filter((complaint) => complaint.status === status).length,
   })).filter((entry) => entry.count > 0);
 }
 
-function countByPriority(complaints: { priority: Priority }[]): PriorityCount[] {
+function countByPriority(
+  complaints: { priority: Priority }[]
+): PriorityCount[] {
   const priorities: Priority[] = ["URGENT", "HIGH", "MEDIUM", "LOW"];
   return priorities
     .map((priority) => ({
       priority,
-      count: complaints.filter((complaint) => complaint.priority === priority).length,
+      count: complaints.filter((complaint) => complaint.priority === priority)
+        .length,
     }))
     .filter((entry) => entry.count > 0);
 }
@@ -93,18 +112,21 @@ function fallbackView(
   byCategory: CategoryCount[],
   byStatus: StatusCount[],
   byPriority: PriorityCount[],
-  byBlock: BlockCount[],
+  byBlock: BlockCount[]
 ): SummaryView {
   const total = payload.complaints.length;
   const open = byStatus.find((entry) => entry.status === "OPEN")?.count ?? 0;
-  const inProgress = byStatus.find((entry) => entry.status === "IN_PROGRESS")?.count ?? 0;
+  const inProgress =
+    byStatus.find((entry) => entry.status === "IN_PROGRESS")?.count ?? 0;
   const top = [...byCategory].sort((a, b) => b.count - a.count)[0];
 
   const summary =
     total === 0
       ? "No complaints were raised in the last 30 days."
       : `${total} complaint${total === 1 ? "" : "s"} were raised in the last 30 days. ${open} are open and ${inProgress} are in progress.${
-          top ? ` ${top.category.charAt(0) + top.category.slice(1).toLowerCase()} is the most common category (${top.count}).` : ""
+          top
+            ? ` ${top.category.charAt(0) + top.category.slice(1).toLowerCase()} is the most common category (${top.count}).`
+            : ""
         }`;
 
   return {
@@ -112,7 +134,8 @@ function fallbackView(
     summary,
     topIssues: [...byCategory].sort((a, b) => b.count - a.count).slice(0, 3),
     recommendedActions: [],
-    safetyConcerns: byPriority.find((entry) => entry.priority === "URGENT")?.count ?? 0,
+    safetyConcerns:
+      byPriority.find((entry) => entry.priority === "URGENT")?.count ?? 0,
     provider: null,
     model: null,
     generatedAt: new Date().toISOString(),
@@ -158,7 +181,8 @@ ${JSON.stringify(payload, null, 2)}
       summary: result.data.summary,
       topIssues: [...byCategory].sort((a, b) => b.count - a.count).slice(0, 3),
       recommendedActions: result.data.recommendedActions,
-      safetyConcerns: byPriority.find((entry) => entry.priority === "URGENT")?.count ?? 0,
+      safetyConcerns:
+        byPriority.find((entry) => entry.priority === "URGENT")?.count ?? 0,
       provider: result.provider,
       model: result.model,
       generatedAt: new Date().toISOString(),
@@ -215,7 +239,9 @@ export async function summarizeCommonIssues(): Promise<SummaryView> {
     .sort((a, b) => a.block.localeCompare(b.block));
 
   const resolved = complaints
-    .filter((complaint) => complaint.status === "RESOLVED" && complaint.adminResponse)
+    .filter(
+      (complaint) => complaint.status === "RESOLVED" && complaint.adminResponse
+    )
     .slice(0, 20)
     .map((complaint) => ({
       category: complaint.category,
@@ -237,12 +263,15 @@ export async function summarizeCommonIssues(): Promise<SummaryView> {
     resolved,
   };
 
-  const hash = createHash("sha256").update(JSON.stringify(payload)).digest("hex").slice(0, 24);
+  const hash = createHash("sha256")
+    .update(JSON.stringify(payload))
+    .digest("hex")
+    .slice(0, 24);
 
   const cached = unstable_cache(
     async () => computeSummary(payload),
     ["admin-ai-summary", hash],
-    { revalidate: 600, tags: ["ai-summary"] },
+    { revalidate: 600, tags: ["ai-summary"] }
   );
 
   return cached();

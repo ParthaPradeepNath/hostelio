@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+
 import { Monitor, Moon, Sun } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,16 +15,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   normalizeTheme,
+  type Theme,
   THEME_COOKIE,
   THEME_COOKIE_MAX_AGE,
-  type Theme,
 } from "@/lib/theme";
 
 const OPTIONS = [
   { value: "light", label: "Light", Icon: Sun },
   { value: "dark", label: "Dark", Icon: Moon },
   { value: "system", label: "System", Icon: Monitor },
-] as const satisfies ReadonlyArray<{ value: Theme; label: string; Icon: typeof Sun }>;
+] as const satisfies ReadonlyArray<{
+  value: Theme;
+  label: string;
+  Icon: typeof Sun;
+}>;
 
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
@@ -31,7 +37,8 @@ function applyTheme(theme: Theme) {
 
 export function ThemeToggle({ initialTheme }: { initialTheme: Theme }) {
   const [theme, setTheme] = useState<Theme>(initialTheme);
-  const current = OPTIONS.find((option) => option.value === theme) ?? OPTIONS[2];
+  const current =
+    OPTIONS.find((option) => option.value === theme) ?? OPTIONS[2];
   const CurrentIcon = current.Icon;
 
   return (

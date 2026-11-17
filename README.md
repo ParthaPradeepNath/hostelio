@@ -15,10 +15,10 @@ bun run dev
 
 The seed creates rooms, notices, and two demo accounts:
 
-| Role | Email | Password |
-|---|---|---|
-| Warden (admin) | `admin@hostelio.local` | `Admin123!` |
-| Student | `student@hostelio.local` | `Student123!` |
+| Role           | Email                    | Password      |
+| -------------- | ------------------------ | ------------- |
+| Warden (admin) | `admin@hostelio.local`   | `Admin123!`   |
+| Student        | `student@hostelio.local` | `Student123!` |
 
 Override these with `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` and
 `SEED_STUDENT_EMAIL` / `SEED_STUDENT_PASSWORD`.
@@ -41,26 +41,26 @@ Authentication is handled in-app with JSON Web Tokens; there is no external auth
 
 ### Environment variables
 
-| Variable | Required | Description |
-|---|---|---|
-| `DATABASE_URL` | yes | Pooled Postgres connection string |
-| `DIRECT_URL` | yes | Direct Postgres connection for migrations |
-| `JWT_SECRET` | production yes | Random string of at least 32 characters; a local-only fallback is used when unset |
-| `ADMIN_SIGNUP_CODE` | no | If set, required to register an admin account |
-| `AI_PROVIDER`, `GEMINI_API_KEY`, `GROQ_API_KEY`, … | for AI features | See `.env.example` |
-| `SEED_*` | no | Overrides for the demo accounts created by the seed |
+| Variable                                           | Required        | Description                                                                       |
+| -------------------------------------------------- | --------------- | --------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                     | yes             | Pooled Postgres connection string                                                 |
+| `DIRECT_URL`                                       | yes             | Direct Postgres connection for migrations                                         |
+| `JWT_SECRET`                                       | production yes  | Random string of at least 32 characters; a local-only fallback is used when unset |
+| `ADMIN_SIGNUP_CODE`                                | no              | If set, required to register an admin account                                     |
+| `AI_PROVIDER`, `GEMINI_API_KEY`, `GROQ_API_KEY`, … | for AI features | See `.env.example`                                                                |
+| `SEED_*`                                           | no              | Overrides for the demo accounts created by the seed                               |
 
 ## Scripts
 
-| Script | Purpose |
-|---|---|
-| `bun run dev` | Start the dev server |
-| `bun run build` | Generate Prisma client and build for production |
-| `bun run typecheck` | Run TypeScript checks |
-| `bun run lint` | Run ESLint |
-| `bun run db:migrate` | Apply migrations |
-| `bun run db:seed` | Seed rooms, notices, and demo accounts |
-| `bun run db:studio` | Open Prisma Studio |
+| Script               | Purpose                                         |
+| -------------------- | ----------------------------------------------- |
+| `bun run dev`        | Start the dev server                            |
+| `bun run build`      | Generate Prisma client and build for production |
+| `bun run typecheck`  | Run TypeScript checks                           |
+| `bun run lint`       | Run ESLint                                      |
+| `bun run db:migrate` | Apply migrations                                |
+| `bun run db:seed`    | Seed rooms, notices, and demo accounts          |
+| `bun run db:studio`  | Open Prisma Studio                              |
 
 ## Auth migration note
 

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
 import { isAppError } from "@/lib/api/errors";
 import { requireUser } from "@/lib/auth/guards";
 import { updateProfile } from "@/lib/services/users";
@@ -11,7 +12,9 @@ export type ProfileActionResult =
   | { ok: true }
   | { ok: false; message: string; fieldErrors?: Record<string, string> };
 
-export async function updateProfileAction(values: unknown): Promise<ProfileActionResult> {
+export async function updateProfileAction(
+  values: unknown
+): Promise<ProfileActionResult> {
   const user = await requireUser();
 
   const parsed = profileUpdateSchema.safeParse(values);

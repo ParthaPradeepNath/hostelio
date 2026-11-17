@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+
 import * as TabsPrimitive from "@radix-ui/react-tabs";
+
 import { cn } from "@/lib/utils";
 
 const Tabs = TabsPrimitive.Root;
@@ -13,8 +15,8 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-12 items-center gap-1 rounded-md border border-line bg-surface-2 p-1 sm:h-10",
-      className,
+      "border-line bg-surface-2 inline-flex h-12 items-center gap-1 rounded-md border p-1 sm:h-10",
+      className
     )}
     {...props}
   />
@@ -28,8 +30,8 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex h-11 items-center justify-center rounded-sm px-3 text-[13px] font-medium text-ink-secondary transition-colors data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-card sm:h-8",
-      className,
+      "text-ink-secondary data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-card inline-flex h-11 items-center justify-center rounded-sm px-3 text-[13px] font-medium transition-colors sm:h-8",
+      className
     )}
     {...props}
   />
@@ -40,7 +42,11 @@ const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
 >(({ className, ...props }, ref) => (
-  <TabsPrimitive.Content ref={ref} className={cn("mt-4", className)} {...props} />
+  <TabsPrimitive.Content
+    ref={ref}
+    className={cn("mt-4", className)}
+    {...props}
+  />
 ));
 TabsContent.displayName = TabsPrimitive.Content.displayName;
 

@@ -21,4 +21,8 @@ export type ComplaintFilters = {
   pageSize: number;
 };
 
-export type ActiveRoomOption = { id: string; roomNumber: string; block: string } | null;
+export type ActiveRoomOption = {
+  id: string;
+  roomNumber: string;
+  block: string;
+} | null;

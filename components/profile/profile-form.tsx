@@ -1,14 +1,23 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Controller } from "react-hook-form";
+
+import { useRouter } from "next/navigation";
+
 import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
+
 import { updateProfileAction } from "@/app/(app)/profile/actions";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useAppForm } from "@/lib/client/use-app-form";
 import { profileUpdateSchema } from "@/lib/validators/profile";
 
@@ -61,7 +70,13 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
     toast.error(result.message);
     if (result.fieldErrors) {
       for (const [field, message] of Object.entries(result.fieldErrors)) {
-        if (field === "name" || field === "phone" || field === "studentId" || field === "department" || field === "year") {
+        if (
+          field === "name" ||
+          field === "phone" ||
+          field === "studentId" ||
+          field === "department" ||
+          field === "year"
+        ) {
           setError(field, { message });
         }
       }
@@ -69,10 +84,14 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-6"
+      noValidate
+    >
       {isStudent ? (
         <fieldset className="flex min-w-0 flex-col gap-3 border-0 p-0">
-          <legend className="type-label mb-1 text-ink">Identity</legend>
+          <legend className="type-label text-ink mb-1">Identity</legend>
           <Field
             label="Full name"
             htmlFor="profile-name"
@@ -83,7 +102,9 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
               id="profile-name"
               autoComplete="name"
               aria-invalid={Boolean(errors.name)}
-              aria-describedby={errors.name ? "profile-name-error" : "profile-name-hint"}
+              aria-describedby={
+                errors.name ? "profile-name-error" : "profile-name-hint"
+              }
               {...register("name")}
             />
           </Field>
@@ -91,15 +112,22 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
       ) : null}
 
       <fieldset className="flex min-w-0 flex-col gap-3 border-0 p-0">
-        <legend className="type-label mb-1 text-ink">Contact</legend>
-        <Field label="Phone" htmlFor="profile-phone" error={errors.phone?.message} hint="Optional">
+        <legend className="type-label text-ink mb-1">Contact</legend>
+        <Field
+          label="Phone"
+          htmlFor="profile-phone"
+          error={errors.phone?.message}
+          hint="Optional"
+        >
           <Input
             id="profile-phone"
             type="tel"
             autoComplete="tel"
             placeholder="+91 98765 43210"
             aria-invalid={Boolean(errors.phone)}
-            aria-describedby={errors.phone ? "profile-phone-error" : "profile-phone-hint"}
+            aria-describedby={
+              errors.phone ? "profile-phone-error" : "profile-phone-hint"
+            }
             {...register("phone")}
           />
         </Field>
@@ -107,7 +135,7 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
 
       {isStudent ? (
         <fieldset className="flex min-w-0 flex-col gap-3 border-0 p-0">
-          <legend className="type-label mb-1 text-ink">Academic</legend>
+          <legend className="type-label text-ink mb-1">Academic</legend>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field
               label="Student ID"
@@ -121,22 +149,39 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
                 placeholder="2026CS1042"
                 aria-invalid={Boolean(errors.studentId)}
                 aria-describedby={
-                  errors.studentId ? "profile-student-id-error" : "profile-student-id-hint"
+                  errors.studentId
+                    ? "profile-student-id-error"
+                    : "profile-student-id-hint"
                 }
                 {...register("studentId")}
               />
             </Field>
 
-            <Field label="Year" htmlFor="profile-year" error={errors.year?.message}>
+            <Field
+              label="Year"
+              htmlFor="profile-year"
+              error={errors.year?.message}
+            >
               <Controller
                 control={control}
                 name="year"
                 render={({ field }) => (
                   <Select
-                    value={field.value === null || field.value === undefined ? "none" : String(field.value)}
-                    onValueChange={(value) => field.onChange(value === "none" ? null : Number(value))}
+                    value={
+                      field.value === null || field.value === undefined
+                        ? "none"
+                        : String(field.value)
+                    }
+                    onValueChange={(value) =>
+                      field.onChange(value === "none" ? null : Number(value))
+                    }
                   >
-                    <SelectTrigger id="profile-year" aria-describedby={errors.year ? "profile-year-error" : undefined}>
+                    <SelectTrigger
+                      id="profile-year"
+                      aria-describedby={
+                        errors.year ? "profile-year-error" : undefined
+                      }
+                    >
                       <SelectValue placeholder="Not set" />
                     </SelectTrigger>
                     <SelectContent>
@@ -153,23 +198,32 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
             </Field>
           </div>
 
-          <Field label="Department" htmlFor="profile-department" error={errors.department?.message}>
+          <Field
+            label="Department"
+            htmlFor="profile-department"
+            error={errors.department?.message}
+          >
             <Input
               id="profile-department"
               autoComplete="off"
               placeholder="Computer Science"
               aria-invalid={Boolean(errors.department)}
-              aria-describedby={errors.department ? "profile-department-error" : undefined}
+              aria-describedby={
+                errors.department ? "profile-department-error" : undefined
+              }
               {...register("department")}
             />
           </Field>
         </fieldset>
       ) : null}
 
-      <div className="mt-1 flex justify-end border-t border-line pt-4">
+      <div className="border-line mt-1 flex justify-end border-t pt-4">
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? (
-            <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden />
+            <Loader2
+              className="animate-spin motion-reduce:animate-none"
+              aria-hidden
+            />
           ) : (
             <Save aria-hidden />
           )}

@@ -1,9 +1,19 @@
-import { Prisma, type AllocationStatus, type Role, type User } from "@prisma/client";
+import {
+  type AllocationStatus,
+  Prisma,
+  type Role,
+  type User,
+} from "@prisma/client";
+
 import { AppError, conflict, notFound } from "@/lib/api/errors";
 import { paginationMeta } from "@/lib/api/responses";
 import { prisma } from "@/lib/prisma";
-import type { AllocationCreateInput, AllocationQuery, AllocationUpdateInput } from "@/lib/validators/allocation";
 import { recomputeRoomStatus } from "@/lib/services/rooms";
+import type {
+  AllocationCreateInput,
+  AllocationQuery,
+  AllocationUpdateInput,
+} from "@/lib/validators/allocation";
 
 export const allocationInclude = {
   student: { select: { id: true, name: true, studentId: true, email: true } },
@@ -20,7 +30,10 @@ export const allocationInclude = {
   },
 } satisfies Prisma.AllocationInclude;
 
-export async function listAllocations(user: Pick<User, "id" | "role">, query: AllocationQuery) {
+export async function listAllocations(
+  user: Pick<User, "id" | "role">,
+  query: AllocationQuery
+) {
   const where: Prisma.AllocationWhereInput = {
     ...(query.status ? { status: query.status } : {}),
     ...(query.roomId ? { roomId: query.roomId } : {}),
@@ -100,14 +113,17 @@ async function lockRoom(tx: Prisma.TransactionClient, roomId: string) {
   await tx.$queryRaw`SELECT id FROM "rooms" WHERE id = ${roomId} FOR UPDATE`;
 }
 
-async function lockAllocation(tx: Prisma.TransactionClient, allocationId: string) {
+async function lockAllocation(
+  tx: Prisma.TransactionClient,
+  allocationId: string
+) {
   await tx.$queryRaw`SELECT id FROM "allocations" WHERE id = ${allocationId} FOR UPDATE`;
 }
 
 async function findActiveForStudent(
   tx: Prisma.TransactionClient,
   studentId: string,
-  exceptAllocationId?: string,
+  exceptAllocationId?: string
 ) {
   return tx.allocation.findFirst({
     where: {
@@ -118,13 +134,18 @@ async function findActiveForStudent(
   });
 }
 
-async function assertRoomCanTakeStudent(tx: Prisma.TransactionClient, roomId: string) {
+async function assertRoomCanTakeStudent(
+  tx: Prisma.TransactionClient,
+  roomId: string
+) {
   const room = await tx.room.findUnique({ where: { id: roomId } });
   if (!room) throw notFound("Room not found");
   if (room.status === "MAINTENANCE") {
     throw conflict("ROOM_UNDER_MAINTENANCE", "This room is under maintenance");
   }
-  const occupancy = await tx.allocation.count({ where: { roomId, status: "ACTIVE" } });
+  const occupancy = await tx.allocation.count({
+    where: { roomId, status: "ACTIVE" },
+  });
   if (occupancy >= room.capacity) {
     throw conflict("ROOM_FULL", "This room has no available beds");
   }
@@ -132,22 +153,38 @@ async function assertRoomCanTakeStudent(tx: Prisma.TransactionClient, roomId: st
 }
 
 function mapUniqueAllocationError(error: unknown): never {
-  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-    throw conflict("STUDENT_ALREADY_ALLOCATED", "This student already has an active allocation");
+  if (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002"
+  ) {
+    throw conflict(
+      "STUDENT_ALREADY_ALLOCATED",
+      "This student already has an active allocation"
+    );
   }
   throw error;
 }
 
 export async function createAllocation(input: AllocationCreateInput) {
-  const student = await prisma.user.findUnique({ where: { id: input.studentId }, select: { id: true, role: true } });
+  const student = await prisma.user.findUnique({
+    where: { id: input.studentId },
+    select: { id: true, role: true },
+  });
   if (!student) throw notFound("Student not found");
   if (student.role !== "STUDENT") {
-    throw new AppError("VALIDATION_ERROR", "Allocations can only be made for students", {
-      studentId: "This account is not a student",
-    });
+    throw new AppError(
+      "VALIDATION_ERROR",
+      "Allocations can only be made for students",
+      {
+        studentId: "This account is not a student",
+      }
+    );
   }
 
-  const room = await prisma.room.findUnique({ where: { id: input.roomId }, select: { id: true } });
+  const room = await prisma.room.findUnique({
+    where: { id: input.roomId },
+    select: { id: true },
+  });
   if (!room) throw notFound("Room not found");
 
   try {
@@ -156,7 +193,10 @@ export async function createAllocation(input: AllocationCreateInput) {
 
       const existing = await findActiveForStudent(tx, input.studentId);
       if (existing) {
-        throw conflict("STUDENT_ALREADY_ALLOCATED", "This student already has an active allocation");
+        throw conflict(
+          "STUDENT_ALREADY_ALLOCATED",
+          "This student already has an active allocation"
+        );
       }
 
       const lockedRoom = await assertRoomCanTakeStudent(tx, input.roomId);
@@ -179,7 +219,10 @@ export async function createAllocation(input: AllocationCreateInput) {
   }
 }
 
-export async function updateAllocation(id: string, input: AllocationUpdateInput) {
+export async function updateAllocation(
+  id: string,
+  input: AllocationUpdateInput
+) {
   const existing = await prisma.allocation.findUnique({
     where: { id },
     include: { room: true },
@@ -198,23 +241,36 @@ export async function updateAllocation(id: string, input: AllocationUpdateInput)
     return reassignAllocation(existing, input.studentId);
   }
 
-  throw new AppError("VALIDATION_ERROR", "Choose an allocation action", { form: "No action provided" });
+  throw new AppError("VALIDATION_ERROR", "Choose an allocation action", {
+    form: "No action provided",
+  });
 }
 
 async function vacateAllocation(
-  existing: { id: string; roomId: string; status: AllocationStatus; startDate: Date },
-  endDate?: Date,
+  existing: {
+    id: string;
+    roomId: string;
+    status: AllocationStatus;
+    startDate: Date;
+  },
+  endDate?: Date
 ) {
   const resolvedEndDate = endDate ?? new Date();
   if (resolvedEndDate.getTime() < existing.startDate.getTime()) {
-    throw new AppError("VALIDATION_ERROR", "End date cannot be before the allocation start", {
-      endDate: "Choose a date on or after the start date",
-    });
+    throw new AppError(
+      "VALIDATION_ERROR",
+      "End date cannot be before the allocation start",
+      {
+        endDate: "Choose a date on or after the start date",
+      }
+    );
   }
 
   return prisma.$transaction(async (tx) => {
     await lockAllocation(tx, existing.id);
-    const current = await tx.allocation.findUnique({ where: { id: existing.id } });
+    const current = await tx.allocation.findUnique({
+      where: { id: existing.id },
+    });
     if (!current) throw notFound("Allocation not found");
     if (current.status !== "ACTIVE") {
       throw conflict("CONFLICT", "This allocation has already been vacated");
@@ -232,17 +288,28 @@ async function vacateAllocation(
 }
 
 async function moveAllocation(
-  existing: { id: string; roomId: string; studentId: string; status: AllocationStatus },
-  targetRoomId: string,
+  existing: {
+    id: string;
+    roomId: string;
+    studentId: string;
+    status: AllocationStatus;
+  },
+  targetRoomId: string
 ) {
   if (existing.status !== "ACTIVE") {
     throw conflict("CONFLICT", "Only an active allocation can be moved");
   }
   if (existing.roomId === targetRoomId) {
-    throw conflict("STUDENT_ALREADY_ALLOCATED", "The student is already allocated to this room");
+    throw conflict(
+      "STUDENT_ALREADY_ALLOCATED",
+      "The student is already allocated to this room"
+    );
   }
 
-  const target = await prisma.room.findUnique({ where: { id: targetRoomId }, select: { id: true } });
+  const target = await prisma.room.findUnique({
+    where: { id: targetRoomId },
+    select: { id: true },
+  });
   if (!target) throw notFound("Room not found");
 
   return prisma.$transaction(async (tx) => {
@@ -252,7 +319,9 @@ async function moveAllocation(
       await lockRoom(tx, roomId);
     }
 
-    const current = await tx.allocation.findUnique({ where: { id: existing.id } });
+    const current = await tx.allocation.findUnique({
+      where: { id: existing.id },
+    });
     if (!current || current.status !== "ACTIVE") {
       throw conflict("CONFLICT", "This allocation is no longer active");
     }
@@ -283,35 +352,59 @@ async function moveAllocation(
 }
 
 async function reassignAllocation(
-  existing: { id: string; studentId: string; roomId: string; status: AllocationStatus },
-  targetStudentId: string,
+  existing: {
+    id: string;
+    studentId: string;
+    roomId: string;
+    status: AllocationStatus;
+  },
+  targetStudentId: string
 ) {
   if (existing.status !== "ACTIVE") {
     throw conflict("CONFLICT", "Only an active allocation can be reassigned");
   }
   if (existing.studentId === targetStudentId) {
-    throw conflict("STUDENT_ALREADY_ALLOCATED", "This student already holds this allocation");
+    throw conflict(
+      "STUDENT_ALREADY_ALLOCATED",
+      "This student already holds this allocation"
+    );
   }
 
-  const target = await prisma.user.findUnique({ where: { id: targetStudentId }, select: { id: true, role: true } });
+  const target = await prisma.user.findUnique({
+    where: { id: targetStudentId },
+    select: { id: true, role: true },
+  });
   if (!target) throw notFound("Student not found");
   if (target.role !== "STUDENT") {
-    throw new AppError("VALIDATION_ERROR", "Allocations can only be assigned to students", {
-      studentId: "This account is not a student",
-    });
+    throw new AppError(
+      "VALIDATION_ERROR",
+      "Allocations can only be assigned to students",
+      {
+        studentId: "This account is not a student",
+      }
+    );
   }
 
   try {
     return await prisma.$transaction(async (tx) => {
       await lockAllocation(tx, existing.id);
-      const current = await tx.allocation.findUnique({ where: { id: existing.id } });
+      const current = await tx.allocation.findUnique({
+        where: { id: existing.id },
+      });
       if (!current || current.status !== "ACTIVE") {
         throw conflict("CONFLICT", "This allocation is no longer active");
       }
 
-      const alreadyActive = await findActiveForStudent(tx, targetStudentId, existing.id);
+      const alreadyActive = await findActiveForStudent(
+        tx,
+        targetStudentId,
+        existing.id
+      );
       if (alreadyActive) {
-        throw conflict("STUDENT_ALREADY_ALLOCATED", "This student already has an active allocation");
+        throw conflict(
+          "STUDENT_ALREADY_ALLOCATED",
+          "This student already has an active allocation"
+        );
       }
 
       const allocation = await tx.allocation.update({
@@ -328,7 +421,10 @@ async function reassignAllocation(
 }
 
 export async function deleteAllocation(id: string) {
-  const existing = await prisma.allocation.findUnique({ where: { id }, select: { id: true, roomId: true } });
+  const existing = await prisma.allocation.findUnique({
+    where: { id },
+    select: { id: true, roomId: true },
+  });
   if (!existing) throw notFound("Allocation not found");
 
   await prisma.$transaction(async (tx) => {

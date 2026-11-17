@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { paginationSchema, trimmedNullableString } from "@/lib/validators/common";
+
+import {
+  paginationSchema,
+  trimmedNullableString,
+} from "@/lib/validators/common";
 
 export const ROOM_TYPES = ["SINGLE", "DOUBLE", "TRIPLE", "QUAD"] as const;
 export const ROOM_STATUSES = ["AVAILABLE", "FULL", "MAINTENANCE"] as const;
@@ -18,7 +22,10 @@ const roomNumber = z
   .string()
   .trim()
   .toUpperCase()
-  .regex(/^[A-Z0-9][A-Z0-9-]{1,11}$/, "Use 2–12 uppercase letters, numbers, or dashes");
+  .regex(
+    /^[A-Z0-9][A-Z0-9-]{1,11}$/,
+    "Use 2–12 uppercase letters, numbers, or dashes"
+  );
 
 const block = z
   .string()
@@ -34,7 +41,10 @@ const monthlyRent = z
   .number()
   .min(0)
   .max(99_999_999)
-  .refine((value) => Math.round(value * 100) === value * 100, "Use at most 2 decimal places")
+  .refine(
+    (value) => Math.round(value * 100) === value * 100,
+    "Use at most 2 decimal places"
+  )
   .nullable()
   .optional();
 
@@ -82,7 +92,11 @@ export const roomUpdateSchema = z
     notes,
   })
   .superRefine((value, ctx) => {
-    if (value.type && value.capacity !== undefined && BEDS_BY_TYPE[value.type] !== value.capacity) {
+    if (
+      value.type &&
+      value.capacity !== undefined &&
+      BEDS_BY_TYPE[value.type] !== value.capacity
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["capacity"],
@@ -101,12 +115,7 @@ export const roomUpdateSchema = z
   });
 
 export const roomQuerySchema = paginationSchema.extend({
-  block: z
-    .string()
-    .trim()
-    .toUpperCase()
-    .max(8)
-    .optional(),
+  block: z.string().trim().toUpperCase().max(8).optional(),
   floor: z.coerce.number().int().min(0).max(20).optional(),
   type: roomTypeEnum.optional(),
   status: roomStatusEnum.optional(),

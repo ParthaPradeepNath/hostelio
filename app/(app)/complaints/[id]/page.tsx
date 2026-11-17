@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, Bot, CheckCircle2, Clock, Sparkles, UserRound } from "lucide-react";
+
+import {
+  ArrowLeft,
+  Bot,
+  CheckCircle2,
+  Clock,
+  Sparkles,
+  UserRound,
+} from "lucide-react";
+
 import { AdminTriage } from "@/components/complaints/admin-triage";
 import { StudentComplaintEdit } from "@/components/complaints/student-complaint-edit";
 import { PageHeader } from "@/components/layout/page-header";
@@ -35,7 +44,8 @@ export default async function ComplaintDetailsPage({
 
   const isAdmin = user.role === "ADMIN";
   const predictionApplied =
-    complaint.aiCategory === complaint.category && complaint.aiPriority === complaint.priority;
+    complaint.aiCategory === complaint.category &&
+    complaint.aiPriority === complaint.priority;
 
   const timeline = [
     {
@@ -75,7 +85,7 @@ export default async function ComplaintDetailsPage({
     <div>
       <Link
         href="/complaints"
-        className="mb-4 inline-flex items-center gap-1.5 text-[13px] text-ink-secondary transition-colors hover:text-ink"
+        className="text-ink-secondary hover:text-ink mb-4 inline-flex items-center gap-1.5 text-[13px] transition-colors"
       >
         <ArrowLeft className="size-3.5" aria-hidden />
         All complaints
@@ -84,7 +94,9 @@ export default async function ComplaintDetailsPage({
       <PageHeader
         title={complaint.title}
         description={`Raised ${formatDateTime(complaint.createdAt)}${
-          complaint.room ? ` · Room ${complaint.room.roomNumber}, Block ${complaint.room.block}` : ""
+          complaint.room
+            ? ` · Room ${complaint.room.roomNumber}, Block ${complaint.room.block}`
+            : ""
         }`}
       >
         <StatusBadge value={complaint.status} />
@@ -108,7 +120,9 @@ export default async function ComplaintDetailsPage({
               <CardTitle>Description</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="type-reading text-[14px] text-ink">{complaint.description}</p>
+              <p className="type-reading text-ink text-[14px]">
+                {complaint.description}
+              </p>
             </CardContent>
           </Card>
 
@@ -118,7 +132,9 @@ export default async function ComplaintDetailsPage({
                 <CardTitle>Hostel office response</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="type-reading text-[14px] text-ink">{complaint.adminResponse}</p>
+                <p className="type-reading text-ink text-[14px]">
+                  {complaint.adminResponse}
+                </p>
               </CardContent>
             </Card>
           ) : null}
@@ -146,43 +162,48 @@ export default async function ComplaintDetailsPage({
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bot className="size-4 text-ink-tertiary" aria-hidden />
+                  <Bot className="text-ink-tertiary size-4" aria-hidden />
                   AI suggestion
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {complaint.aiStatus === "PENDING" ? (
-                  <p className="flex items-center gap-2 text-[13px] text-ink-secondary">
-                    <Clock className="size-4 text-ink-tertiary" aria-hidden />
+                  <p className="text-ink-secondary flex items-center gap-2 text-[13px]">
+                    <Clock className="text-ink-tertiary size-4" aria-hidden />
                     Analyzing this complaint. This usually takes a few seconds.
                   </p>
                 ) : complaint.aiStatus === "FAILED" ? (
-                  <p className="text-[13px] leading-relaxed text-ink-secondary">
-                    AI analysis failed. Triage this complaint manually — no automatic category or
-                    priority was applied.
+                  <p className="text-ink-secondary text-[13px] leading-relaxed">
+                    AI analysis failed. Triage this complaint manually — no
+                    automatic category or priority was applied.
                   </p>
                 ) : complaint.aiStatus === "SKIPPED" ? (
-                  <p className="text-[13px] leading-relaxed text-ink-secondary">
-                    AI was unavailable, so this complaint was not categorized automatically.
+                  <p className="text-ink-secondary text-[13px] leading-relaxed">
+                    AI was unavailable, so this complaint was not categorized
+                    automatically.
                   </p>
                 ) : (
                   <div className="flex flex-col gap-4">
                     <div className="grid grid-cols-2 gap-4 text-[13px]">
                       <div>
                         <p className="text-ink-tertiary">Predicted category</p>
-                        <p className="mt-0.5 text-ink">
-                          {complaint.aiCategory ? enumLabel(complaint.aiCategory) : "—"}
+                        <p className="text-ink mt-0.5">
+                          {complaint.aiCategory
+                            ? enumLabel(complaint.aiCategory)
+                            : "—"}
                         </p>
                       </div>
                       <div>
                         <p className="text-ink-tertiary">Predicted priority</p>
-                        <p className="mt-0.5 text-ink">
-                          {complaint.aiPriority ? enumLabel(complaint.aiPriority) : "—"}
+                        <p className="text-ink mt-0.5">
+                          {complaint.aiPriority
+                            ? enumLabel(complaint.aiPriority)
+                            : "—"}
                         </p>
                       </div>
                       <div>
                         <p className="text-ink-tertiary">Confidence</p>
-                        <p className="tabular mt-0.5 text-ink">
+                        <p className="tabular text-ink mt-0.5">
                           {complaint.aiConfidence === null
                             ? "—"
                             : `${Math.round(complaint.aiConfidence * 100)}%`}
@@ -190,10 +211,13 @@ export default async function ComplaintDetailsPage({
                       </div>
                       <div>
                         <p className="text-ink-tertiary">Applied</p>
-                        <p className="mt-0.5 flex items-center gap-1.5 text-ink">
+                        <p className="text-ink mt-0.5 flex items-center gap-1.5">
                           {predictionApplied ? (
                             <>
-                              <Sparkles className="size-3.5 text-accent" aria-hidden />
+                              <Sparkles
+                                className="text-accent size-3.5"
+                                aria-hidden
+                              />
                               Applied
                             </>
                           ) : (
@@ -203,8 +227,9 @@ export default async function ComplaintDetailsPage({
                       </div>
                     </div>
                     <Separator />
-                    <p className="text-[12px] text-ink-tertiary">
-                      {complaint.aiProvider ?? "Unknown provider"} · {complaint.aiModel ?? "Unknown model"} ·{" "}
+                    <p className="text-ink-tertiary text-[12px]">
+                      {complaint.aiProvider ?? "Unknown provider"} ·{" "}
+                      {complaint.aiModel ?? "Unknown model"} ·{" "}
                       {formatDateTime(complaint.aiProcessedAt)}
                     </p>
                   </div>
@@ -241,8 +266,12 @@ export default async function ComplaintDetailsPage({
                   <dt className="text-ink-tertiary">Room</dt>
                   <dd className="text-ink">
                     {complaint.room ? (
-                      <Link href={`/rooms/${complaint.room.id}`} className="hover:text-accent">
-                        {complaint.room.roomNumber} · Block {complaint.room.block}
+                      <Link
+                        href={`/rooms/${complaint.room.id}`}
+                        className="hover:text-accent"
+                      >
+                        {complaint.room.roomNumber} · Block{" "}
+                        {complaint.room.block}
                       </Link>
                     ) : (
                       "Not specified"
@@ -252,10 +281,15 @@ export default async function ComplaintDetailsPage({
                 {isAdmin ? (
                   <div className="flex items-center justify-between gap-3">
                     <dt className="text-ink-tertiary">Student</dt>
-                    <dd className="flex items-center gap-1.5 text-ink">
-                      <UserRound className="size-3.5 text-ink-tertiary" aria-hidden />
+                    <dd className="text-ink flex items-center gap-1.5">
+                      <UserRound
+                        className="text-ink-tertiary size-3.5"
+                        aria-hidden
+                      />
                       {complaint.student.name}
-                      {complaint.student.studentId ? ` (${complaint.student.studentId})` : ""}
+                      {complaint.student.studentId
+                        ? ` (${complaint.student.studentId})`
+                        : ""}
                     </dd>
                   </div>
                 ) : null}
@@ -274,16 +308,23 @@ export default async function ComplaintDetailsPage({
                   return (
                     <li key={entry.key} className="flex gap-3">
                       <div className="flex flex-col items-center">
-                        <span className="flex size-7 shrink-0 items-center justify-center rounded-pill bg-surface-2 text-ink-secondary">
+                        <span className="rounded-pill bg-surface-2 text-ink-secondary flex size-7 shrink-0 items-center justify-center">
                           <Icon className="size-3.5" aria-hidden />
                         </span>
                         {index < timeline.length - 1 ? (
-                          <span className="mt-1 w-px flex-1 bg-line" aria-hidden />
+                          <span
+                            className="bg-line mt-1 w-px flex-1"
+                            aria-hidden
+                          />
                         ) : null}
                       </div>
                       <div className="min-w-0 pb-1">
-                        <p className="text-[13px] font-medium text-ink">{entry.label}</p>
-                        <p className="text-[12px] text-ink-secondary">{formatDateTime(entry.date)}</p>
+                        <p className="text-ink text-[13px] font-medium">
+                          {entry.label}
+                        </p>
+                        <p className="text-ink-secondary text-[12px]">
+                          {formatDateTime(entry.date)}
+                        </p>
                       </div>
                     </li>
                   );
@@ -292,9 +333,11 @@ export default async function ComplaintDetailsPage({
             </CardContent>
           </Card>
 
-          <p className="px-1 text-[12px] text-ink-tertiary">
+          <p className="text-ink-tertiary px-1 text-[12px]">
             Raised on {formatDate(complaint.createdAt)}
-            {complaint.resolvedAt ? ` · Resolved on ${formatDate(complaint.resolvedAt)}` : ""}
+            {complaint.resolvedAt
+              ? ` · Resolved on ${formatDate(complaint.resolvedAt)}`
+              : ""}
           </p>
         </div>
       </div>

@@ -1,19 +1,25 @@
-import bcrypt from "bcryptjs";
 import type { NextRequest } from "next/server";
+
+import bcrypt from "bcryptjs";
+
 import { AppError } from "@/lib/api/errors";
 import { publicErrorResponse, readJsonBody } from "@/lib/api/public-handler";
 import { ok } from "@/lib/api/responses";
 import { toSessionUser } from "@/lib/auth/dto";
 import { setSessionCookie } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
-import { fieldErrors } from "@/lib/validators/common";
 import { loginSchema } from "@/lib/validators/auth";
+import { fieldErrors } from "@/lib/validators/common";
 
 export async function POST(req: NextRequest) {
   try {
     const parsed = loginSchema.safeParse(await readJsonBody(req));
     if (!parsed.success) {
-      throw new AppError("VALIDATION_ERROR", "Invalid input", fieldErrors(parsed.error));
+      throw new AppError(
+        "VALIDATION_ERROR",
+        "Invalid input",
+        fieldErrors(parsed.error)
+      );
     }
 
     const { email, password } = parsed.data;

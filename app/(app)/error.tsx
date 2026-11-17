@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+
 import Link from "next/link";
+
 import { RotateCcw } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -21,8 +24,9 @@ export default function AppError({
     <div className="flex min-h-[60vh] items-center justify-center">
       <Card className="w-full max-w-md text-center">
         <h2 className="type-section text-ink">Something went wrong</h2>
-        <p className="mt-2 text-[13px] leading-relaxed text-ink-secondary">
-          We could not load this page. Try again, or return to the dashboard if the problem continues.
+        <p className="text-ink-secondary mt-2 text-[13px] leading-relaxed">
+          We could not load this page. Try again, or return to the dashboard if
+          the problem continues.
         </p>
         <div className="mt-5 flex justify-center gap-2">
           <Button onClick={reset}>

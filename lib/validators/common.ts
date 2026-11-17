@@ -7,7 +7,10 @@ export const paginationSchema = z.object({
 
 export const isoDate = z
   .union([z.string(), z.date()])
-  .refine((value) => !Number.isNaN(new Date(value).getTime()), "Enter a valid date")
+  .refine(
+    (value) => !Number.isNaN(new Date(value).getTime()),
+    "Enter a valid date"
+  )
   .transform((value) => new Date(value));
 
 export const startDateSchema = isoDate.refine((date) => {
@@ -25,7 +28,10 @@ export function fieldErrors(error: z.ZodError): Record<string, string> {
   return output;
 }
 
-export function parseOrThrow<T extends z.ZodTypeAny>(schema: T, value: unknown): z.infer<T> {
+export function parseOrThrow<T extends z.ZodTypeAny>(
+  schema: T,
+  value: unknown
+): z.infer<T> {
   const result = schema.safeParse(value);
   if (!result.success) {
     throw new z.ZodError(result.error.issues);
@@ -33,7 +39,9 @@ export function parseOrThrow<T extends z.ZodTypeAny>(schema: T, value: unknown):
   return result.data;
 }
 
-export function searchParamsObject(searchParams: URLSearchParams): Record<string, string> {
+export function searchParamsObject(
+  searchParams: URLSearchParams
+): Record<string, string> {
   const output: Record<string, string> = {};
   for (const [key, value] of searchParams.entries()) {
     if (value !== "") output[key] = value;
@@ -48,4 +56,6 @@ export const trimmedNullableString = (max: number) =>
     .max(max)
     .nullable()
     .optional()
-    .transform((value) => (value === undefined ? undefined : value === "" ? null : value));
+    .transform((value) =>
+      value === undefined ? undefined : value === "" ? null : value
+    );

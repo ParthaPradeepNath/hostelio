@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
 import { ComplaintsView } from "@/components/complaints/complaints-view";
-import type { ActiveRoomOption, ComplaintListItem } from "@/components/complaints/types";
+import type {
+  ActiveRoomOption,
+  ComplaintListItem,
+} from "@/components/complaints/types";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import { getStudentActiveAllocation } from "@/lib/services/allocations";
 import { listComplaints } from "@/lib/services/complaints";
@@ -23,7 +27,9 @@ export default async function ComplaintsPage({
 
   const [result, activeAllocation] = await Promise.all([
     listComplaints(user, query),
-    user.role === "STUDENT" ? getStudentActiveAllocation(user.id) : Promise.resolve(null),
+    user.role === "STUDENT"
+      ? getStudentActiveAllocation(user.id)
+      : Promise.resolve(null),
   ]);
 
   const complaints: ComplaintListItem[] = result.data.map((complaint) => ({

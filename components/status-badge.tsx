@@ -58,7 +58,12 @@ export function StatusBadge({
   const label = LABELS[value] ?? enumLabel(value);
   const analyzing = value === "PENDING";
   return (
-    <Badge tone={tone} dot={dot || analyzing} pulse={analyzing} className={className}>
+    <Badge
+      tone={tone}
+      dot={dot || analyzing}
+      pulse={analyzing}
+      className={className}
+    >
       {label}
     </Badge>
   );

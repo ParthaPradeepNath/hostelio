@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, BedDouble, Building2, IndianRupee, Layers, Users } from "lucide-react";
+
+import {
+  ArrowLeft,
+  BedDouble,
+  Building2,
+  IndianRupee,
+  Layers,
+  Users,
+} from "lucide-react";
+
 import { AllocationRowActions } from "@/components/allocations/allocation-actions";
 import type { AllocatableRoom } from "@/components/allocations/move-room-dialog";
 import { PageHeader } from "@/components/layout/page-header";
@@ -13,8 +22,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { getCurrentUser } from "@/lib/auth/current-user";
 import { isAppError } from "@/lib/api/errors";
+import { getCurrentUser } from "@/lib/auth/current-user";
 import { listAllocatableRooms } from "@/lib/services/allocations";
 import { getRoomDetails } from "@/lib/services/rooms";
 import { formatDate, formatRent, pluralize } from "@/lib/utils";
@@ -41,7 +50,11 @@ export async function generateMetadata({
   }
 }
 
-export default async function RoomDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function RoomDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
@@ -57,7 +70,9 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
 
   const { room, occupants, complaints } = details;
   const isAdmin = user.role === "ADMIN";
-  const allocatable: AllocatableRoom[] = isAdmin ? await listAllocatableRooms() : [];
+  const allocatable: AllocatableRoom[] = isAdmin
+    ? await listAllocatableRooms()
+    : [];
 
   const roomForDialog: RoomListItem = {
     id: room.id,
@@ -74,13 +89,14 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
     availableBeds: room.availableBeds,
   };
 
-  const occupancyPercent = room.capacity > 0 ? (room.occupancy / room.capacity) * 100 : 0;
+  const occupancyPercent =
+    room.capacity > 0 ? (room.occupancy / room.capacity) * 100 : 0;
 
   return (
     <div>
       <Link
         href="/rooms"
-        className="mb-4 inline-flex items-center gap-1.5 text-[13px] text-ink-secondary transition-colors hover:text-ink"
+        className="text-ink-secondary hover:text-ink mb-4 inline-flex items-center gap-1.5 text-[13px] transition-colors"
       >
         <ArrowLeft className="size-3.5" aria-hidden />
         All rooms
@@ -121,11 +137,14 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
           </CardHeader>
           <CardContent>
             <div className="flex items-end justify-between gap-4">
-              <p className="tabular text-[28px] font-semibold leading-none text-ink">
+              <p className="tabular text-ink text-[28px] leading-none font-semibold">
                 {room.occupancy}
-                <span className="text-[16px] font-normal text-ink-tertiary"> / {room.capacity}</span>
+                <span className="text-ink-tertiary text-[16px] font-normal">
+                  {" "}
+                  / {room.capacity}
+                </span>
               </p>
-              <p className="text-[13px] text-ink-secondary">
+              <p className="text-ink-secondary text-[13px]">
                 {pluralize(room.availableBeds, "bed")} available
               </p>
             </div>
@@ -138,37 +157,48 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
             <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 text-[13px] sm:grid-cols-3">
               <div>
                 <p className="text-ink-tertiary">Block</p>
-                <p className="mt-0.5 flex items-center gap-1.5 text-ink">
-                  <Building2 className="size-3.5 text-ink-tertiary" aria-hidden />
+                <p className="text-ink mt-0.5 flex items-center gap-1.5">
+                  <Building2
+                    className="text-ink-tertiary size-3.5"
+                    aria-hidden
+                  />
                   {room.block}
                 </p>
               </div>
               <div>
                 <p className="text-ink-tertiary">Floor</p>
-                <p className="mt-0.5 flex items-center gap-1.5 text-ink">
-                  <Layers className="size-3.5 text-ink-tertiary" aria-hidden />
+                <p className="text-ink mt-0.5 flex items-center gap-1.5">
+                  <Layers className="text-ink-tertiary size-3.5" aria-hidden />
                   {room.floor}
                 </p>
               </div>
               <div>
                 <p className="text-ink-tertiary">Room type</p>
-                <p className="mt-0.5 flex items-center gap-1.5 text-ink">
-                  <BedDouble className="size-3.5 text-ink-tertiary" aria-hidden />
+                <p className="text-ink mt-0.5 flex items-center gap-1.5">
+                  <BedDouble
+                    className="text-ink-tertiary size-3.5"
+                    aria-hidden
+                  />
                   {TYPE_LABELS[room.type]} ({BEDS_BY_TYPE[room.type]} bed
                   {BEDS_BY_TYPE[room.type] === 1 ? "" : "s"})
                 </p>
               </div>
               <div>
                 <p className="text-ink-tertiary">Monthly rent</p>
-                <p className="tabular mt-0.5 flex items-center gap-1.5 text-ink">
-                  <IndianRupee className="size-3.5 text-ink-tertiary" aria-hidden />
-                  {room.monthlyRent === null ? "Not set" : formatRent(room.monthlyRent)}
+                <p className="tabular text-ink mt-0.5 flex items-center gap-1.5">
+                  <IndianRupee
+                    className="text-ink-tertiary size-3.5"
+                    aria-hidden
+                  />
+                  {room.monthlyRent === null
+                    ? "Not set"
+                    : formatRent(room.monthlyRent)}
                 </p>
               </div>
               <div>
                 <p className="text-ink-tertiary">Active occupants</p>
-                <p className="mt-0.5 flex items-center gap-1.5 text-ink">
-                  <Users className="size-3.5 text-ink-tertiary" aria-hidden />
+                <p className="text-ink mt-0.5 flex items-center gap-1.5">
+                  <Users className="text-ink-tertiary size-3.5" aria-hidden />
                   {room.occupancy}
                 </p>
               </div>
@@ -188,7 +218,7 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
                   {room.amenities.map((amenity) => (
                     <li
                       key={amenity}
-                      className="rounded-pill border border-line bg-surface-2 px-2.5 py-1 text-[12px] text-ink-secondary"
+                      className="rounded-pill border-line bg-surface-2 text-ink-secondary border px-2.5 py-1 text-[12px]"
                     >
                       {amenity}
                     </li>
@@ -201,7 +231,9 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
               <>
                 <Separator className="my-5" />
                 <p className="type-label text-ink">Notes</p>
-                <p className="type-reading mt-1.5 text-[13px] text-ink-secondary">{room.notes}</p>
+                <p className="type-reading text-ink-secondary mt-1.5 text-[13px]">
+                  {room.notes}
+                </p>
               </>
             ) : null}
           </CardContent>
@@ -209,29 +241,40 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
 
         <Card>
           <CardHeader>
-            <CardTitle>{isAdmin ? "Occupants" : "Your room at a glance"}</CardTitle>
+            <CardTitle>
+              {isAdmin ? "Occupants" : "Your room at a glance"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {isAdmin ? (
               occupants.length === 0 ? (
-                <p className="text-[13px] leading-relaxed text-ink-secondary">
+                <p className="text-ink-secondary text-[13px] leading-relaxed">
                   No students are allocated to this room.{" "}
-                  <Link href="/allocations" className="text-accent hover:underline">
+                  <Link
+                    href="/allocations"
+                    className="text-accent hover:underline"
+                  >
                     Allocate a student
                   </Link>
                   .
                 </p>
               ) : (
-                <ul className="flex flex-col divide-y divide-line">
+                <ul className="divide-line flex flex-col divide-y">
                   {occupants.map((occupant) => (
-                    <li key={occupant.allocationId} className="flex flex-col gap-2 py-3 first:pt-0 last:pb-0">
+                    <li
+                      key={occupant.allocationId}
+                      className="flex flex-col gap-2 py-3 first:pt-0 last:pb-0"
+                    >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="truncate text-[14px] font-medium text-ink" title={occupant.name}>
+                          <p
+                            className="text-ink truncate text-[14px] font-medium"
+                            title={occupant.name}
+                          >
                             {occupant.name}
                           </p>
                           <p
-                            className="truncate text-[12px] text-ink-secondary"
+                            className="text-ink-secondary truncate text-[12px]"
                             title={occupant.studentId ?? "No student ID"}
                           >
                             {occupant.studentId ?? "No student ID"} · Since{" "}
@@ -251,7 +294,7 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
                 </ul>
               )
             ) : (
-              <div className="text-[13px] leading-relaxed text-ink-secondary">
+              <div className="text-ink-secondary text-[13px] leading-relaxed">
                 <p className="text-ink">
                   {room.occupancy === 0
                     ? "No one is currently allocated here."
@@ -274,23 +317,27 @@ export default async function RoomDetailsPage({ params }: { params: Promise<{ id
             </CardHeader>
             <CardContent>
               {complaints.length === 0 ? (
-                <p className="text-[13px] text-ink-secondary">
+                <p className="text-ink-secondary text-[13px]">
                   No complaints have been raised for this room.
                 </p>
               ) : (
-                <ul className="flex flex-col divide-y divide-line">
+                <ul className="divide-line flex flex-col divide-y">
                   {complaints.map((complaint) => (
-                    <li key={complaint.id} className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0">
+                    <li
+                      key={complaint.id}
+                      className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0 last:pb-0"
+                    >
                       <div className="min-w-0">
                         <Link
                           href={`/complaints/${complaint.id}`}
-                          className="block truncate text-[14px] font-medium text-ink hover:text-accent"
+                          className="text-ink hover:text-accent block truncate text-[14px] font-medium"
                           title={complaint.title}
                         >
                           {complaint.title}
                         </Link>
-                        <p className="text-[12px] text-ink-secondary">
-                          {complaint.student.name} · {formatDate(complaint.createdAt)}
+                        <p className="text-ink-secondary text-[12px]">
+                          {complaint.student.name} ·{" "}
+                          {formatDate(complaint.createdAt)}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
