@@ -8,8 +8,14 @@
 | Version | 1.0 |
 | Status | Draft for approval |
 | Date | 10 Nov 2026 |
-| Stack | Next.js + Bun + Clerk + Neon Postgres + Prisma + Gemini/Groq |
+| Stack | Next.js + Bun + JWT auth + Neon Postgres + Prisma + Gemini/Groq |
 | Deployment | Not planned. Local/dev and hosted environments documented only. |
+
+> **Implementation note (17 Nov 2026):** Authentication has moved from Clerk to in-app JWT
+> sessions with bcrypt password hashes, as described in `README.md`. References to Clerk below are
+> part of the original specification and are retained for context only. `users.clerkUserId` has been
+> replaced by `users.passwordHash`; roles now live in the database, and sign-up offers a role choice
+> (optionally gated by `ADMIN_SIGNUP_CODE`).
 
 ---
 
