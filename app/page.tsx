@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 
 import { Brand } from "@/components/layout/brand";
+import Grass from "@/components/layout/grass";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Highlighter } from "@/components/ui/highlighter";
@@ -62,8 +63,11 @@ export default async function HomePage() {
         </div>
       </div>
 
-      <footer className="text-ink-tertiary px-5 py-6 text-center text-[12px]">
-        Hostelio · A quieter way to run a hostel.
+      <footer className="relative mt-auto flex flex-col items-center overflow-hidden">
+        <p className="text-ink-tertiary relative z-20 px-5 pt-6 text-center text-[12px]">
+          Hostelio · A quieter way to run a hostel.
+        </p>
+        <Grass />
       </footer>
     </main>
   );
