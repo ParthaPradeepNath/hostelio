@@ -15,7 +15,7 @@ export default async function AuthLayout({
   const theme = normalizeTheme(cookieStore.get(THEME_COOKIE)?.value);
 
   return (
-    <main className="auth-surface relative isolate flex min-h-dvh flex-col items-center justify-center px-5 py-12">
+    <main className="page-surface relative isolate flex min-h-dvh flex-col items-center justify-center px-5 py-12">
       <AuthSpotlight />
       <div className="fixed top-3 right-3 sm:top-6 sm:right-6">
         <ThemeToggle initialTheme={theme} />

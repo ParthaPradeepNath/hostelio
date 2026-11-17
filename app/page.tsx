@@ -17,7 +17,7 @@ export default async function HomePage() {
   const theme = normalizeTheme(cookieStore.get(THEME_COOKIE)?.value);
 
   return (
-    <main className="relative flex min-h-dvh flex-col">
+    <main className="page-surface relative flex min-h-dvh flex-col">
       <div className="fixed top-3 right-3 sm:top-6 sm:right-6">
         <ThemeToggle initialTheme={theme} />
       </div>

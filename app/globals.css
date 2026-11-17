@@ -219,8 +219,8 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Auth screens sit on a lifted dark surface rather than pure black. */
-  .auth-surface {
+  /* Public pages sit on a lifted dark surface rather than pure black. */
+  .page-surface {
     background-color: light-dark(var(--bg), #121212);
   }
 
