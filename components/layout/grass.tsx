@@ -34,7 +34,7 @@ const Grass = () => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none relative z-10 mx-auto w-[95vw] lg:w-[62vw] xl:w-[52vw] 2xl:w-[44vw] 2xl:max-w-[850px]"
+      className="pointer-events-none relative z-10 w-full"
     >
       <style>{`
         .grass-blade, .grass-stem {
