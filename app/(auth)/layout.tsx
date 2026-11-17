@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { AuthSpotlight } from "@/components/auth/auth-spotlight";
 import { Brand } from "@/components/layout/brand";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { normalizeTheme, THEME_COOKIE } from "@/lib/theme";
@@ -9,18 +10,19 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
   const theme = normalizeTheme(cookieStore.get(THEME_COOKIE)?.value);
 
   return (
-    <main className="auth-surface flex min-h-dvh flex-col items-center justify-center px-5 py-12">
+    <main className="auth-surface relative isolate flex min-h-dvh flex-col items-center justify-center px-5 py-12">
+      <AuthSpotlight />
       <div className="fixed right-3 top-3 sm:right-6 sm:top-6">
         <ThemeToggle initialTheme={theme} />
       </div>
-      <div className="mb-7 flex flex-col items-center gap-2">
+      <div className="relative z-10 mb-7 flex flex-col items-center gap-2">
         <Brand />
         <p className="text-[13px] text-ink-secondary">Hostel management, made simple.</p>
       </div>
-      <div className="w-full max-w-md">{children}</div>
+      <div className="relative z-10 w-full max-w-md">{children}</div>
       <Link
         href="/"
-        className="mt-6 text-[12px] text-ink-tertiary transition-colors hover:text-accent"
+        className="relative z-10 mt-6 text-[12px] text-ink-tertiary transition-colors hover:text-accent"
       >
         Back to home
       </Link>
