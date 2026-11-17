@@ -4,9 +4,11 @@ import { usePathname } from "next/navigation";
 
 import { Spotlight } from "@/components/ui/spotlight-new";
 
-/** Decorative spotlight behind the top of the login page. */
+const PAGES_WITH_SPOTLIGHT = ["/login", "/sign-up"];
+
+/** Decorative spotlight behind the top of the auth pages. */
 export function AuthSpotlight() {
-  if (usePathname() !== "/login") return null;
+  if (!PAGES_WITH_SPOTLIGHT.includes(usePathname())) return null;
 
   return (
     <div
